@@ -14,7 +14,9 @@ import {
   BarChart3,
   Bell,
   FileText,
-  RefreshCw
+  RefreshCw,
+  Map,
+  Route
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import StatsCard from '@/components/admin/StatsCard';
@@ -22,6 +24,9 @@ import RealtimeFeed from '@/components/admin/RealtimeFeed';
 import TopPagesCard from '@/components/admin/TopPagesCard';
 import RecentVisitorsCard from '@/components/admin/RecentVisitorsCard';
 import AlertsPanel from '@/components/admin/AlertsPanel';
+import LiveVisitorMap from '@/components/admin/LiveVisitorMap';
+import ActiveUsersPanel from '@/components/admin/ActiveUsersPanel';
+import VisitorTimeline from '@/components/admin/VisitorTimeline';
 import { useAdminStats } from '@/hooks/useAdminStats';
 
 const AdminDashboard: React.FC = () => {
@@ -151,6 +156,21 @@ const AdminDashboard: React.FC = () => {
             />
           </div>
 
+          {/* Live Visitor Map */}
+          <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6 mb-8">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <Map className="w-5 h-5 text-[#B8956C]" />
+                <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Live Visitor Map</h3>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-[hsl(var(--admin-text-subtle))]">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                Real-time
+              </div>
+            </div>
+            <LiveVisitorMap />
+          </div>
+
           {/* Main Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
             {/* Real-Time Activity Feed */}
@@ -168,6 +188,27 @@ const AdminDashboard: React.FC = () => {
               <RealtimeFeed maxItems={8} />
             </div>
 
+            {/* Active Users Panel */}
+            <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Users className="w-5 h-5 text-[#B8956C]" />
+                <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Active Users</h3>
+              </div>
+              <ActiveUsersPanel />
+            </div>
+          </div>
+
+          {/* Visitor Timeline & Alerts */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Visitor Timeline */}
+            <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Route className="w-5 h-5 text-[#B8956C]" />
+                <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Visitor Journeys</h3>
+              </div>
+              <VisitorTimeline />
+            </div>
+
             {/* Alerts Panel */}
             <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
@@ -180,15 +221,6 @@ const AdminDashboard: React.FC = () => {
 
           {/* Bottom Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Recent Visitors */}
-            <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
-              <div className="flex items-center gap-2 mb-6">
-                <Users className="w-5 h-5 text-[#B8956C]" />
-                <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Recent Visitors</h3>
-              </div>
-              <RecentVisitorsCard />
-            </div>
-
             {/* Top Pages */}
             <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
               <div className="flex items-center gap-2 mb-6">
@@ -196,6 +228,15 @@ const AdminDashboard: React.FC = () => {
                 <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Top Pages Today</h3>
               </div>
               <TopPagesCard />
+            </div>
+
+            {/* Recent Visitors */}
+            <div className="bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] rounded-xl p-6">
+              <div className="flex items-center gap-2 mb-6">
+                <Users className="w-5 h-5 text-[#B8956C]" />
+                <h3 className="text-lg font-medium text-[hsl(var(--admin-text))]">Recent Visitors</h3>
+              </div>
+              <RecentVisitorsCard />
             </div>
           </div>
         </main>
