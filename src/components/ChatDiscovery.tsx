@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, ArrowRight, Calendar, Plus } from 'lucide-react';
+import visitorTracking from '@/lib/visitorTracking';
+import { trackingSupabase } from '@/lib/trackingBackend';
 
 interface Message {
   id: string;
@@ -145,25 +147,71 @@ const ChatDiscovery: React.FC<ChatDiscoveryProps> = ({ onComplete }) => {
 
       console.log('📝 Conversation text prepared:', conversationText);
 
-      try {
-      const serviceDisplay = finalData.servicePath === 'customgpt'
-        ? 'Custom GPT (The Doing)'
-        : finalData.servicePath === 'roundtable'
-        ? 'The Roundtable (The Thinking)'
-        : 'Both (Custom GPT + Roundtable)';
+      // Save lead to Supabase
+      const sessionId = visitorTracking.getSessionId() || sessionStorage.getItem('galavanteer_session_id');
+      
+      if (sessionId) {
+        const serviceDisplay = finalData.servicePath === 'customgpt'
+          ? 'Custom GPT (The Doing)'
+          : finalData.servicePath === 'roundtable'
+          ? 'The Roundtable (The Thinking)'
+          : 'Both (Custom GPT + Roundtable)';
 
-      const templateParams = {
-        name: finalData.name,
-        email: finalData.email,
-        servicePath: serviceDisplay,
-        role: finalData.role,
-        timeWaster: finalData.thinkingPartner || 'Not specified',
-        solution: finalData.whatWouldChange || 'Not specified',
-        customResponse: finalData.customResponse || 'None provided',
-        additionalContext: finalData.additionalContext || 'None provided',
-        conversation: conversationText,
-        timestamp: new Date().toLocaleString()
-      };
+        const { error: supabaseError } = await trackingSupabase.from('leads').insert({
+          session_id: sessionId,
+          email: finalData.email,
+          name: finalData.name,
+          source: 'chatbot',
+          status: 'new',
+          message: finalData.additionalContext || null,
+          metadata: {
+            servicePath: finalData.servicePath,
+            serviceDisplay,
+            role: finalData.role,
+            thinkingPartner: finalData.thinkingPartner,
+            whatWouldChange: finalData.whatWouldChange,
+            interest: finalData.interest,
+            customResponse: finalData.customResponse,
+            additionalContext: finalData.additionalContext,
+            conversation: conversationText,
+            timestamp: new Date().toISOString()
+          }
+        });
+
+        if (supabaseError) {
+          console.error('❌ Supabase lead insert error:', supabaseError);
+        } else {
+          console.log('✅ Lead saved to Supabase with session:', sessionId);
+        }
+
+        // Track the lead capture event
+        await visitorTracking.trackEvent('chatbot_lead_captured', {
+          has_email: !!finalData.email,
+          has_name: !!finalData.name,
+          service_path: finalData.servicePath
+        });
+      }
+
+      // Continue with EmailJS
+      try {
+        const serviceDisplay = finalData.servicePath === 'customgpt'
+          ? 'Custom GPT (The Doing)'
+          : finalData.servicePath === 'roundtable'
+          ? 'The Roundtable (The Thinking)'
+          : 'Both (Custom GPT + Roundtable)';
+
+        const templateParams = {
+          name: finalData.name,
+          email: finalData.email,
+          servicePath: serviceDisplay,
+          role: finalData.role,
+          timeWaster: finalData.thinkingPartner || 'Not specified',
+          solution: finalData.whatWouldChange || 'Not specified',
+          customResponse: finalData.customResponse || 'None provided',
+          additionalContext: finalData.additionalContext || 'None provided',
+          conversation: conversationText,
+          timestamp: new Date().toLocaleString()
+        };
 
         console.log('📧 Sending email with params:', templateParams);
 

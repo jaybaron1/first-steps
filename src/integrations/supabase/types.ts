@@ -82,6 +82,7 @@ export type Database = {
           id: string
           lead_score: number | null
           message: string | null
+          metadata: Json | null
           name: string | null
           phone: string | null
           session_id: string | null
@@ -95,6 +96,7 @@ export type Database = {
           id?: string
           lead_score?: number | null
           message?: string | null
+          metadata?: Json | null
           name?: string | null
           phone?: string | null
           session_id?: string | null
@@ -108,6 +110,7 @@ export type Database = {
           id?: string
           lead_score?: number | null
           message?: string | null
+          metadata?: Json | null
           name?: string | null
           phone?: string | null
           session_id?: string | null
