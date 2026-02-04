@@ -496,7 +496,7 @@ const AdminPortalPage: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full h-12 bg-admin-accent hover:bg-admin-accent/90 text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-gold hover:bg-gold-dark text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-2">
