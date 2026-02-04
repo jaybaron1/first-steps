@@ -148,7 +148,7 @@ const AboutPage = () => {
                     style={{ background: '#1A1915' }}
                   >
                     <img
-                      src="/lovable-uploads/1dfeb988-8485-4ff0-b758-62fafc4f58a0.png"
+                      src="/lovable-uploads/jason-founder-new.jpeg"
                       alt="Jason Baron, Founder of Galavanteer"
                       className="w-full object-cover opacity-95"
                       style={{ aspectRatio: '4/5' }}
