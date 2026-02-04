@@ -11,17 +11,26 @@ const PrivacyPage = () => {
   useEffect(() => {
     const handleScroll = () => {
       const sections = document.querySelectorAll('[data-section]');
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
+      const scrollPosition = window.scrollY + window.innerHeight / 3;
 
-      sections.forEach((section, index) => {
+      let closestSection = 0;
+      let closestDistance = Infinity;
+
+      sections.forEach((section) => {
         const element = section as HTMLElement;
-        const top = element.offsetTop;
-        const bottom = top + element.offsetHeight;
+        const sectionIndex = parseInt(element.getAttribute('data-section') || '0', 10);
+        const rect = element.getBoundingClientRect();
+        const sectionTop = rect.top + window.scrollY;
+        const sectionCenter = sectionTop + rect.height / 2;
+        const distance = Math.abs(scrollPosition - sectionCenter);
 
-        if (scrollPosition >= top && scrollPosition <= bottom) {
-          setActiveSection(index);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = sectionIndex;
         }
       });
+
+      setActiveSection(closestSection);
     };
 
     window.addEventListener('scroll', handleScroll);
