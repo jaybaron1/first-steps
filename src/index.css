@@ -531,3 +531,13 @@ textarea:-webkit-autofill {
   --gold-light: #D4B896;
   --gold-dark: #8A6D4E;
 }
+
+/* Hide scrollbar but allow scrolling */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
