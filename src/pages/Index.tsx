@@ -15,6 +15,7 @@ import IndividualReviewSchema from '@/components/IndividualReviewSchema';
 import WebPageSchema from '@/components/WebPageSchema';
 import OrganizationSchema from '@/components/OrganizationSchema';
 import ServiceSchema from '@/components/ServiceSchema';
+import FAQSchema from '@/components/FAQSchema';
 
 const Index = () => {
   const homePageSchema = {
@@ -49,6 +50,7 @@ const Index = () => {
       <WebPageSchema />
       <OrganizationSchema />
       <ServiceSchema />
+      <FAQSchema />
       <ReviewSchema />
       <LocalBusinessSchema />
       <AggregateRatingSchema
