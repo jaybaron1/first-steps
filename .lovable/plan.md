@@ -1,354 +1,219 @@
 
-# Custom Goal Tracking, CTA Heatmaps & Lead Enrichment
+# Plan: Build Out Remaining Admin Dashboard Pages
 
-This plan implements the three remaining conversion intelligence features to complete Section 2.
-
----
-
-## Current State
-
-| Component | Status |
-|-----------|--------|
-| Funnel visualization | Implemented in `ConversionFunnel.tsx` |
-| CTA performance table | Implemented in `CTAPerformance.tsx` |
-| Lead scoring | Implemented via `calculate_lead_score` function |
-| A/B testing | Implemented in `ABTestingPanel.tsx` |
-| Visitor session tracking | Stores `company_name`, `company_size`, `company_industry` (currently empty) |
+## Overview
+Based on the 10-page specification and current implementation status, I'll build out the remaining functional dashboard pages: **Content Performance** and **System Health**. The Security Dashboard already has foundational components in `AdminRoute.tsx` handling auth, so I'll enhance it with visibility into security events.
 
 ---
 
-## Phase 1: Custom Goal Completion Tracking
+## Current Status
 
-### 1.1 Database Schema
+| Page | Status |
+|------|--------|
+| Overview | Complete |
+| Visitor Intelligence | Complete |
+| Lead Generation | Complete |
+| Campaigns | Complete |
+| **Content Performance** | **To Build** |
+| Revenue & Growth | Hidden (needs external integrations) |
+| SEO & Search | Hidden (needs Google Search Console) |
+| **System Health** | **To Build** |
+| **Security Dashboard** | **To Build** |
+| Reports & Exports | Hidden (future phase) |
 
-Create a new `conversion_goals` table:
+---
+
+## Pages to Build
+
+### Page 5: Content Performance (`/admin/content`)
+
+**Components:**
+- **ContentPerformanceTable**: Enhanced page analytics with engagement metrics
+  - Page URL and title
+  - Total views, unique visitors
+  - Average time on page
+  - Bounce rate per page
+  - Avg scroll depth
+  - Entry/exit ratios
+
+- **TopExitPagesCard**: Shows pages where users leave most often
+  - Calculate exit rates by comparing last page views per session
+
+- **EngagementScorecard**: Visual summary cards
+  - Most engaging page (highest time + scroll)
+  - Highest bounce rate page
+  - Most viewed content
+
+**Data Source:** `page_views` table with aggregations
+
+---
+
+### Page 8: System Health (`/admin/system`)
+
+**Components:**
+- **UptimeMonitor**: Visualize `keep_alive_logs` data
+  - Current status indicator (last ping)
+  - Response time chart (last 24h)
+  - Uptime percentage calculation
+  - Response time trends
+
+- **PerformanceMetrics**: Summary cards
+  - Average response time
+  - Total pings
+  - Success rate %
+  - Last check timestamp
+
+- **ResponseTimeChart**: Line chart using `recharts`
+  - X-axis: time
+  - Y-axis: response_time_ms
+  - Threshold lines for warning (2s) and critical (5s)
+
+- **SystemHealthAlerts**: Automatic alerts for
+  - Response times exceeding thresholds
+  - Failed health checks
+  - Degraded performance trends
+
+**Data Source:** `keep_alive_logs` table
+
+---
+
+### Page 9: Security Dashboard (`/admin/security`)
+
+**Components:**
+- **LoginAttemptsLog**: Track admin login events
+  - Uses `visitor_events` with `event_type = 'admin_login'` (needs tracking)
+  - Show timestamp, email, status (success/failed), IP
+
+- **ActiveSessionsPanel**: Current authenticated admin sessions
+  - Based on recent admin activity
+
+- **SecurityAlertsPanel**: Security-related alerts
+  - Failed login attempts
+  - Rate limit triggers
+  - Suspicious activity patterns
+
+- **AuditLogViewer**: Display admin actions
+  - Uses existing audit log infrastructure
+  - Filter by action type, user, date
+
+**Data Source:** `visitor_events` + new audit tracking
+
+---
+
+## Implementation Steps
+
+### Step 1: Create Data Hooks
 
 ```text
-conversion_goals
-+------------------+-------------+---------------------------------------+
-| Column           | Type        | Description                           |
-+------------------+-------------+---------------------------------------+
-| id               | uuid        | Primary key                           |
-| name             | text        | Goal name (e.g., "Booked Call")       |
-| description      | text        | Optional description                  |
-| goal_type        | text        | url_visit, event, time_on_site, etc.  |
-| goal_config      | jsonb       | Configuration for matching            |
-| value            | numeric     | Optional monetary value               |
-| status           | text        | active, paused, archived              |
-| created_at       | timestamptz | Creation timestamp                    |
-+------------------+-------------+---------------------------------------+
+src/hooks/useContentStats.ts      - Page performance aggregations
+src/hooks/useSystemHealth.ts      - Keep-alive logs & uptime metrics
+src/hooks/useSecurityEvents.ts    - Login attempts & security events
 ```
 
-Create a `goal_completions` table:
+### Step 2: Create UI Components
 
 ```text
-goal_completions
-+------------------+-------------+---------------------------------------+
-| Column           | Type        | Description                           |
-+------------------+-------------+---------------------------------------+
-| id               | uuid        | Primary key                           |
-| goal_id          | uuid        | FK to conversion_goals                |
-| session_id       | text        | Session that completed goal           |
-| completed_at     | timestamptz | When goal was completed               |
-| metadata         | jsonb       | Additional context                    |
-+------------------+-------------+---------------------------------------+
+src/components/admin/ContentPerformanceTable.tsx
+src/components/admin/TopExitPagesCard.tsx
+src/components/admin/UptimeMonitor.tsx
+src/components/admin/ResponseTimeChart.tsx
+src/components/admin/LoginAttemptsLog.tsx
+src/components/admin/ActiveSessionsPanel.tsx
 ```
 
-### 1.2 Goal Types Configuration
-
-The `goal_config` JSONB will support multiple goal types:
+### Step 3: Create Page Files
 
 ```text
-URL Visit:      {"url_pattern": "/pricing%", "min_time": 10}
-Event:          {"event_type": "cta_click", "event_filter": {"ctaName": "Book"}}
-Time on Site:   {"min_seconds": 180}
-Scroll Depth:   {"min_depth": 75, "url_pattern": "/%"}
-Page Count:     {"min_pages": 3}
-Form Submit:    {"form_id": "contact-form"}
+src/pages/admin/ContentPage.tsx
+src/pages/admin/SystemPage.tsx
+src/pages/admin/SecurityPage.tsx
 ```
 
-### 1.3 New Component: `GoalsPanel.tsx`
+### Step 4: Update Navigation
 
-Admin interface with:
-- List of defined goals with completion counts
-- Create/edit goal dialog with type selector
-- Goal type options with appropriate config fields
-- Real-time completion tracking display
-- Sparkline trends for each goal
+Update `AdminLayout.tsx` to add new navigation tabs:
+- Content (FileText icon)
+- System (Server icon)
+- Security (Shield icon)
 
-### 1.4 New Hook: `useGoals.ts`
+### Step 5: Register Routes
 
-Provides:
-- CRUD operations for goals
-- Goal completion statistics
-- Conversion rate calculations by source
-
-### 1.5 Frontend Goal Detection
-
-Modify `src/lib/visitorTracking.ts` to check for goal completion on:
-- Page views (URL patterns)
-- Events (custom event matching)
-- Session metrics (time, scroll, pages)
+Update `App.tsx` to include:
+```
+/admin/content   -> ContentPage
+/admin/system    -> SystemPage
+/admin/security  -> SecurityPage
+```
 
 ---
 
-## Phase 2: CTA Heatmap Visualization
+## Technical Details
 
-### 2.1 New Component: `CTAHeatmap.tsx`
-
-Visual click density display showing:
-
+### Content Stats Hook Logic
 ```text
-+-----------------------------------------------+
-|  Page: /marketing                       [v]   |
-+-----------------------------------------------+
-|                                               |
-|  +------------------------------------------+ |
-|  |           HEADER                         | |
-|  |   [Logo]              [Nav] [CTA: 45]    | |
-|  +------------------------------------------+ |
-|  |                                          | |
-|  |           HERO SECTION                   | |
-|  |                                          | |
-|  |      Headline Here                       | |
-|  |      Subheadline                         | |
-|  |                                          | |
-|  |      [CTA Button: 234 clicks]  <-- HOT   | |
-|  |                                          | |
-|  +------------------------------------------+ |
-|  |           PRICING SECTION                | |
-|  |                                          | |
-|  |   [Plan A: 89]  [Plan B: 156]  [Plan C]  | |
-|  |                                          | |
-|  +------------------------------------------+ |
-|                                               |
-+-----------------------------------------------+
+- Aggregate page_views by page_url
+- Calculate unique sessions per page
+- Compute avg time_on_page and scroll_depth
+- Identify exit pages (last page_view per session)
+- Calculate bounce rate (sessions with 1 page view)
 ```
 
-### 2.2 Implementation Approach
-
-Since we cannot capture actual screen positions, the heatmap will:
-1. Query CTA clicks grouped by page URL
-2. Display a schematic page layout with labeled sections
-3. Show click counts as badges with color intensity
-4. Use predefined page templates for known routes
-
-### 2.3 Heatmap Data Structure
-
-```typescript
-interface CTAClickData {
-  ctaName: string;
-  pageUrl: string;
-  section: string; // Derived from data-track-location
-  totalClicks: number;
-  intensity: 'cold' | 'warm' | 'hot';
-}
-```
-
-### 2.4 Page Template System
-
-Define templates for main pages:
-
-```typescript
-const PAGE_TEMPLATES = {
-  '/marketing': [
-    { section: 'header', label: 'Header CTA' },
-    { section: 'hero', label: 'Hero Section' },
-    { section: 'scorecard', label: 'Scorecard Section' },
-    { section: 'pricing', label: 'Pricing Section' },
-    { section: 'final_cta', label: 'Final CTA' },
-  ],
-  // ... other pages
-};
-```
-
----
-
-## Phase 3: Clearbit Lead Enrichment Integration
-
-### 3.1 Edge Function: `enrich-visitor`
-
-New edge function that:
-1. Receives IP address and optional email
-2. Calls Clearbit Reveal API for IP-based company lookup
-3. Optionally calls Clearbit Enrichment API for email lookup
-4. Returns company data (name, size, industry)
-
+### System Health Hook Logic
 ```text
-POST /enrich-visitor
-{
-  "ip_address": "104.193.168.24",
-  "email": "john@company.com"  // optional
-}
-
-Response:
-{
-  "company_name": "Acme Corp",
-  "company_size": "51-200",
-  "company_industry": "Software",
-  "company_domain": "acme.com"
-}
+- Fetch keep_alive_logs with time filtering
+- Calculate uptime = success_count / total_count * 100
+- Get average, min, max response times
+- Identify outliers for alerting
 ```
 
-### 3.2 Clearbit API Integration
-
-Using Clearbit Reveal API (IP-based):
-
+### Security Events
 ```text
-GET https://reveal.clearbit.com/v1/companies/find?ip={ip}
-Authorization: Bearer sk_...
-
-Response includes:
-- company.name
-- company.domain
-- company.metrics.employeesRange
-- company.category.industry
-```
-
-### 3.3 Update Visitor Tracking
-
-Modify `get-visitor-info` edge function to:
-1. Get IP and geo data (existing)
-2. Call `enrich-visitor` for company data
-3. Return enriched response
-
-Or alternatively, call enrichment on lead creation for cost efficiency.
-
-### 3.4 Database Updates
-
-The `visitor_sessions` table already has:
-- `company_name`
-- `company_size`
-- `company_industry`
-
-These will be populated by the enrichment function.
-
-### 3.5 Admin Display
-
-Update `LeadsPanel.tsx` to show:
-- Company name column
-- Company size badge
-- Industry tag
-- "Enrich" button for manual enrichment
-
----
-
-## File Changes Summary
-
-| File | Action | Description |
-|------|--------|-------------|
-| `conversion_goals` table | Create | Goal definitions |
-| `goal_completions` table | Create | Completion tracking |
-| `src/hooks/useGoals.ts` | Create | Goal CRUD and stats |
-| `src/components/admin/GoalsPanel.tsx` | Create | Goal management UI |
-| `src/components/admin/CTAHeatmap.tsx` | Create | Click density visualization |
-| `src/hooks/useCTAStats.ts` | Modify | Add section grouping |
-| `supabase/functions/enrich-visitor/index.ts` | Create | Clearbit integration |
-| `src/components/admin/LeadsPanel.tsx` | Modify | Show company data |
-| `src/lib/visitorTracking.ts` | Modify | Goal completion detection |
-| `src/pages/admin/AdminDashboard.tsx` | Modify | Add Goals and Heatmap sections |
-
----
-
-## Technical Implementation Details
-
-### Goal Completion Detection Logic
-
-```typescript
-async function checkGoalCompletion(sessionId: string, context: GoalContext) {
-  const goals = await getActiveGoals();
-  
-  for (const goal of goals) {
-    if (await matchesGoal(goal, context)) {
-      // Check if not already completed
-      const exists = await goalCompletionExists(goal.id, sessionId);
-      if (!exists) {
-        await recordGoalCompletion(goal.id, sessionId, context);
-      }
-    }
-  }
-}
-
-function matchesGoal(goal: Goal, context: GoalContext): boolean {
-  switch (goal.goal_type) {
-    case 'url_visit':
-      return urlMatchesPattern(context.pageUrl, goal.goal_config.url_pattern);
-    case 'event':
-      return context.eventType === goal.goal_config.event_type;
-    case 'time_on_site':
-      return context.totalTime >= goal.goal_config.min_seconds;
-    // ... other types
-  }
-}
-```
-
-### Heatmap Intensity Calculation
-
-```typescript
-function getIntensity(clicks: number, maxClicks: number): 'cold' | 'warm' | 'hot' {
-  const ratio = clicks / maxClicks;
-  if (ratio >= 0.6) return 'hot';
-  if (ratio >= 0.3) return 'warm';
-  return 'cold';
-}
-```
-
-### Clearbit Error Handling
-
-```typescript
-async function enrichVisitor(ip: string): Promise<CompanyData | null> {
-  try {
-    const response = await fetch(
-      `https://reveal.clearbit.com/v1/companies/find?ip=${ip}`,
-      {
-        headers: {
-          'Authorization': `Bearer ${CLEARBIT_API_KEY}`,
-        },
-      }
-    );
-    
-    if (response.status === 404) {
-      // No company found for this IP (consumer IP)
-      return null;
-    }
-    
-    if (!response.ok) {
-      throw new Error(`Clearbit API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return {
-      company_name: data.company?.name,
-      company_size: data.company?.metrics?.employeesRange,
-      company_industry: data.company?.category?.industry,
-    };
-  } catch (error) {
-    console.error('[enrich-visitor] Error:', error);
-    return null;
-  }
-}
+- Track admin login events via visitor_events
+- Query events by type for security dashboard
+- Calculate failed login rates
 ```
 
 ---
 
-## Secret Requirements
+## UI/UX Considerations
 
-The Clearbit integration requires:
-- `CLEARBIT_API_KEY` - Clearbit API secret key
-
-This will need to be added via the secrets tool before the enrichment feature can work.
+- Consistent card styling with existing pages (border-[#B8956C]/20, rounded-2xl, shadow-lg)
+- Loading skeletons for all data panels
+- Time range selectors where appropriate
+- Real-time indicators for live data
+- Visual alerts for concerning metrics (red for critical, amber for warning)
 
 ---
 
-## Execution Order
+## Dependencies
 
-1. Create database tables (conversion_goals, goal_completions)
-2. Create `useGoals.ts` hook
-3. Create `GoalsPanel.tsx` component
-4. Create `CTAHeatmap.tsx` component
-5. Request CLEARBIT_API_KEY secret
-6. Create `enrich-visitor` edge function
-7. Update `LeadsPanel.tsx` with company data display
-8. Update `visitorTracking.ts` with goal detection
-9. Update `AdminDashboard.tsx` with new sections
-10. Test end-to-end goal tracking and enrichment
+- `recharts` (already installed) for charts
+- `date-fns` (already installed) for time formatting
+- Existing UI components (Table, Card, Badge, Progress)
+
+---
+
+## Files to Create/Modify
+
+### New Files (12)
+1. `src/hooks/useContentStats.ts`
+2. `src/hooks/useSystemHealth.ts`
+3. `src/hooks/useSecurityEvents.ts`
+4. `src/components/admin/ContentPerformanceTable.tsx`
+5. `src/components/admin/TopExitPagesCard.tsx`
+6. `src/components/admin/UptimeMonitor.tsx`
+7. `src/components/admin/ResponseTimeChart.tsx`
+8. `src/components/admin/LoginAttemptsLog.tsx`
+9. `src/pages/admin/ContentPage.tsx`
+10. `src/pages/admin/SystemPage.tsx`
+11. `src/pages/admin/SecurityPage.tsx`
+
+### Modified Files (2)
+1. `src/components/admin/AdminLayout.tsx` - Add navigation items
+2. `src/App.tsx` - Add routes
+
+---
+
+## Summary
+
+This plan adds 3 new dashboard pages with 11 new components/hooks, expanding the admin portal from 4 to 7 functional tabs. Each page leverages existing database tables and follows established patterns for consistency.
