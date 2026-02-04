@@ -226,6 +226,7 @@ export type Database = {
       }
       campaigns: {
         Row: {
+          actual_spend: number | null
           budget: number | null
           created_at: string | null
           end_date: string | null
@@ -238,6 +239,7 @@ export type Database = {
           utm_source: string | null
         }
         Insert: {
+          actual_spend?: number | null
           budget?: number | null
           created_at?: string | null
           end_date?: string | null
@@ -250,6 +252,7 @@ export type Database = {
           utm_source?: string | null
         }
         Update: {
+          actual_spend?: number | null
           budget?: number | null
           created_at?: string | null
           end_date?: string | null
@@ -295,6 +298,89 @@ export type Database = {
           value?: number | null
         }
         Relationships: []
+      }
+      customer_cohorts: {
+        Row: {
+          churn_reason: string | null
+          churned_at: string | null
+          cohort_month: string
+          created_at: string
+          customer_id: string
+          first_revenue_date: string
+          id: string
+          is_churned: boolean | null
+          last_activity_date: string | null
+          metadata: Json | null
+          total_lifetime_value: number | null
+          updated_at: string
+        }
+        Insert: {
+          churn_reason?: string | null
+          churned_at?: string | null
+          cohort_month: string
+          created_at?: string
+          customer_id: string
+          first_revenue_date: string
+          id?: string
+          is_churned?: boolean | null
+          last_activity_date?: string | null
+          metadata?: Json | null
+          total_lifetime_value?: number | null
+          updated_at?: string
+        }
+        Update: {
+          churn_reason?: string | null
+          churned_at?: string | null
+          cohort_month?: string
+          created_at?: string
+          customer_id?: string
+          first_revenue_date?: string
+          id?: string
+          is_churned?: boolean | null
+          last_activity_date?: string | null
+          metadata?: Json | null
+          total_lifetime_value?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      deal_stage_history: {
+        Row: {
+          changed_at: string
+          created_at: string
+          deal_id: string
+          duration_hours: number | null
+          from_stage: Database["public"]["Enums"]["deal_stage"] | null
+          id: string
+          to_stage: Database["public"]["Enums"]["deal_stage"]
+        }
+        Insert: {
+          changed_at?: string
+          created_at?: string
+          deal_id: string
+          duration_hours?: number | null
+          from_stage?: Database["public"]["Enums"]["deal_stage"] | null
+          id?: string
+          to_stage: Database["public"]["Enums"]["deal_stage"]
+        }
+        Update: {
+          changed_at?: string
+          created_at?: string
+          deal_id?: string
+          duration_hours?: number | null
+          from_stage?: Database["public"]["Enums"]["deal_stage"] | null
+          id?: string
+          to_stage?: Database["public"]["Enums"]["deal_stage"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deal_stage_history_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       deals: {
         Row: {
