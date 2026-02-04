@@ -30,11 +30,11 @@ const FinalCTASection = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button onClick={handleBookCall} className="mkt-btn mkt-btn-primary">
+            <button onClick={handleBookCall} className="mkt-btn mkt-btn-primary" data-track-cta="Book AI Visibility Call - Final">
               Book an AI Visibility Call
               <ArrowRight className="w-4 h-4" />
             </button>
-            <button onClick={scrollToScorecard} className="mkt-btn mkt-btn-ghost">
+            <button onClick={scrollToScorecard} className="mkt-btn mkt-btn-ghost" data-track-cta="Run Scorecard - Final">
               Run the Scorecard →
             </button>
           </div>
