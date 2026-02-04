@@ -195,7 +195,7 @@ const PrivacyPage = () => {
                 {/* Left Column - Section Numbers */}
                 <div className="lg:col-span-2">
                   <div className="lg:sticky lg:top-24 space-y-8">
-                    {['01', '02', '03', '04', '05'].map((num, i) => (
+                    {['01', '02', '03', '04', '05', '06'].map((num, i) => (
                       <div key={i} className="flex items-center gap-4 transition-all duration-500">
                         <span
                           className="font-display text-2xl transition-colors duration-500"
@@ -380,6 +380,25 @@ const PrivacyPage = () => {
                     </div>
                   </article>
 
+                  {/* 06 - Updates */}
+                  <article data-section="5" className="pb-12 border-b border-ink/10">
+                    <div className="mb-6">
+                      <h2
+                        className="font-display mb-3"
+                        style={{
+                          fontSize: 'clamp(1.75rem, 3vw, 2.25rem)',
+                          color: '#1A1915',
+                          lineHeight: 1.1
+                        }}
+                      >
+                        Policy Updates
+                      </h2>
+                      <div className="w-12 h-px bg-gold" />
+                    </div>
+                    <p className="text-sm leading-relaxed" style={{ color: '#5C554A' }}>
+                      This document may evolve. Check back periodically. Continued use constitutes acceptance of changes.
+                    </p>
+                  </article>
                 </div>
               </div>
             </div>
