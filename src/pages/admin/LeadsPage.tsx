@@ -1,10 +1,12 @@
 import React from 'react';
-import { UserCheck, Filter, Target, MousePointerClick, Flame } from 'lucide-react';
+import { UserCheck, Filter, Target, MousePointerClick, Flame, FileText, Sparkles } from 'lucide-react';
 import LeadsPanel from '@/components/admin/LeadsPanel';
 import ConversionFunnel from '@/components/admin/ConversionFunnel';
 import GoalsPanel from '@/components/admin/GoalsPanel';
 import CTAPerformance from '@/components/admin/CTAPerformance';
 import CTAHeatmap from '@/components/admin/CTAHeatmap';
+import FormSubmissionsPanel from '@/components/admin/FormSubmissionsPanel';
+import LeadEnrichmentStatus from '@/components/admin/LeadEnrichmentStatus';
 
 const LeadsPage: React.FC = () => {
   return (
@@ -29,6 +31,35 @@ const LeadsPage: React.FC = () => {
           </div>
         </div>
         <LeadsPanel />
+      </div>
+
+      {/* Form Submissions & Lead Enrichment */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-[#B8956C]/10">
+              <FileText className="w-6 h-6 text-[#B8956C]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-display font-semibold text-[#1A1915]">Form Submissions</h3>
+              <p className="text-xs text-[#8C857A]">Track form starts and completions</p>
+            </div>
+          </div>
+          <FormSubmissionsPanel />
+        </div>
+
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+          <div className="flex items-center gap-3 mb-6">
+            <div className="p-2 rounded-lg bg-[#B8956C]/10">
+              <Sparkles className="w-6 h-6 text-[#B8956C]" />
+            </div>
+            <div>
+              <h3 className="text-lg font-display font-semibold text-[#1A1915]">Lead Enrichment</h3>
+              <p className="text-xs text-[#8C857A]">Company data enrichment status</p>
+            </div>
+          </div>
+          <LeadEnrichmentStatus />
+        </div>
       </div>
 
       {/* Conversion Funnel */}
