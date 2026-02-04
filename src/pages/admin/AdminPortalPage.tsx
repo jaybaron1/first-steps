@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
-import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, ArrowRight } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, ArrowRight, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,12 +26,13 @@ const AdminPortalPage: React.FC = () => {
   // Form state
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   
   // View state
-  const [view, setView] = useState<'login' | 'reset' | 'reset-sent'>('login');
+  const [view, setView] = useState<'login' | 'signup' | 'reset' | 'reset-sent'>('login');
   
   // Rate limiting state
   const [loginAttempts, setLoginAttempts] = useState<LoginAttempts>(() => {
@@ -154,6 +155,60 @@ const AdminPortalPage: React.FC = () => {
         });
         
         navigate('/admin');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!validateEmail(email)) {
+      return;
+    }
+
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { data, error: signupError } = await supabase.auth.signUp({
+        email: email.trim().toLowerCase(),
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/admin-portal`,
+        },
+      });
+
+      if (signupError) {
+        if (signupError.message.includes('already registered')) {
+          setError('This email is already registered. Please sign in.');
+        } else {
+          setError(signupError.message);
+        }
+        return;
+      }
+
+      if (data.user) {
+        toast({
+          title: 'Account created',
+          description: 'Please check your email to verify your account.',
+        });
+        setView('login');
+        setPassword('');
+        setConfirmPassword('');
       }
     } catch (err) {
       setError('An unexpected error occurred. Please try again.');
@@ -327,12 +382,149 @@ const AdminPortalPage: React.FC = () => {
                   )}
                 </Button>
 
+                {/* Signup Link */}
+                <div className="text-center">
+                  <p className="text-sm text-admin-text-subtle">
+                    Don't have an account?{' '}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setView('signup');
+                        setError(null);
+                      }}
+                      className="text-admin-accent hover:text-admin-accent/80 transition-colors"
+                    >
+                      Request access
+                    </button>
+                  </p>
+                </div>
+
                 {/* Security Notice */}
                 <p className="text-center text-xs text-admin-text-subtle">
                   Access restricted to authorized personnel only.
                   <br />
                   All login attempts are logged.
                 </p>
+              </form>
+            )}
+
+            {view === 'signup' && (
+              <form onSubmit={handleSignup} className="space-y-6">
+                <div className="text-center mb-2">
+                  <h2 className="text-lg font-medium text-admin-text">Create Account</h2>
+                  <p className="text-sm text-admin-text-subtle mt-1">
+                    Only @galavanteer.com emails are allowed
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="flex items-start gap-3 p-4 bg-admin-danger/10 border border-admin-danger/20 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-admin-danger shrink-0 mt-0.5" />
+                    <p className="text-sm text-admin-danger">{error}</p>
+                  </div>
+                )}
+
+                {/* Email Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="signup-email" className="text-sm text-admin-text-muted">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
+                    <Input
+                      id="signup-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@galavanteer.com"
+                      disabled={isLoading}
+                      className="pl-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="signup-password" className="text-sm text-admin-text-muted">
+                    Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
+                    <Input
+                      id="signup-password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="Minimum 8 characters"
+                      disabled={isLoading}
+                      className="pl-11 pr-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
+                      required
+                      minLength={8}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-admin-text-subtle hover:text-admin-text-muted"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Confirm Password Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="confirm-password" className="text-sm text-admin-text-muted">
+                    Confirm Password
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
+                    <Input
+                      id="confirm-password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder="Confirm your password"
+                      disabled={isLoading}
+                      className="pl-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  disabled={isLoading}
+                  className="w-full h-12 bg-admin-accent hover:bg-admin-accent/90 text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Creating account...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <UserPlus className="w-4 h-4" />
+                      <span>Create Account</span>
+                    </div>
+                  )}
+                </Button>
+
+                {/* Back to Login */}
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setView('login');
+                    setError(null);
+                    setPassword('');
+                    setConfirmPassword('');
+                  }}
+                  className="w-full h-12 text-admin-text-muted hover:text-admin-text hover:bg-admin-bg-card"
+                >
+                  Back to Sign In
+                </Button>
               </form>
             )}
 
