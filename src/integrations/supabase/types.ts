@@ -10,247 +10,28 @@ export type Database = {
   // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
-    PostgrestVersion: "13.0.5"
+    PostgrestVersion: "14.1"
   }
   public: {
     Tables: {
-      active_sessions: {
+      keep_alive_logs: {
         Row: {
-          created_at: string
-          expires_at: string
+          executed_at: string
           id: string
-          ip_address: string | null
-          last_activity: string
-          session_token: string
-          user_agent: string | null
-          user_email: string
-          user_id: string
+          response_time_ms: number | null
+          status: string
         }
         Insert: {
-          created_at?: string
-          expires_at: string
+          executed_at?: string
           id?: string
-          ip_address?: string | null
-          last_activity?: string
-          session_token: string
-          user_agent?: string | null
-          user_email: string
-          user_id: string
+          response_time_ms?: number | null
+          status: string
         }
         Update: {
-          created_at?: string
-          expires_at?: string
+          executed_at?: string
           id?: string
-          ip_address?: string | null
-          last_activity?: string
-          session_token?: string
-          user_agent?: string | null
-          user_email?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      audit_logs: {
-        Row: {
-          action: string
-          created_at: string
-          details: Json | null
-          id: string
-          ip_address: string | null
-          user_agent: string | null
-          user_email: string
-          user_id: string | null
-        }
-        Insert: {
-          action: string
-          created_at?: string
-          details?: Json | null
-          id?: string
-          ip_address?: string | null
-          user_agent?: string | null
-          user_email: string
-          user_id?: string | null
-        }
-        Update: {
-          action?: string
-          created_at?: string
-          details?: Json | null
-          id?: string
-          ip_address?: string | null
-          user_agent?: string | null
-          user_email?: string
-          user_id?: string | null
-        }
-        Relationships: []
-      }
-      failed_login_attempts: {
-        Row: {
-          attempted_at: string
-          email: string
-          id: string
-          ip_address: string | null
-          reason: string | null
-          user_agent: string | null
-        }
-        Insert: {
-          attempted_at?: string
-          email: string
-          id?: string
-          ip_address?: string | null
-          reason?: string | null
-          user_agent?: string | null
-        }
-        Update: {
-          attempted_at?: string
-          email?: string
-          id?: string
-          ip_address?: string | null
-          reason?: string | null
-          user_agent?: string | null
-        }
-        Relationships: []
-      }
-      ip_whitelist: {
-        Row: {
-          added_by: string | null
-          created_at: string
-          description: string | null
-          id: string
-          ip_address: string
-          is_active: boolean
-        }
-        Insert: {
-          added_by?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          ip_address: string
-          is_active?: boolean
-        }
-        Update: {
-          added_by?: string | null
-          created_at?: string
-          description?: string | null
-          id?: string
-          ip_address?: string
-          is_active?: boolean
-        }
-        Relationships: []
-      }
-      lighthouse_audits: {
-        Row: {
-          accessibility_score: number | null
-          audit_data: Json | null
-          best_practices_score: number | null
-          created_at: string
-          cumulative_layout_shift: number | null
-          error_message: string | null
-          first_contentful_paint: number | null
-          first_input_delay: number | null
-          id: string
-          largest_contentful_paint: number | null
-          performance_score: number | null
-          pwa_score: number | null
-          seo_score: number | null
-          speed_index: number | null
-          status: string | null
-          time_to_interactive: number | null
-          total_blocking_time: number | null
-          url: string
-        }
-        Insert: {
-          accessibility_score?: number | null
-          audit_data?: Json | null
-          best_practices_score?: number | null
-          created_at?: string
-          cumulative_layout_shift?: number | null
-          error_message?: string | null
-          first_contentful_paint?: number | null
-          first_input_delay?: number | null
-          id?: string
-          largest_contentful_paint?: number | null
-          performance_score?: number | null
-          pwa_score?: number | null
-          seo_score?: number | null
-          speed_index?: number | null
-          status?: string | null
-          time_to_interactive?: number | null
-          total_blocking_time?: number | null
-          url: string
-        }
-        Update: {
-          accessibility_score?: number | null
-          audit_data?: Json | null
-          best_practices_score?: number | null
-          created_at?: string
-          cumulative_layout_shift?: number | null
-          error_message?: string | null
-          first_contentful_paint?: number | null
-          first_input_delay?: number | null
-          id?: string
-          largest_contentful_paint?: number | null
-          performance_score?: number | null
-          pwa_score?: number | null
-          seo_score?: number | null
-          speed_index?: number | null
-          status?: string | null
-          time_to_interactive?: number | null
-          total_blocking_time?: number | null
-          url?: string
-        }
-        Relationships: []
-      }
-      mfa_secrets: {
-        Row: {
-          backup_codes: string[] | null
-          created_at: string
-          enabled: boolean
-          id: string
-          secret: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          backup_codes?: string[] | null
-          created_at?: string
-          enabled?: boolean
-          id?: string
-          secret: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          backup_codes?: string[] | null
-          created_at?: string
-          enabled?: boolean
-          id?: string
-          secret?: string
-          updated_at?: string
-          user_id?: string
-        }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          created_at: string
-          email: string
-          id: string
-          updated_at: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          email: string
-          id?: string
-          updated_at?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          email?: string
-          id?: string
-          updated_at?: string
-          user_id?: string
+          response_time_ms?: number | null
+          status?: string
         }
         Relationships: []
       }
@@ -280,7 +61,6 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      cleanup_expired_sessions: { Args: never; Returns: undefined }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -288,14 +68,9 @@ export type Database = {
         }
         Returns: boolean
       }
-      is_ip_whitelisted: { Args: { _ip_address: string }; Returns: boolean }
-      verify_totp_secret: {
-        Args: { _token: string; _user_id: string }
-        Returns: boolean
-      }
     }
     Enums: {
-      app_role: "admin" | "user"
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -423,7 +198,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "user"],
+      app_role: ["admin", "moderator", "user"],
     },
   },
 } as const
