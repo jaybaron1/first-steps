@@ -14,6 +14,112 @@ export type Database = {
   }
   public: {
     Tables: {
+      ab_assignments: {
+        Row: {
+          created_at: string | null
+          experiment_id: string | null
+          id: string
+          session_id: string
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          session_id: string
+          variant_id: string
+        }
+        Update: {
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          session_id?: string
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_assignments_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_conversions: {
+        Row: {
+          conversion_type: string
+          created_at: string | null
+          experiment_id: string | null
+          id: string
+          session_id: string
+          variant_id: string
+        }
+        Insert: {
+          conversion_type: string
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          session_id: string
+          variant_id: string
+        }
+        Update: {
+          conversion_type?: string
+          created_at?: string | null
+          experiment_id?: string | null
+          id?: string
+          session_id?: string
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_conversions_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_experiments: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          element_selector: string
+          end_date: string | null
+          id: string
+          name: string
+          start_date: string | null
+          status: string | null
+          traffic_percent: number | null
+          variants: Json
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          element_selector: string
+          end_date?: string | null
+          id?: string
+          name: string
+          start_date?: string | null
+          status?: string | null
+          traffic_percent?: number | null
+          variants?: Json
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          element_selector?: string
+          end_date?: string | null
+          id?: string
+          name?: string
+          start_date?: string | null
+          status?: string | null
+          traffic_percent?: number | null
+          variants?: Json
+        }
+        Relationships: []
+      }
       campaigns: {
         Row: {
           budget: number | null
@@ -53,6 +159,33 @@ export type Database = {
         }
         Relationships: []
       }
+      funnel_steps: {
+        Row: {
+          created_at: string | null
+          funnel_name: string | null
+          id: string
+          name: string
+          step_order: number
+          url_pattern: string
+        }
+        Insert: {
+          created_at?: string | null
+          funnel_name?: string | null
+          id?: string
+          name: string
+          step_order: number
+          url_pattern: string
+        }
+        Update: {
+          created_at?: string | null
+          funnel_name?: string | null
+          id?: string
+          name?: string
+          step_order?: number
+          url_pattern?: string
+        }
+        Relationships: []
+      }
       keep_alive_logs: {
         Row: {
           executed_at: string
@@ -86,6 +219,7 @@ export type Database = {
           name: string | null
           phone: string | null
           session_id: string | null
+          sheets_synced_at: string | null
           source: string | null
           status: string | null
         }
@@ -100,6 +234,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           session_id?: string | null
+          sheets_synced_at?: string | null
           source?: string | null
           status?: string | null
         }
@@ -114,6 +249,7 @@ export type Database = {
           name?: string | null
           phone?: string | null
           session_id?: string | null
+          sheets_synced_at?: string | null
           source?: string | null
           status?: string | null
         }
