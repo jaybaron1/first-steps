@@ -467,12 +467,21 @@ textarea:focus::placeholder {
   color: #C9C3B8;
 }
 
-/* Ensure typed text is always visible */
+/* Ensure typed text is always visible - light theme */
 input[type="text"],
 input[type="email"],
 textarea {
   color: #1A1915 !important;
   -webkit-text-fill-color: #1A1915;
+}
+
+/* Admin portal inputs - dark theme */
+.bg-admin-bg input[type="text"],
+.bg-admin-bg input[type="email"],
+.bg-admin-bg input[type="password"],
+.bg-admin-bg textarea {
+  color: hsl(0 0% 98%) !important;
+  -webkit-text-fill-color: hsl(0 0% 98%);
 }
 
 /* Override autofill styling */
@@ -483,4 +492,12 @@ textarea:-webkit-autofill {
   -webkit-text-fill-color: #1A1915;
   -webkit-box-shadow: 0 0 0px 1000px #FFFFFF inset;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Admin portal autofill - dark theme */
+.bg-admin-bg input:-webkit-autofill,
+.bg-admin-bg input:-webkit-autofill:hover,
+.bg-admin-bg input:-webkit-autofill:focus {
+  -webkit-text-fill-color: hsl(0 0% 98%);
+  -webkit-box-shadow: 0 0 0px 1000px hsl(240 6% 4%) inset;
 }
