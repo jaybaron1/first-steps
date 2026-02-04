@@ -9,6 +9,12 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
+import AdminPortalPage from "./pages/AdminPortalPage";
+import DashboardPage from "./pages/DashboardPage";
+import SecurityDashboardPage from "./pages/SecurityDashboardPage";
+import TwoFactorSetupPage from "./pages/TwoFactorSetupPage";
+import AdminUsersPage from "./pages/AdminUsersPage";
+import AuditLogsPage from "./pages/AuditLogsPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -50,6 +56,13 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/admin" element={<AdminPortalPage />} />
+            <Route path="/admin-portal" element={<AdminPortalPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/security" element={<SecurityDashboardPage />} />
+            <Route path="/2fa-setup" element={<TwoFactorSetupPage />} />
+            <Route path="/admin-users" element={<AdminUsersPage />} />
+            <Route path="/audit-logs" element={<AuditLogsPage />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
