@@ -10,8 +10,10 @@ import {
   LayoutDashboard,
   Users,
   UserCheck,
-  BarChart3,
   FlaskConical,
+  FileText,
+  Server,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
@@ -21,6 +23,9 @@ const navItems = [
   { path: '/admin/visitors', label: 'Visitors', icon: Users },
   { path: '/admin/leads', label: 'Leads', icon: UserCheck },
   { path: '/admin/campaigns', label: 'Campaigns', icon: FlaskConical },
+  { path: '/admin/content', label: 'Content', icon: FileText },
+  { path: '/admin/system', label: 'System', icon: Server },
+  { path: '/admin/security', label: 'Security', icon: ShieldCheck },
 ];
 
 const AdminLayout: React.FC = () => {
