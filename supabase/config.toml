@@ -8,3 +8,6 @@ verify_jwt = false
 
 [functions.track-page-exit]
 verify_jwt = false
+
+[functions.sync-leads-to-sheets]
+verify_jwt = false
