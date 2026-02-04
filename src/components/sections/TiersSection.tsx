@@ -135,6 +135,7 @@ const TiersSection = () => {
 
                 <a
                   href="https://calendly.com/jason-galavanteer/discovery_call"
+                  data-track-cta={`Pricing - ${tier.name}`}
                   className={`flex items-center justify-center gap-2 w-full py-3 text-xs font-medium tracking-wide uppercase transition-all group ${
                     tier.featured
                       ? 'bg-cream text-ink hover:bg-gold hover:text-cream'
