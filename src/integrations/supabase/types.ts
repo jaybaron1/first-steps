@@ -226,6 +226,7 @@ export type Database = {
           company_name: string | null
           company_size: string | null
           country: string | null
+          created_at: string | null
           device_type: string | null
           fingerprint_hash: string | null
           first_seen: string | null
@@ -249,6 +250,7 @@ export type Database = {
           company_name?: string | null
           company_size?: string | null
           country?: string | null
+          created_at?: string | null
           device_type?: string | null
           fingerprint_hash?: string | null
           first_seen?: string | null
@@ -272,6 +274,7 @@ export type Database = {
           company_name?: string | null
           company_size?: string | null
           country?: string | null
+          created_at?: string | null
           device_type?: string | null
           fingerprint_hash?: string | null
           first_seen?: string | null
