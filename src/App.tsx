@@ -15,6 +15,9 @@ import OverviewPage from "./pages/admin/OverviewPage";
 import VisitorsPage from "./pages/admin/VisitorsPage";
 import LeadsPage from "./pages/admin/LeadsPage";
 import CampaignsPage from "./pages/admin/CampaignsPage";
+import ContentPage from "./pages/admin/ContentPage";
+import SystemPage from "./pages/admin/SystemPage";
+import SecurityPage from "./pages/admin/SecurityPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -69,6 +72,9 @@ const App = () => (
               <Route path="visitors" element={<VisitorsPage />} />
               <Route path="leads" element={<LeadsPage />} />
               <Route path="campaigns" element={<CampaignsPage />} />
+              <Route path="content" element={<ContentPage />} />
+              <Route path="system" element={<SystemPage />} />
+              <Route path="security" element={<SecurityPage />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />
