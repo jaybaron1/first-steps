@@ -209,43 +209,43 @@ const AdminPortalPage: React.FC = () => {
         <meta name="bingbot" content="noindex, nofollow" />
       </Helmet>
 
-      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+      <div className="min-h-screen bg-admin-bg flex items-center justify-center p-4">
         {/* Background effects */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-admin-accent/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-admin-accent/3 rounded-full blur-3xl" />
         </div>
 
         {/* Login Card */}
         <div className="relative w-full max-w-md">
           {/* Logo/Brand */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 border border-white/10 mb-4">
-              <Shield className="w-8 h-8 text-emerald-400" />
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-admin-accent/10 border border-admin-border mb-4">
+              <Shield className="w-8 h-8 text-admin-accent" />
             </div>
-            <h1 className="text-2xl font-semibold text-white mb-1">Admin Portal</h1>
-            <p className="text-sm text-gray-500">Galavanteer Command Center</p>
+            <h1 className="text-2xl font-semibold text-admin-text mb-1">Admin Portal</h1>
+            <p className="text-sm text-admin-text-subtle">Galavanteer Command Center</p>
           </div>
 
           {/* Card */}
-          <div className="bg-[#111113] border border-white/5 rounded-2xl p-8 shadow-2xl">
+          <div className="bg-admin-bg-elevated border border-admin-border-subtle rounded-2xl p-8 shadow-2xl">
             {view === 'login' && (
               <form onSubmit={handleLogin} className="space-y-6">
                 {/* Error Alert */}
                 {error && (
-                  <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-300">{error}</p>
+                  <div className="flex items-start gap-3 p-4 bg-admin-danger/10 border border-admin-danger/20 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-admin-danger shrink-0 mt-0.5" />
+                    <p className="text-sm text-admin-danger">{error}</p>
                   </div>
                 )}
 
                 {/* Lockout Warning */}
                 {isLockedOut && (
-                  <div className="flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-                    <Lock className="w-5 h-5 text-amber-400 shrink-0" />
+                  <div className="flex items-center gap-3 p-4 bg-admin-warning/10 border border-admin-warning/20 rounded-lg">
+                    <Lock className="w-5 h-5 text-admin-warning shrink-0" />
                     <div>
-                      <p className="text-sm text-amber-300 font-medium">Account Temporarily Locked</p>
-                      <p className="text-xs text-amber-400/70">
+                      <p className="text-sm text-admin-warning font-medium">Account Temporarily Locked</p>
+                      <p className="text-xs text-admin-warning/70">
                         Try again in {formatTime(lockoutRemaining)}
                       </p>
                     </div>
@@ -254,11 +254,11 @@ const AdminPortalPage: React.FC = () => {
 
                 {/* Email Field */}
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm text-gray-400">
+                  <Label htmlFor="email" className="text-sm text-admin-text-muted">
                     Email Address
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
                     <Input
                       id="email"
                       type="email"
@@ -266,7 +266,7 @@ const AdminPortalPage: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@galavanteer.com"
                       disabled={isLoading || isLockedOut}
-                      className="pl-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      className="pl-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
                       required
                     />
                   </div>
@@ -275,19 +275,19 @@ const AdminPortalPage: React.FC = () => {
                 {/* Password Field */}
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-sm text-gray-400">
+                    <Label htmlFor="password" className="text-sm text-admin-text-muted">
                       Password
                     </Label>
                     <button
                       type="button"
                       onClick={() => setView('reset')}
-                      className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+                      className="text-xs text-admin-accent hover:text-admin-accent/80 transition-colors"
                     >
                       Forgot password?
                     </button>
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
                     <Input
                       id="password"
                       type={showPassword ? 'text' : 'password'}
@@ -295,13 +295,13 @@ const AdminPortalPage: React.FC = () => {
                       onChange={(e) => setPassword(e.target.value)}
                       placeholder="••••••••"
                       disabled={isLoading || isLockedOut}
-                      className="pl-11 pr-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      className="pl-11 pr-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-400"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-admin-text-subtle hover:text-admin-text-muted"
                     >
                       {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                     </button>
@@ -312,7 +312,7 @@ const AdminPortalPage: React.FC = () => {
                 <Button
                   type="submit"
                   disabled={isLoading || isLockedOut}
-                  className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-12 bg-admin-accent hover:bg-admin-accent/90 text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isLoading ? (
                     <div className="flex items-center gap-2">
@@ -328,7 +328,7 @@ const AdminPortalPage: React.FC = () => {
                 </Button>
 
                 {/* Security Notice */}
-                <p className="text-center text-xs text-gray-600">
+                <p className="text-center text-xs text-admin-text-subtle">
                   Access restricted to authorized personnel only.
                   <br />
                   All login attempts are logged.
@@ -339,25 +339,25 @@ const AdminPortalPage: React.FC = () => {
             {view === 'reset' && (
               <form onSubmit={handlePasswordReset} className="space-y-6">
                 <div className="text-center mb-2">
-                  <h2 className="text-lg font-medium text-white">Reset Password</h2>
-                  <p className="text-sm text-gray-500 mt-1">
+                  <h2 className="text-lg font-medium text-admin-text">Reset Password</h2>
+                  <p className="text-sm text-admin-text-subtle mt-1">
                     Enter your email to receive reset instructions
                   </p>
                 </div>
 
                 {error && (
-                  <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
-                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
-                    <p className="text-sm text-red-300">{error}</p>
+                  <div className="flex items-start gap-3 p-4 bg-admin-danger/10 border border-admin-danger/20 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-admin-danger shrink-0 mt-0.5" />
+                    <p className="text-sm text-admin-danger">{error}</p>
                   </div>
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="reset-email" className="text-sm text-gray-400">
+                  <Label htmlFor="reset-email" className="text-sm text-admin-text-muted">
                     Email Address
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-admin-text-subtle" />
                     <Input
                       id="reset-email"
                       type="email"
@@ -365,7 +365,7 @@ const AdminPortalPage: React.FC = () => {
                       onChange={(e) => setEmail(e.target.value)}
                       placeholder="you@galavanteer.com"
                       disabled={isLoading}
-                      className="pl-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      className="pl-11 h-12 bg-admin-bg border-admin-border text-admin-text placeholder:text-admin-text-subtle focus:border-admin-accent/50 focus:ring-admin-accent/20"
                       required
                     />
                   </div>
@@ -375,7 +375,7 @@ const AdminPortalPage: React.FC = () => {
                   <Button
                     type="submit"
                     disabled={isLoading}
-                    className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg"
+                    className="w-full h-12 bg-admin-accent hover:bg-admin-accent/90 text-white font-medium rounded-lg"
                   >
                     {isLoading ? 'Sending...' : 'Send Reset Link'}
                   </Button>
@@ -386,7 +386,7 @@ const AdminPortalPage: React.FC = () => {
                       setView('login');
                       setError(null);
                     }}
-                    className="w-full h-12 text-gray-400 hover:text-white hover:bg-white/5"
+                    className="w-full h-12 text-admin-text-muted hover:text-admin-text hover:bg-admin-bg-card"
                   >
                     Back to Sign In
                   </Button>
@@ -396,14 +396,14 @@ const AdminPortalPage: React.FC = () => {
 
             {view === 'reset-sent' && (
               <div className="text-center space-y-6">
-                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                  <Mail className="w-8 h-8 text-emerald-400" />
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-admin-accent/10 border border-admin-accent/20">
+                  <Mail className="w-8 h-8 text-admin-accent" />
                 </div>
                 <div>
-                  <h2 className="text-lg font-medium text-white">Check Your Email</h2>
-                  <p className="text-sm text-gray-500 mt-2">
+                  <h2 className="text-lg font-medium text-admin-text">Check Your Email</h2>
+                  <p className="text-sm text-admin-text-subtle mt-2">
                     We've sent password reset instructions to{' '}
-                    <span className="text-gray-300">{email}</span>
+                    <span className="text-admin-text-muted">{email}</span>
                   </p>
                 </div>
                 <Button
@@ -414,7 +414,7 @@ const AdminPortalPage: React.FC = () => {
                     setError(null);
                     setEmail('');
                   }}
-                  className="w-full h-12 text-gray-400 hover:text-white hover:bg-white/5"
+                  className="w-full h-12 text-admin-text-muted hover:text-admin-text hover:bg-admin-bg-card"
                 >
                   Back to Sign In
                 </Button>
@@ -423,7 +423,7 @@ const AdminPortalPage: React.FC = () => {
           </div>
 
           {/* Footer */}
-          <p className="text-center text-xs text-gray-600 mt-6">
+          <p className="text-center text-xs text-admin-text-subtle mt-6">
             © {new Date().getFullYear()} Galavanteer. All rights reserved.
           </p>
         </div>

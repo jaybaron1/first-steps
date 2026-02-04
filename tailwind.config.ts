@@ -90,6 +90,21 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Admin dark theme
+        admin: {
+          bg: "hsl(var(--admin-bg))",
+          "bg-elevated": "hsl(var(--admin-bg-elevated))",
+          "bg-card": "hsl(var(--admin-bg-card))",
+          border: "hsl(var(--admin-border))",
+          "border-subtle": "hsl(var(--admin-border-subtle))",
+          text: "hsl(var(--admin-text))",
+          "text-muted": "hsl(var(--admin-text-muted))",
+          "text-subtle": "hsl(var(--admin-text-subtle))",
+          accent: "hsl(var(--admin-accent))",
+          "accent-muted": "hsl(var(--admin-accent-muted))",
+          danger: "hsl(var(--admin-danger))",
+          warning: "hsl(var(--admin-warning))",
+        },
       },
       fontFamily: {
         display: ["Playfair Display", "Georgia", "serif"],
