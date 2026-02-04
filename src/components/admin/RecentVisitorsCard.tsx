@@ -1,26 +1,43 @@
 import React, { useState } from 'react';
 import { Users, MapPin, Monitor, Smartphone, Tablet, Globe, Clock, MousePointer } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useVisitors, Visitor } from '@/hooks/useVisitors';
+import { useVisitors, Visitor, VisitorFilters } from '@/hooks/useVisitors';
 import LeadTemperatureBadge from './LeadTemperatureBadge';
 import VisitorProfileModal from './VisitorProfileModal';
 import PaginationControls from './PaginationControls';
+import VisitorFiltersComponent, { VisitorFiltersState } from './VisitorFilters';
 
 interface RecentVisitorsCardProps {
   pageSize?: number;
+  showFilters?: boolean;
 }
 
-const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ pageSize = 10 }) => {
+const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ 
+  pageSize = 10,
+  showFilters = true 
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [filters, setFilters] = useState<VisitorFiltersState>({
+    dateRange: 'all',
+    deviceType: 'all',
+    country: '',
+  });
 
-  const { visitors, loading, totalCount, totalPages } = useVisitors({
+  const { visitors, loading, totalCount, totalPages, countries } = useVisitors({
     page: currentPage,
     pageSize,
     sortBy: 'first_seen',
     sortOrder: 'desc',
+    filters: filters as VisitorFilters,
   });
+
+  // Reset to page 1 when filters change
+  const handleFiltersChange = (newFilters: VisitorFiltersState) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
 
   const getDeviceIcon = (deviceType: string | null) => {
     switch (deviceType?.toLowerCase()) {
@@ -101,6 +118,13 @@ const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ pageSize = 10 }
 
   return (
     <>
+      {showFilters && (
+        <VisitorFiltersComponent
+          filters={filters}
+          onFiltersChange={handleFiltersChange}
+          countries={countries}
+        />
+      )}
       <div className="space-y-2">
         {visitors.map((visitor) => (
           <div

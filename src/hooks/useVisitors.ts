@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { adminSupabase as supabase } from '@/lib/adminBackend';
+import { subDays, subHours } from 'date-fns';
 
 export interface Visitor {
   session_id: string;
@@ -27,11 +28,18 @@ export interface Visitor {
   id: string;
 }
 
+export interface VisitorFilters {
+  dateRange?: 'all' | '24h' | '7d' | '30d' | '90d';
+  deviceType?: 'all' | 'desktop' | 'mobile' | 'tablet';
+  country?: string;
+}
+
 export interface UseVisitorsOptions {
   page?: number;
   pageSize?: number;
   sortBy?: 'first_seen' | 'last_seen' | 'lead_score';
   sortOrder?: 'asc' | 'desc';
+  filters?: VisitorFilters;
 }
 
 export interface UseVisitorsResult {
@@ -41,7 +49,24 @@ export interface UseVisitorsResult {
   totalCount: number;
   currentPage: number;
   totalPages: number;
+  countries: string[];
   refetch: () => Promise<void>;
+}
+
+function getDateRangeStart(range: string): Date | null {
+  const now = new Date();
+  switch (range) {
+    case '24h':
+      return subHours(now, 24);
+    case '7d':
+      return subDays(now, 7);
+    case '30d':
+      return subDays(now, 30);
+    case '90d':
+      return subDays(now, 90);
+    default:
+      return null;
+  }
 }
 
 export function useVisitors(options: UseVisitorsOptions = {}): UseVisitorsResult {
@@ -49,31 +74,71 @@ export function useVisitors(options: UseVisitorsOptions = {}): UseVisitorsResult
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState(0);
+  const [countries, setCountries] = useState<string[]>([]);
 
   const {
     page = 1,
     pageSize = 10,
     sortBy = 'first_seen',
     sortOrder = 'desc',
+    filters = {},
   } = options;
+
+  const fetchCountries = useCallback(async () => {
+    try {
+      const { data } = await supabase
+        .from('visitor_sessions')
+        .select('country')
+        .not('country', 'is', null);
+
+      if (data) {
+        const uniqueCountries = [...new Set(data.map((d) => d.country).filter(Boolean))] as string[];
+        setCountries(uniqueCountries.sort());
+      }
+    } catch (err) {
+      console.error('[useVisitors] Error fetching countries:', err);
+    }
+  }, []);
 
   const fetchVisitors = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      // Get total count first
-      const { count: total } = await supabase
-        .from('visitor_sessions')
-        .select('*', { count: 'exact', head: true });
+      // Build query with filters
+      let countQuery = supabase.from('visitor_sessions').select('*', { count: 'exact', head: true });
+      let dataQuery = supabase.from('visitor_sessions').select('*');
 
-      // Apply pagination
+      // Apply date range filter
+      if (filters.dateRange && filters.dateRange !== 'all') {
+        const startDate = getDateRangeStart(filters.dateRange);
+        if (startDate) {
+          const isoDate = startDate.toISOString();
+          countQuery = countQuery.gte('first_seen', isoDate);
+          dataQuery = dataQuery.gte('first_seen', isoDate);
+        }
+      }
+
+      // Apply device type filter
+      if (filters.deviceType && filters.deviceType !== 'all') {
+        countQuery = countQuery.eq('device_type', filters.deviceType);
+        dataQuery = dataQuery.eq('device_type', filters.deviceType);
+      }
+
+      // Apply country filter
+      if (filters.country) {
+        countQuery = countQuery.eq('country', filters.country);
+        dataQuery = dataQuery.eq('country', filters.country);
+      }
+
+      // Get total count
+      const { count: total } = await countQuery;
+
+      // Apply pagination and sorting
       const from = (page - 1) * pageSize;
       const to = from + pageSize - 1;
 
-      const { data: sessions, error: sessionsError } = await supabase
-        .from('visitor_sessions')
-        .select('*')
+      const { data: sessions, error: sessionsError } = await dataQuery
         .order(sortBy, { ascending: sortOrder === 'asc' })
         .range(from, to);
 
@@ -111,7 +176,11 @@ export function useVisitors(options: UseVisitorsOptions = {}): UseVisitorsResult
     } finally {
       setLoading(false);
     }
-  }, [page, pageSize, sortBy, sortOrder]);
+  }, [page, pageSize, sortBy, sortOrder, filters.dateRange, filters.deviceType, filters.country]);
+
+  useEffect(() => {
+    fetchCountries();
+  }, [fetchCountries]);
 
   useEffect(() => {
     fetchVisitors();
@@ -140,6 +209,7 @@ export function useVisitors(options: UseVisitorsOptions = {}): UseVisitorsResult
     totalCount,
     currentPage: page,
     totalPages: Math.ceil(totalCount / pageSize),
+    countries,
     refetch: fetchVisitors,
   };
 }

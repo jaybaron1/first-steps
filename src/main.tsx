@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./index.css";
 import visitorTracking from "@/lib/visitorTracking";
+import "@/lib/mediaTracking"; // Auto-initializes video/download tracking
 
 // Make tracking globally available for manual event tracking
 declare global {
