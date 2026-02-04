@@ -3,11 +3,16 @@
 ## Overview
 Build an enterprise-grade, non-public admin dashboard for $500K/month agency operations. This is a comprehensive command center for business intelligence, visitor tracking, lead generation, and growth optimization.
 
+**🔐 AUTHENTICATION & ACCESS:**
+This entire admin system is **password-protected using Supabase Authentication**. All routes (`/admin`, `/admin-portal`, `/dashboard`, `/security`, `/2fa-setup`, `/admin-users`, `/audit-logs`) require authenticated Supabase sessions with verified @galavanteer.com email addresses. The existing AdminPortalPage handles login with password reset functionality and optional 2FA.
+
 **Critical Requirements:**
 - 🚫 Non-public: Hidden from robots.txt, sitemap.xml, and LLM crawlers
+- 🔐 Supabase Authentication: Password-protected with email verification
+- 🛡️ Multi-Factor Authentication (2FA): Optional but recommended
 - 🍪 Cookie-less tracking (privacy-first, GDPR compliant)
-- 🔒 Enterprise-level security and authentication
-- 📊 Real-time data and insights
+- 🔒 Enterprise-level security and role-based access control
+- 📊 Real-time data and insights via Supabase Realtime
 - 🎯 Actionable intelligence for business growth
 
 ---
