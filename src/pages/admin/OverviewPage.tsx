@@ -212,7 +212,7 @@ const OverviewPage: React.FC = () => {
               <p className="text-xs text-[#8C857A]">Latest sessions</p>
             </div>
           </div>
-          <RecentVisitorsCard />
+          <RecentVisitorsCard showFilters={false} pageSize={5} />
         </div>
       </div>
     </>

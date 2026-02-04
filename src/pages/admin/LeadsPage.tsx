@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCheck, Filter, Target, MousePointerClick, Flame, FileText, Sparkles } from 'lucide-react';
+import { UserCheck, Filter, Target, MousePointerClick, Flame, FileText, Sparkles, Thermometer } from 'lucide-react';
 import LeadsPanel from '@/components/admin/LeadsPanel';
 import ConversionFunnel from '@/components/admin/ConversionFunnel';
 import GoalsPanel from '@/components/admin/GoalsPanel';
@@ -7,6 +7,7 @@ import CTAPerformance from '@/components/admin/CTAPerformance';
 import CTAHeatmap from '@/components/admin/CTAHeatmap';
 import FormSubmissionsPanel from '@/components/admin/FormSubmissionsPanel';
 import LeadEnrichmentStatus from '@/components/admin/LeadEnrichmentStatus';
+import HotLeadsPanel from '@/components/admin/HotLeadsPanel';
 
 const LeadsPage: React.FC = () => {
   return (
@@ -15,6 +16,24 @@ const LeadsPage: React.FC = () => {
       <div className="mb-8">
         <h2 className="text-2xl font-display font-semibold text-[#1A1915]">Lead Generation</h2>
         <p className="text-sm text-[#8C857A]">Capture, score, and convert prospects</p>
+      </div>
+
+      {/* Hot Leads Panel - NEW */}
+      <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200/50 rounded-2xl p-8 mb-10 shadow-lg">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-lg bg-amber-100">
+              <Thermometer className="w-6 h-6 text-amber-600" />
+            </div>
+            <div>
+              <h3 className="text-lg font-display font-semibold text-[#1A1915]">
+                Hot Leads Requiring Action
+              </h3>
+              <p className="text-xs text-[#8C857A]">High-score leads that need immediate follow-up</p>
+            </div>
+          </div>
+        </div>
+        <HotLeadsPanel />
       </div>
 
       {/* Lead Management */}
