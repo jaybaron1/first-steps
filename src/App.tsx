@@ -18,6 +18,7 @@ import CampaignsPage from "./pages/admin/CampaignsPage";
 import ContentPage from "./pages/admin/ContentPage";
 import SystemPage from "./pages/admin/SystemPage";
 import SecurityPage from "./pages/admin/SecurityPage";
+import SEOPage from "./pages/admin/SEOPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -75,6 +76,7 @@ const App = () => (
               <Route path="content" element={<ContentPage />} />
               <Route path="system" element={<SystemPage />} />
               <Route path="security" element={<SecurityPage />} />
+              <Route path="seo" element={<SEOPage />} />
             </Route>
             
             <Route path="*" element={<NotFound />} />

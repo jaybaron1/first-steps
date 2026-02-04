@@ -3,6 +3,7 @@ import App from "./App.tsx";
 import "./index.css";
 import visitorTracking from "@/lib/visitorTracking";
 import "@/lib/mediaTracking"; // Auto-initializes video/download tracking
+import { initWebVitalsTracking } from "@/lib/webVitalsTracking";
 
 // Make tracking globally available for manual event tracking
 declare global {
@@ -15,6 +16,9 @@ window.galavanteerTracking = visitorTracking;
 
 // Tracking starts automatically when visitorTracking is imported!
 console.log("✅ Galavanteer visitor tracking initialized");
+
+// Initialize Core Web Vitals tracking
+initWebVitalsTracking();
 
 // Rebuild v2
 createRoot(document.getElementById("root")!).render(<App />);
