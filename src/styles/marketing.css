@@ -1,0 +1,337 @@
+/* AI Visibility by Galavanteer - Marketing Microsite Design System */
+/* Direction A: Dark editorial base + warm light panels + teal accent */
+
+.marketing-site {
+  /* Core colors - Dark Editorial */
+  --mkt-bg-dark: 220 20% 10%;
+  --mkt-bg-darker: 220 25% 6%;
+  --mkt-fg-dark: 40 20% 95%;
+  
+  /* Warm light panels */
+  --mkt-bg-light: 40 30% 96%;
+  --mkt-bg-warm: 35 40% 93%;
+  --mkt-fg-light: 220 20% 15%;
+  
+  /* Teal accent */
+  --mkt-accent: 175 70% 45%;
+  --mkt-accent-hover: 175 70% 38%;
+  --mkt-accent-glow: 175 70% 50%;
+  
+  /* Supporting colors */
+  --mkt-border-dark: 220 15% 20%;
+  --mkt-border-light: 35 20% 85%;
+  --mkt-muted: 220 10% 50%;
+  --mkt-success: 150 60% 45%;
+  --mkt-warning: 45 90% 55%;
+  --mkt-error: 0 70% 55%;
+  
+  /* Typography */
+  --mkt-font-display: 'DM Serif Display', Georgia, serif;
+  --mkt-font-body: 'Manrope', system-ui, sans-serif;
+  
+  /* Spacing rhythm */
+  --mkt-space-xs: 0.5rem;
+  --mkt-space-sm: 1rem;
+  --mkt-space-md: 1.5rem;
+  --mkt-space-lg: 2.5rem;
+  --mkt-space-xl: 4rem;
+  --mkt-space-2xl: 6rem;
+  
+  /* Radius */
+  --mkt-radius-sm: 0.375rem;
+  --mkt-radius-md: 0.75rem;
+  --mkt-radius-lg: 1rem;
+  --mkt-radius-xl: 1.5rem;
+  
+  /* Shadows */
+  --mkt-shadow-sm: 0 2px 8px -2px hsl(220 20% 10% / 0.15);
+  --mkt-shadow-md: 0 8px 24px -8px hsl(220 20% 10% / 0.2);
+  --mkt-shadow-lg: 0 16px 48px -16px hsl(220 20% 10% / 0.25);
+  --mkt-shadow-glow: 0 0 40px hsl(var(--mkt-accent) / 0.3);
+}
+
+/* Base styles for marketing site */
+.marketing-site {
+  font-family: var(--mkt-font-body);
+  background: hsl(var(--mkt-bg-dark));
+  color: hsl(var(--mkt-fg-dark));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Marketing Typography */
+.marketing-site h1,
+.marketing-site h2,
+.marketing-site h3,
+.marketing-site h4,
+.marketing-site h5,
+.marketing-site h6 {
+  font-family: var(--mkt-font-display);
+  font-weight: 400;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.marketing-site h1 {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+}
+
+.marketing-site h2 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.marketing-site h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.marketing-site p {
+  line-height: 1.7;
+  font-size: 1.0625rem;
+}
+
+/* Marketing Buttons */
+.mkt-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--mkt-font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: var(--mkt-radius-md);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+}
+
+.mkt-btn-primary {
+  background: hsl(var(--mkt-accent));
+  color: hsl(var(--mkt-bg-darker));
+  box-shadow: 0 4px 16px hsl(var(--mkt-accent) / 0.3);
+}
+
+.mkt-btn-primary:hover {
+  background: hsl(var(--mkt-accent-hover));
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px hsl(var(--mkt-accent) / 0.4);
+}
+
+.mkt-btn-secondary {
+  background: transparent;
+  color: hsl(var(--mkt-fg-dark));
+  border: 1px solid hsl(var(--mkt-border-dark));
+}
+
+.mkt-btn-secondary:hover {
+  background: hsl(var(--mkt-bg-darker));
+  border-color: hsl(var(--mkt-accent));
+}
+
+.mkt-btn-ghost {
+  background: transparent;
+  color: hsl(var(--mkt-accent));
+  padding: 0.5rem 0;
+}
+
+.mkt-btn-ghost:hover {
+  color: hsl(var(--mkt-accent-hover));
+}
+
+/* Light section variant */
+.mkt-section-light {
+  background: hsl(var(--mkt-bg-light));
+  color: hsl(var(--mkt-fg-light));
+}
+
+.mkt-section-light h1,
+.mkt-section-light h2,
+.mkt-section-light h3 {
+  color: hsl(var(--mkt-fg-light));
+}
+
+.mkt-section-light .mkt-btn-secondary {
+  color: hsl(var(--mkt-fg-light));
+  border-color: hsl(var(--mkt-border-light));
+}
+
+/* Warm section variant */
+.mkt-section-warm {
+  background: hsl(var(--mkt-bg-warm));
+  color: hsl(var(--mkt-fg-light));
+}
+
+/* Cards */
+.mkt-card {
+  background: hsl(var(--mkt-bg-darker));
+  border: 1px solid hsl(var(--mkt-border-dark));
+  border-radius: var(--mkt-radius-lg);
+  padding: var(--mkt-space-lg);
+  transition: all 0.3s ease;
+}
+
+.mkt-card:hover {
+  border-color: hsl(var(--mkt-accent) / 0.3);
+  box-shadow: var(--mkt-shadow-md);
+}
+
+.mkt-card-light {
+  background: hsl(0 0% 100%);
+  border-color: hsl(var(--mkt-border-light));
+  color: hsl(var(--mkt-fg-light));
+}
+
+/* Bento Grid */
+.mkt-bento {
+  display: grid;
+  gap: var(--mkt-space-md);
+}
+
+@media (min-width: 768px) {
+  .mkt-bento-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .mkt-bento-6 > *:nth-child(1) {
+    grid-column: span 2;
+  }
+}
+
+/* Container */
+.mkt-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--mkt-space-md);
+}
+
+@media (min-width: 768px) {
+  .mkt-container {
+    padding: 0 var(--mkt-space-lg);
+  }
+}
+
+/* Section spacing */
+.mkt-section {
+  padding: var(--mkt-space-2xl) 0;
+}
+
+/* Input styles */
+.mkt-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  font-family: var(--mkt-font-body);
+  font-size: 1rem;
+  background: hsl(var(--mkt-bg-darker));
+  border: 1px solid hsl(var(--mkt-border-dark));
+  border-radius: var(--mkt-radius-md);
+  color: hsl(var(--mkt-fg-dark));
+  transition: all 0.2s ease;
+}
+
+.mkt-input:focus {
+  outline: none;
+  border-color: hsl(var(--mkt-accent));
+  box-shadow: 0 0 0 3px hsl(var(--mkt-accent) / 0.15);
+}
+
+.mkt-input::placeholder {
+  color: hsl(var(--mkt-muted));
+}
+
+.mkt-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Label */
+.mkt-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--mkt-fg-dark) / 0.8);
+  margin-bottom: 0.5rem;
+}
+
+/* Accordion */
+.mkt-accordion-trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--mkt-space-md);
+  font-family: var(--mkt-font-body);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+.mkt-accordion-content {
+  padding: 0 var(--mkt-space-md) var(--mkt-space-md);
+  color: hsl(var(--mkt-muted));
+}
+
+/* Grade colors */
+.mkt-grade-a { color: hsl(150 70% 45%); }
+.mkt-grade-b { color: hsl(120 60% 50%); }
+.mkt-grade-c { color: hsl(45 90% 55%); }
+.mkt-grade-d { color: hsl(25 90% 55%); }
+.mkt-grade-f { color: hsl(0 70% 55%); }
+
+/* Animations */
+@keyframes mkt-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes mkt-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.mkt-animate-fade-up {
+  animation: mkt-fade-up 0.6s ease-out forwards;
+}
+
+.mkt-animate-scale-in {
+  animation: mkt-scale-in 0.4s ease-out forwards;
+}
+
+/* Scrollbar for marketing site */
+.marketing-site::-webkit-scrollbar {
+  width: 8px;
+}
+
+.marketing-site::-webkit-scrollbar-track {
+  background: hsl(var(--mkt-bg-darker));
+}
+
+.marketing-site::-webkit-scrollbar-thumb {
+  background: hsl(var(--mkt-border-dark));
+  border-radius: 4px;
+}
+
+.marketing-site::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--mkt-accent));
+}
