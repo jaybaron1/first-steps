@@ -117,12 +117,33 @@ export const parseUTMParams = (): {
   utm_source: string | null;
   utm_medium: string | null;
   utm_campaign: string | null;
+  utm_term: string | null;
+  utm_content: string | null;
 } => {
   const params = new URLSearchParams(window.location.search);
   return {
     utm_source: params.get('utm_source'),
     utm_medium: params.get('utm_medium'),
     utm_campaign: params.get('utm_campaign'),
+    utm_term: params.get('utm_term'),
+    utm_content: params.get('utm_content'),
+  };
+};
+
+/**
+ * Get screen and device details
+ */
+export const getScreenInfo = (): {
+  screen_resolution: string;
+  viewport_size: string;
+  timezone: string;
+  language: string;
+} => {
+  return {
+    screen_resolution: `${screen.width}x${screen.height}`,
+    viewport_size: `${window.innerWidth}x${window.innerHeight}`,
+    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    language: navigator.language,
   };
 };
 
@@ -198,6 +219,7 @@ export const initializeSession = async (): Promise<string> => {
   const fingerprintHash = await getFingerprint();
   const utmParams = parseUTMParams();
   const visitorInfo = await getVisitorInfo();
+  const screenInfo = getScreenInfo();
 
   // Check if session already exists
   const { data: existingSession } = await trackingSupabase
@@ -218,6 +240,12 @@ export const initializeSession = async (): Promise<string> => {
       utm_source: utmParams.utm_source,
       utm_medium: utmParams.utm_medium,
       utm_campaign: utmParams.utm_campaign,
+      utm_term: utmParams.utm_term,
+      utm_content: utmParams.utm_content,
+      screen_resolution: screenInfo.screen_resolution,
+      viewport_size: screenInfo.viewport_size,
+      timezone: screenInfo.timezone,
+      language: screenInfo.language,
       ip_address: visitorInfo.ip_address,
       country: visitorInfo.country,
       city: visitorInfo.city,
