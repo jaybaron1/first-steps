@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { adminSupabase as supabase } from '@/lib/adminBackend';
 import { Session, User } from '@supabase/supabase-js';
 import { Shield, Loader2 } from 'lucide-react';
 
