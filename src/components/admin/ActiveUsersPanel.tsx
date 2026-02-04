@@ -48,8 +48,8 @@
 
         const { data: sessions, error } = await adminSupabase
           .from('visitor_sessions')
-          .select('session_id, city, country, device_type, created_at')
-          .gte('created_at', fiveMinutesAgo);
+          .select('session_id, city, country, device_type, first_seen')
+          .gte('first_seen', fiveMinutesAgo);
 
         if (error) throw error;
 
@@ -63,8 +63,7 @@
 
             const lastPage = pages?.[0];
             const duration = lastPage
-              ? Math.floor((new Date().getTime() - new
-  Date(session.created_at).getTime()) / 1000)
+              ? Math.floor((new Date().getTime() - new Date(session.first_seen).getTime()) / 1000)
               : 0;
 
             return {
@@ -72,7 +71,7 @@
               city: session.city,
               country: session.country,
               current_page: lastPage?.page_url || null,
-              last_activity: lastPage?.created_at || session.created_at,
+              last_activity: lastPage?.created_at || session.first_seen,
               duration_seconds: duration,
               page_count: pages?.length || 0,
               device_type: session.device_type,
