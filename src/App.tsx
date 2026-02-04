@@ -9,7 +9,6 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
-import AdminPortalPage from "./pages/admin/AdminPortalPage";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminRoute from "./components/admin/AdminRoute";
 import AOSProvider from "@/components/AOSProvider";
@@ -56,16 +55,8 @@ const App = () => (
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             
-            {/* Admin Portal - Authentication */}
-            <Route path="/admin-portal" element={<AdminPortalPage />} />
-            
-            {/* Protected Admin Routes */}
+            {/* Admin - Single route with integrated login */}
             <Route path="/admin" element={
-              <AdminRoute>
-                <AdminDashboard />
-              </AdminRoute>
-            } />
-            <Route path="/admin-dashboard" element={
               <AdminRoute>
                 <AdminDashboard />
               </AdminRoute>
