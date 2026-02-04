@@ -120,6 +120,110 @@ export type Database = {
         }
         Relationships: []
       }
+      attribution_credits: {
+        Row: {
+          attributed_revenue: number
+          calculated_at: string
+          credit_percent: number
+          deal_id: string
+          id: string
+          model: Database["public"]["Enums"]["attribution_model"]
+          touchpoint_id: string
+        }
+        Insert: {
+          attributed_revenue?: number
+          calculated_at?: string
+          credit_percent: number
+          deal_id: string
+          id?: string
+          model: Database["public"]["Enums"]["attribution_model"]
+          touchpoint_id: string
+        }
+        Update: {
+          attributed_revenue?: number
+          calculated_at?: string
+          credit_percent?: number
+          deal_id?: string
+          id?: string
+          model?: Database["public"]["Enums"]["attribution_model"]
+          touchpoint_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attribution_credits_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attribution_credits_touchpoint_id_fkey"
+            columns: ["touchpoint_id"]
+            isOneToOne: false
+            referencedRelation: "attribution_touchpoints"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attribution_touchpoints: {
+        Row: {
+          campaign: string | null
+          channel: string | null
+          content: string | null
+          created_at: string
+          deal_id: string
+          id: string
+          is_converting_touch: boolean | null
+          medium: string | null
+          metadata: Json | null
+          page_url: string | null
+          session_id: string | null
+          source: string | null
+          touchpoint_time: string
+          touchpoint_type: string
+        }
+        Insert: {
+          campaign?: string | null
+          channel?: string | null
+          content?: string | null
+          created_at?: string
+          deal_id: string
+          id?: string
+          is_converting_touch?: boolean | null
+          medium?: string | null
+          metadata?: Json | null
+          page_url?: string | null
+          session_id?: string | null
+          source?: string | null
+          touchpoint_time?: string
+          touchpoint_type: string
+        }
+        Update: {
+          campaign?: string | null
+          channel?: string | null
+          content?: string | null
+          created_at?: string
+          deal_id?: string
+          id?: string
+          is_converting_touch?: boolean | null
+          medium?: string | null
+          metadata?: Json | null
+          page_url?: string | null
+          session_id?: string | null
+          source?: string | null
+          touchpoint_time?: string
+          touchpoint_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attribution_touchpoints_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       campaigns: {
         Row: {
           budget: number | null
@@ -191,6 +295,65 @@ export type Database = {
           value?: number | null
         }
         Relationships: []
+      }
+      deals: {
+        Row: {
+          actual_close_date: string | null
+          company: string | null
+          created_at: string
+          expected_close_date: string | null
+          id: string
+          lead_id: string | null
+          metadata: Json | null
+          name: string
+          notes: string | null
+          owner_email: string | null
+          probability: number | null
+          stage: Database["public"]["Enums"]["deal_stage"]
+          updated_at: string
+          value: number
+        }
+        Insert: {
+          actual_close_date?: string | null
+          company?: string | null
+          created_at?: string
+          expected_close_date?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          name: string
+          notes?: string | null
+          owner_email?: string | null
+          probability?: number | null
+          stage?: Database["public"]["Enums"]["deal_stage"]
+          updated_at?: string
+          value?: number
+        }
+        Update: {
+          actual_close_date?: string | null
+          company?: string | null
+          created_at?: string
+          expected_close_date?: string | null
+          id?: string
+          lead_id?: string | null
+          metadata?: Json | null
+          name?: string
+          notes?: string | null
+          owner_email?: string | null
+          probability?: number | null
+          stage?: Database["public"]["Enums"]["deal_stage"]
+          updated_at?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deals_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       funnel_steps: {
         Row: {
@@ -366,6 +529,50 @@ export type Database = {
           },
         ]
       }
+      revenue_events: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string | null
+          deal_id: string
+          description: string | null
+          event_date: string
+          event_type: string
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string | null
+          deal_id: string
+          description?: string | null
+          event_date?: string
+          event_type: string
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string | null
+          deal_id?: string
+          description?: string | null
+          event_date?: string
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "revenue_events_deal_id_fkey"
+            columns: ["deal_id"]
+            isOneToOne: false
+            referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -523,6 +730,17 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_attribution: {
+        Args: {
+          p_deal_id: string
+          p_model: Database["public"]["Enums"]["attribution_model"]
+        }
+        Returns: {
+          attributed_revenue: number
+          credit_percent: number
+          touchpoint_id: string
+        }[]
+      }
       calculate_lead_score: { Args: { p_session_id: string }; Returns: number }
       has_role: {
         Args: {
@@ -534,6 +752,19 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      attribution_model:
+        | "first_touch"
+        | "last_touch"
+        | "linear"
+        | "time_decay"
+        | "position_based"
+      deal_stage:
+        | "lead"
+        | "qualified"
+        | "proposal"
+        | "negotiation"
+        | "closed_won"
+        | "closed_lost"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -662,6 +893,21 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      attribution_model: [
+        "first_touch",
+        "last_touch",
+        "linear",
+        "time_decay",
+        "position_based",
+      ],
+      deal_stage: [
+        "lead",
+        "qualified",
+        "proposal",
+        "negotiation",
+        "closed_won",
+        "closed_lost",
+      ],
     },
   },
 } as const

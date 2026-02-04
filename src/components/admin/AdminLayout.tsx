@@ -24,6 +24,7 @@ const navItems = [
   { path: '/admin/visitors', label: 'Visitors', icon: Users },
   { path: '/admin/leads', label: 'Leads', icon: UserCheck },
   { path: '/admin/campaigns', label: 'Campaigns', icon: FlaskConical },
+  { path: '/admin/revenue', label: 'Revenue', icon: FileText },
   { path: '/admin/content', label: 'Content', icon: FileText },
   { path: '/admin/seo', label: 'SEO', icon: Search },
   { path: '/admin/system', label: 'System', icon: Server },
