@@ -9,8 +9,12 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
-import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminLayout from "./components/admin/AdminLayout";
 import AdminRoute from "./components/admin/AdminRoute";
+import OverviewPage from "./pages/admin/OverviewPage";
+import VisitorsPage from "./pages/admin/VisitorsPage";
+import LeadsPage from "./pages/admin/LeadsPage";
+import CampaignsPage from "./pages/admin/CampaignsPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -55,12 +59,17 @@ const App = () => (
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             
-            {/* Admin - Single route with integrated login */}
+            {/* Admin - Tab-based layout with nested routes */}
             <Route path="/admin" element={
               <AdminRoute>
-                <AdminDashboard />
+                <AdminLayout />
               </AdminRoute>
-            } />
+            }>
+              <Route index element={<OverviewPage />} />
+              <Route path="visitors" element={<VisitorsPage />} />
+              <Route path="leads" element={<LeadsPage />} />
+              <Route path="campaigns" element={<CampaignsPage />} />
+            </Route>
             
             <Route path="*" element={<NotFound />} />
           </Routes>
