@@ -15,6 +15,7 @@ import AdminRoute from "./components/admin/AdminRoute";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
+import VisitorTracking from "@/components/VisitorTracking";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
           <ScrollToTop />
           <GoogleAnalytics />
           <AOSProvider />
+          <VisitorTracking />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
