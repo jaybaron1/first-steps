@@ -1,7 +1,9 @@
 # Sitemap Location
-Sitemap: https://wukxgvknolbqvtqsitmd.supabase.co/functions/v1/generate-sitemap
-# Sitemap Index (for future category splits)
-# Sitemap: https://galavanteer.com/sitemap_index.xml
+Sitemap: https://galavanteer.com/sitemap.xml
+
+# LLMs.txt for AI Discoverability
+# AI crawlers should reference llms.txt for structured business information
+# Location: https://galavanteer.com/llms.txt
 
 # Search Engine Crawlers
 User-agent: Googlebot
@@ -33,36 +35,55 @@ Allow: /
 # AI Crawlers and LLMs
 User-agent: Claude-Web
 Allow: /
+Allow: /llms.txt
 
 User-agent: ChatGPT-User
 Allow: /
+Allow: /llms.txt
 
 User-agent: CCBot
 Allow: /
+Allow: /llms.txt
 
 User-agent: anthropic-ai
 Allow: /
+Allow: /llms.txt
 
 User-agent: GPTBot
 Allow: /
+Allow: /llms.txt
 
 User-agent: Google-Extended
 Allow: /
+Allow: /llms.txt
 
 User-agent: PerplexityBot
 Allow: /
+Allow: /llms.txt
 
 User-agent: cohere-ai
 Allow: /
+Allow: /llms.txt
 
 User-agent: YouBot
 Allow: /
+Allow: /llms.txt
 
 User-agent: Diffbot
 Allow: /
+Allow: /llms.txt
 
 User-agent: Meta-ExternalAgent
 Allow: /
+Allow: /llms.txt
+
+User-agent: Bytespider
+Allow: /
+Allow: /llms.txt
+
+User-agent: Applebot-Extended
+Allow: /
+Allow: /llms.txt
 
 # All Other Crawlers
 User-agent: *
@@ -87,6 +108,7 @@ Disallow: /*.json$
 Allow: /lovable-uploads/
 Allow: /social-images/
 Allow: /llms.txt
+Allow: /sitemap.xml
 Allow: /*.css
 Allow: /*.js
 Allow: /*.png
@@ -97,3 +119,8 @@ Allow: /*.svg
 Allow: /*.gif
 Allow: /*.woff
 Allow: /*.woff2
+
+# Integration & API Endpoints (for reference, blocked above)
+# Calendly: https://calendly.com/jason-galavanteer
+# Instagram: https://instagram.com/galavanteer_ai
+# LinkedIn: https://linkedin.com/in/jasondbaron

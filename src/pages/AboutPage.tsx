@@ -5,6 +5,7 @@ import ChatDiscovery from '@/components/ChatDiscovery';
 import SEOHead from '@/components/SEOHead';
 import BreadcrumbSchema from '@/components/BreadcrumbSchema';
 import PersonSchema from '@/components/PersonSchema';
+import OrganizationSchema from '@/components/OrganizationSchema';
 import { ArrowRight, Play, X } from 'lucide-react';
 
 const AboutPage = () => {
@@ -47,6 +48,7 @@ const AboutPage = () => {
         { name: "About", url: "/about" }
       ]} />
       <PersonSchema />
+      <OrganizationSchema />
 
       <Header />
 
