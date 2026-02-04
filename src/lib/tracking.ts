@@ -3,7 +3,7 @@
  * Uses browser fingerprinting and session storage for privacy-first tracking
  */
 
-import { supabase } from '@/integrations/supabase/client';
+import { trackingSupabase, trackingBackendUrl } from '@/lib/trackingBackend';
 
 // Session storage keys
 const SESSION_ID_KEY = 'visitor_session_id';
@@ -178,7 +178,7 @@ export const getVisitorInfo = async (): Promise<{
   city: string | null;
 }> => {
   try {
-    const { data, error } = await supabase.functions.invoke('get-visitor-info');
+    const { data, error } = await trackingSupabase.functions.invoke('get-visitor-info');
     if (error) {
       console.warn('Failed to get visitor info:', error);
       return { ip_address: null, country: null, city: null };
@@ -200,7 +200,7 @@ export const initializeSession = async (): Promise<string> => {
   const visitorInfo = await getVisitorInfo();
 
   // Check if session already exists
-  const { data: existingSession } = await supabase
+  const { data: existingSession } = await trackingSupabase
     .from('visitor_sessions')
     .select('id')
     .eq('session_id', sessionId)
@@ -208,7 +208,7 @@ export const initializeSession = async (): Promise<string> => {
 
   if (!existingSession) {
     // Create new session
-    await supabase.from('visitor_sessions').insert({
+    await trackingSupabase.from('visitor_sessions').insert({
       session_id: sessionId,
       fingerprint_hash: fingerprintHash,
       device_type: detectDeviceType(),
@@ -224,7 +224,7 @@ export const initializeSession = async (): Promise<string> => {
     });
   } else {
     // Update last seen
-    await supabase
+    await trackingSupabase
       .from('visitor_sessions')
       .update({ last_seen: new Date().toISOString() })
       .eq('session_id', sessionId);
@@ -245,21 +245,21 @@ export const trackPageView = async (pageUrl?: string, pageTitle?: string): Promi
   sessionStorage.setItem(PAGE_LOAD_TIME_KEY, Date.now().toString());
   sessionStorage.setItem(MAX_SCROLL_DEPTH_KEY, '0');
 
-  await supabase.from('page_views').insert({
+  await trackingSupabase.from('page_views').insert({
     session_id: sessionId,
     page_url: url,
     page_title: title,
   });
 
   // Update session page view count
-  const { data: sessionData } = await supabase
+  const { data: sessionData } = await trackingSupabase
     .from('visitor_sessions')
     .select('page_views')
     .eq('session_id', sessionId)
     .maybeSingle();
 
   if (sessionData) {
-    await supabase
+    await trackingSupabase
       .from('visitor_sessions')
       .update({ page_views: (sessionData.page_views || 0) + 1 })
       .eq('session_id', sessionId);
@@ -275,7 +275,7 @@ export const trackEvent = async (
 ): Promise<void> => {
   const sessionId = getSessionId();
 
-  await supabase.from('visitor_events').insert([{
+  await trackingSupabase.from('visitor_events').insert([{
     session_id: sessionId,
     event_type: eventType,
     event_data: eventData ? JSON.parse(JSON.stringify(eventData)) : {},
@@ -327,20 +327,20 @@ export const trackTimeOnPage = async (): Promise<void> => {
   // Try to update via sendBeacon (more reliable on unload)
   if (navigator.sendBeacon) {
     navigator.sendBeacon(
-      `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/track-page-exit`,
+      `${trackingBackendUrl}/functions/v1/track-page-exit`,
       payload
     );
   }
 
   // Also update total session time
-  await supabase
+  await trackingSupabase
     .from('visitor_sessions')
     .select('total_time_seconds')
     .eq('session_id', sessionId)
     .maybeSingle()
     .then(({ data }) => {
       if (data) {
-        supabase
+        trackingSupabase
           .from('visitor_sessions')
           .update({ total_time_seconds: (data.total_time_seconds || 0) + timeOnPage })
           .eq('session_id', sessionId);
