@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
+import { adminSupabase as supabase, adminBackendIsPlaceholder } from '@/lib/adminBackend';
 import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, ArrowRight, UserPlus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -121,6 +121,11 @@ const AdminPortalPage: React.FC = () => {
     e.preventDefault();
     setError(null);
 
+    if (adminBackendIsPlaceholder) {
+      setError('Backend configuration not loaded yet. Please refresh the preview and try again.');
+      return;
+    }
+
     if (isLockedOut) {
       setError('Account is temporarily locked. Please try again later.');
       return;
@@ -166,6 +171,11 @@ const AdminPortalPage: React.FC = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (adminBackendIsPlaceholder) {
+      setError('Backend configuration not loaded yet. Please refresh the preview and try again.');
+      return;
+    }
 
     if (!validateEmail(email)) {
       return;
@@ -220,6 +230,11 @@ const AdminPortalPage: React.FC = () => {
   const handlePasswordReset = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (adminBackendIsPlaceholder) {
+      setError('Backend configuration not loaded yet. Please refresh the preview and try again.');
+      return;
+    }
 
     if (!validateEmail(email)) {
       return;
