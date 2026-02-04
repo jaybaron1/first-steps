@@ -52,6 +52,20 @@
   --input: 35 15% 90%;
   --ring: 32 35% 57%;
   --radius: 0;
+
+  /* Admin Dark Theme Tokens */
+  --admin-bg: 240 6% 4%;
+  --admin-bg-elevated: 240 5% 7%;
+  --admin-bg-card: 240 5% 10%;
+  --admin-border: 240 5% 15%;
+  --admin-border-subtle: 240 5% 12%;
+  --admin-text: 0 0% 98%;
+  --admin-text-muted: 240 5% 65%;
+  --admin-text-subtle: 240 5% 45%;
+  --admin-accent: 160 60% 45%;
+  --admin-accent-muted: 160 40% 30%;
+  --admin-danger: 0 70% 50%;
+  --admin-warning: 40 90% 50%;
 }
 
 /* ============================================
