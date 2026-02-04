@@ -3,6 +3,8 @@ import { Users, Globe, Route, Monitor, PieChart } from 'lucide-react';
 import RecentVisitorsCard from '@/components/admin/RecentVisitorsCard';
 import GeoHeatMap from '@/components/admin/GeoHeatMap';
 import VisitorTimeline from '@/components/admin/VisitorTimeline';
+import DeviceBrowserAnalytics from '@/components/admin/DeviceBrowserAnalytics';
+import TrafficSourcesChart from '@/components/admin/TrafficSourcesChart';
 
 const VisitorsPage: React.FC = () => {
   return (
@@ -62,7 +64,7 @@ const VisitorsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Device & Browser Analytics - Placeholder */}
+      {/* Device & Browser Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
           <div className="flex items-center gap-3 mb-6">
@@ -76,9 +78,7 @@ const VisitorsPage: React.FC = () => {
               <p className="text-xs text-[#8C857A]">Technology breakdown</p>
             </div>
           </div>
-          <div className="h-48 flex items-center justify-center text-[#8C857A] text-sm">
-            Device analytics coming soon
-          </div>
+          <DeviceBrowserAnalytics />
         </div>
 
         <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
@@ -93,9 +93,7 @@ const VisitorsPage: React.FC = () => {
               <p className="text-xs text-[#8C857A]">Where visitors come from</p>
             </div>
           </div>
-          <div className="h-48 flex items-center justify-center text-[#8C857A] text-sm">
-            Traffic source pie chart coming soon
-          </div>
+          <TrafficSourcesChart />
         </div>
       </div>
     </>
