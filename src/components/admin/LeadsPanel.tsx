@@ -37,6 +37,9 @@ import {
   Building,
   Clock,
   MapPin,
+  Briefcase,
+  Users,
+  Sparkles,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -295,6 +298,36 @@ const LeadsPanel: React.FC = () => {
                               <span>{Math.round((lead.total_time_seconds || 0) / 60)} min on site</span>
                             </div>
                           </div>
+                          
+                          {/* Company Enrichment Data */}
+                          {(lead.company_name || lead.company_industry || lead.company_size) && (
+                            <div className="bg-primary/5 rounded-lg p-3 border border-primary/20">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Sparkles className="w-4 h-4 text-primary" />
+                                <span className="text-sm font-medium text-primary">Enriched Company Data</span>
+                              </div>
+                              <div className="grid grid-cols-3 gap-4 text-sm">
+                                {lead.company_name && (
+                                  <div className="flex items-center gap-2">
+                                    <Building className="w-4 h-4 text-muted-foreground" />
+                                    <span className="font-medium">{lead.company_name}</span>
+                                  </div>
+                                )}
+                                {lead.company_size && (
+                                  <div className="flex items-center gap-2">
+                                    <Users className="w-4 h-4 text-muted-foreground" />
+                                    <Badge variant="secondary">{lead.company_size}</Badge>
+                                  </div>
+                                )}
+                                {lead.company_industry && (
+                                  <div className="flex items-center gap-2">
+                                    <Briefcase className="w-4 h-4 text-muted-foreground" />
+                                    <Badge variant="outline">{lead.company_industry}</Badge>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
                           
                           {lead.message && (
                             <div className="bg-background rounded-lg p-3 border">

@@ -159,6 +159,39 @@ export type Database = {
         }
         Relationships: []
       }
+      conversion_goals: {
+        Row: {
+          created_at: string
+          description: string | null
+          goal_config: Json
+          goal_type: string
+          id: string
+          name: string
+          status: string
+          value: number | null
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          goal_config?: Json
+          goal_type: string
+          id?: string
+          name: string
+          status?: string
+          value?: number | null
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          goal_config?: Json
+          goal_type?: string
+          id?: string
+          name?: string
+          status?: string
+          value?: number | null
+        }
+        Relationships: []
+      }
       funnel_steps: {
         Row: {
           created_at: string | null
@@ -185,6 +218,38 @@ export type Database = {
           url_pattern?: string
         }
         Relationships: []
+      }
+      goal_completions: {
+        Row: {
+          completed_at: string
+          goal_id: string
+          id: string
+          metadata: Json | null
+          session_id: string
+        }
+        Insert: {
+          completed_at?: string
+          goal_id: string
+          id?: string
+          metadata?: Json | null
+          session_id: string
+        }
+        Update: {
+          completed_at?: string
+          goal_id?: string
+          id?: string
+          metadata?: Json | null
+          session_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "goal_completions_goal_id_fkey"
+            columns: ["goal_id"]
+            isOneToOne: false
+            referencedRelation: "conversion_goals"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       keep_alive_logs: {
         Row: {
