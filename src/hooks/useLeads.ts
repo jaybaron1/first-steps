@@ -15,10 +15,13 @@ export interface Lead {
   metadata: unknown | null;
   created_at: string | null;
   sheets_synced_at: string | null;
-  // Joined data
+  // Joined data from session
   page_views_count?: number;
   entry_page?: string;
   total_time_seconds?: number;
+  company_name?: string | null;
+  company_size?: string | null;
+  company_industry?: string | null;
 }
 
 export interface UseLeadsOptions {
@@ -105,7 +108,7 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
           // Get session info
           const { data: session } = await supabase
             .from('visitor_sessions')
-            .select('page_views, total_time_seconds')
+            .select('page_views, total_time_seconds, company_name, company_size, company_industry')
             .eq('session_id', lead.session_id)
             .single();
 
@@ -123,6 +126,9 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
             page_views_count: session?.page_views || 0,
             total_time_seconds: session?.total_time_seconds || 0,
             entry_page: firstPage?.page_url || 'Direct',
+            company_name: session?.company_name || null,
+            company_size: session?.company_size || null,
+            company_industry: session?.company_industry || null,
           };
         })
       );

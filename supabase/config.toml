@@ -11,3 +11,6 @@ verify_jwt = false
 
 [functions.sync-leads-to-sheets]
 verify_jwt = false
+
+[functions.enrich-visitor]
+verify_jwt = false

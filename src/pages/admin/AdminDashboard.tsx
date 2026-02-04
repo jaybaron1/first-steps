@@ -23,6 +23,8 @@ import {
   Filter,
   FlaskConical,
   UserCheck,
+  Target,
+  Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "@/components/admin/StatsCard";
@@ -38,6 +40,8 @@ import LeadsPanel from "@/components/admin/LeadsPanel";
 import ConversionFunnel from "@/components/admin/ConversionFunnel";
 import CTAPerformance from "@/components/admin/CTAPerformance";
 import ABTestingPanel from "@/components/admin/ABTestingPanel";
+import GoalsPanel from "@/components/admin/GoalsPanel";
+import CTAHeatmap from "@/components/admin/CTAHeatmap";
 import { useAdminStats } from "@/hooks/useAdminStats";
 
 const AdminDashboard: React.FC = () => {
@@ -537,7 +541,7 @@ const AdminDashboard: React.FC = () => {
           {/* A/B Testing Section */}
           <div
             className="bg-white border border-[#B8956C]/20 rounded-2xl p-8
-  shadow-lg animate-fadeInUp"
+  mb-10 shadow-lg animate-fadeInUp"
             style={{ animationDelay: "1700ms" }}
           >
             <div className="flex items-center justify-between mb-6">
@@ -557,6 +561,56 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <ABTestingPanel />
+          </div>
+
+          {/* Custom Goals Section */}
+          <div
+            className="bg-white border border-[#B8956C]/20 rounded-2xl p-8
+  mb-10 shadow-lg animate-fadeInUp"
+            style={{ animationDelay: "1800ms" }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[#B8956C]/10">
+                  <Target className="w-6 h-6 text-[#B8956C]" />
+                </div>
+                <div>
+                  <h3
+                    className="text-lg font-display font-semibold
+  text-[#1A1915]"
+                  >
+                    Conversion Goals
+                  </h3>
+                  <p className="text-xs text-[#8C857A]">Custom goal tracking and completion rates</p>
+                </div>
+              </div>
+            </div>
+            <GoalsPanel />
+          </div>
+
+          {/* CTA Heatmap Section */}
+          <div
+            className="bg-white border border-[#B8956C]/20 rounded-2xl p-8
+  shadow-lg animate-fadeInUp"
+            style={{ animationDelay: "1900ms" }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[#B8956C]/10">
+                  <Flame className="w-6 h-6 text-[#B8956C]" />
+                </div>
+                <div>
+                  <h3
+                    className="text-lg font-display font-semibold
+  text-[#1A1915]"
+                  >
+                    CTA Heatmap
+                  </h3>
+                  <p className="text-xs text-[#8C857A]">Click density visualization by page section</p>
+                </div>
+              </div>
+            </div>
+            <CTAHeatmap />
           </div>
         </main>
       </div>
