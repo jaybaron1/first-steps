@@ -1,105 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Users, MapPin, Monitor, Smartphone, Tablet, Globe, Clock, MousePointer } from 'lucide-react';
-import { adminSupabase } from '@/lib/adminBackend';
 import { cn } from '@/lib/utils';
+import { useVisitors, Visitor } from '@/hooks/useVisitors';
 import LeadTemperatureBadge from './LeadTemperatureBadge';
 import VisitorProfileModal from './VisitorProfileModal';
-
-interface Visitor {
-  session_id: string;
-  fingerprint_hash: string | null;
-  ip_address: unknown;
-  country: string | null;
-  city: string | null;
-  device_type: string | null;
-  browser: string | null;
-  os: string | null;
-  referrer: string | null;
-  first_seen: string | null;
-  last_seen: string | null;
-  page_count: number;
-  last_page: string | null;
-  lead_score: number | null;
-  page_views: number | null;
-  total_time_seconds: number | null;
-  utm_source: string | null;
-  utm_medium: string | null;
-  utm_campaign: string | null;
-  company_name: string | null;
-  company_size: string | null;
-  company_industry: string | null;
-  id: string;
-}
+import PaginationControls from './PaginationControls';
 
 interface RecentVisitorsCardProps {
-  maxVisitors?: number;
+  pageSize?: number;
 }
 
-const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ maxVisitors = 10 }) => {
-  const [visitors, setVisitors] = useState<Visitor[]>([]);
-  const [loading, setLoading] = useState(true);
+const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ pageSize = 10 }) => {
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
 
-  useEffect(() => {
-    fetchRecentVisitors();
-
-    // Subscribe to real-time updates
-    const channel = adminSupabase
-      .channel('recent-visitors-updates')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'visitor_sessions' },
-        () => fetchRecentVisitors()
-      )
-      .subscribe();
-
-    return () => {
-      adminSupabase.removeChannel(channel);
-    };
-  }, []);
-
-  const fetchRecentVisitors = async () => {
-    try {
-      const { data: sessions, error: sessionsError } = await adminSupabase
-        .from('visitor_sessions')
-        .select('*')
-        .order('first_seen', { ascending: false })
-        .limit(maxVisitors);
-
-      if (sessionsError) throw sessionsError;
-
-      // Get page counts for each session
-      const sessionsWithPageCount = await Promise.all(
-        (sessions || []).map(async (session) => {
-          const { count } = await adminSupabase
-            .from('page_views')
-            .select('*', { count: 'exact', head: true })
-            .eq('session_id', session.session_id);
-
-          const { data: lastPage } = await adminSupabase
-            .from('page_views')
-            .select('page_url')
-            .eq('session_id', session.session_id)
-            .order('created_at', { ascending: false })
-            .limit(1)
-            .single();
-
-          return {
-            ...session,
-            page_count: count || 0,
-            last_page: lastPage?.page_url || null,
-          };
-        })
-      );
-
-      setVisitors(sessionsWithPageCount);
-    } catch (error) {
-      console.error('Error fetching recent visitors:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { visitors, loading, totalCount, totalPages } = useVisitors({
+    page: currentPage,
+    pageSize,
+    sortBy: 'first_seen',
+    sortOrder: 'desc',
+  });
 
   const getDeviceIcon = (deviceType: string | null) => {
     switch (deviceType?.toLowerCase()) {
@@ -167,7 +88,7 @@ const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ maxVisitors = 1
     );
   }
 
-  if (visitors.length === 0) {
+  if (visitors.length === 0 && currentPage === 1) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center">
         <div className="w-12 h-12 rounded-full bg-[#F3EDE4] flex items-center justify-center mb-3">
@@ -269,6 +190,15 @@ const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({ maxVisitors = 1
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        pageSize={pageSize}
+        onPageChange={setCurrentPage}
+      />
 
       <VisitorProfileModal
         sessionId={selectedSessionId}

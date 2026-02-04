@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLeads, Lead } from '@/hooks/useLeads';
 import LeadTemperatureBadge from './LeadTemperatureBadge';
+import PaginationControls from './PaginationControls';
 import {
   Table,
   TableBody,
@@ -45,6 +46,7 @@ import { formatDistanceToNow } from 'date-fns';
 
 const STATUS_OPTIONS = ['new', 'contacted', 'qualified', 'converted'];
 const SOURCE_OPTIONS = ['chatbot', 'form', 'contact'];
+const PAGE_SIZE = 10;
 
 const LeadsPanel: React.FC = () => {
   const [search, setSearch] = useState('');
@@ -53,14 +55,16 @@ const LeadsPanel: React.FC = () => {
   const [sortBy, setSortBy] = useState<'created_at' | 'lead_score'>('created_at');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [expandedLead, setExpandedLead] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const { leads, loading, error, totalCount, refetch, updateLeadStatus } = useLeads({
+  const { leads, loading, error, totalCount, totalPages, refetch, updateLeadStatus } = useLeads({
     search: search.trim() || undefined,
     status: statusFilter !== 'all' ? [statusFilter] : undefined,
     source: sourceFilter !== 'all' ? [sourceFilter] : undefined,
     sortBy,
     sortOrder,
-    limit: 50,
+    page: currentPage,
+    pageSize: PAGE_SIZE,
   });
 
   const handleStatusChange = async (leadId: string, newStatus: string) => {
@@ -345,6 +349,18 @@ const LeadsPanel: React.FC = () => {
           </TableBody>
         </Table>
       </div>
+
+      {/* Pagination */}
+      <PaginationControls
+        currentPage={currentPage}
+        totalPages={totalPages}
+        totalCount={totalCount}
+        pageSize={PAGE_SIZE}
+        onPageChange={(page) => {
+          setCurrentPage(page);
+          setExpandedLead(null);
+        }}
+      />
     </div>
   );
 };
