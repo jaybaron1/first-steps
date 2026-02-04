@@ -35,7 +35,7 @@ const VisitorsPage: React.FC = () => {
 
       {/* Visitor List & Journey Maps */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Users className="w-6 h-6 text-[#B8956C]" />
@@ -48,7 +48,7 @@ const VisitorsPage: React.FC = () => {
           <RecentVisitorsCard />
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Route className="w-6 h-6 text-[#B8956C]" />
@@ -66,7 +66,7 @@ const VisitorsPage: React.FC = () => {
 
       {/* Device & Browser Analytics */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Monitor className="w-6 h-6 text-[#B8956C]" />
@@ -81,7 +81,7 @@ const VisitorsPage: React.FC = () => {
           <DeviceBrowserAnalytics />
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <PieChart className="w-6 h-6 text-[#B8956C]" />

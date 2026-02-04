@@ -233,7 +233,7 @@
     }
 
     return (
-      <div className="relative">
+      <div className="relative overflow-hidden">
         {/* Timeline */}
         <div className="space-y-0">
           {events.map((event, index) => {
@@ -275,7 +275,7 @@
   'Custom Event'}
                         </h4>
                         {event.page_url && (
-                          <p className="text-xs text-[#8C857A] truncate mt-0.5">
+                          <p className="text-xs text-[#8C857A] truncate mt-0.5 max-w-full">
                             {event.page_url}
                           </p>
                         )}
