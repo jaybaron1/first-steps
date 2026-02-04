@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { adminSupabase as supabase } from '@/lib/adminBackend';
-import { Activity, Globe, Monitor, Smartphone, Tablet, Clock } from 'lucide-react';
-import { formatDistanceToNow } from 'date-fns';
+import React, { useEffect, useState } from "react";
+import { adminSupabase as supabase } from "@/lib/adminBackend";
+import { Activity, Globe, Monitor, Smartphone, Tablet, Clock } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 
 interface PageViewEvent {
   id: string;
@@ -27,9 +27,9 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
 
   const getDeviceIcon = (deviceType: string | null) => {
     switch (deviceType) {
-      case 'mobile':
+      case "mobile":
         return <Smartphone className="w-4 h-4" />;
-      case 'tablet':
+      case "tablet":
         return <Tablet className="w-4 h-4" />;
       default:
         return <Monitor className="w-4 h-4" />;
@@ -37,28 +37,30 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
   };
 
   const formatPageUrl = (url: string) => {
-    if (url === '/') return 'Homepage';
-    return url.replace(/^\//, '').replace(/-/g, ' ').replace(/\//g, ' → ');
+    if (url === "/") return "Homepage";
+    return url.replace(/^\//, "").replace(/-/g, " ").replace(/\//g, " → ");
   };
 
   useEffect(() => {
     const fetchRecentEvents = async () => {
       const { data, error } = await supabase
-        .from('page_views')
-        .select(`
-          id,
-          session_id,
-          page_url,
-          page_title,
-          created_at,
-          visitor_sessions (
-            device_type,
-            country,
-            city,
-            browser
-          )
-        `)
-        .order('created_at', { ascending: false })
+        .from("page_views")
+        .select(
+          `
+            id,
+            session_id,
+            page_url,
+            page_title,
+            created_at,
+            visitor_sessions (
+              device_type,
+              country,
+              city,
+              browser
+            )
+          `,
+        )
+        .order("created_at", { ascending: false })
         .limit(maxItems);
 
       if (!error && data) {
@@ -71,35 +73,32 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
 
     // Subscribe to realtime updates
     const channel = supabase
-      .channel('page_views_realtime')
-      .on(
-        'postgres_changes',
-        { event: 'INSERT', schema: 'public', table: 'page_views' },
-        async (payload) => {
-          // Fetch the full event with session data
-          const { data } = await supabase
-            .from('page_views')
-            .select(`
-              id,
-              session_id,
-              page_url,
-              page_title,
-              created_at,
-              visitor_sessions (
-                device_type,
-                country,
-                city,
-                browser
-              )
-            `)
-            .eq('id', payload.new.id)
-            .single();
+      .channel("page_views_realtime")
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "page_views" }, async (payload) => {
+        const { data } = await supabase
+          .from("page_views")
+          .select(
+            `
+                id,
+                session_id,
+                page_url,
+                page_title,
+                created_at,
+                visitor_sessions (
+                  device_type,
+                  country,
+                  city,
+                  browser
+                )
+              `,
+          )
+          .eq("id", payload.new.id)
+          .single();
 
-          if (data) {
-            setEvents((prev) => [data as PageViewEvent, ...prev.slice(0, maxItems - 1)]);
-          }
+        if (data) {
+          setEvents((prev) => [data as PageViewEvent, ...prev.slice(0, maxItems - 1)]);
         }
-      )
+      })
       .subscribe();
 
     return () => {
@@ -111,11 +110,15 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
     return (
       <div className="space-y-3">
         {[...Array(5)].map((_, i) => (
-          <div key={i} className="flex items-center gap-3 p-3 bg-[hsl(var(--admin-bg-card))] rounded-lg animate-pulse">
-            <div className="w-8 h-8 rounded-full bg-[hsl(var(--admin-border))]" />
+          <div
+            key={i}
+            className="flex items-center gap-3 p-3 bg-[#F9F6F0]
+  rounded-lg animate-pulse"
+          >
+            <div className="w-8 h-8 rounded-full bg-[#F3EDE4]" />
             <div className="flex-1 space-y-2">
-              <div className="h-4 w-32 bg-[hsl(var(--admin-border))] rounded" />
-              <div className="h-3 w-24 bg-[hsl(var(--admin-border))] rounded" />
+              <div className="h-4 w-32 bg-[#F3EDE4] rounded" />
+              <div className="h-3 w-24 bg-[#F3EDE4] rounded" />
             </div>
           </div>
         ))}
@@ -125,9 +128,12 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
 
   if (events.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-48 text-[hsl(var(--admin-text-subtle))]">
+      <div
+        className="flex flex-col items-center justify-center h-48
+  text-[#8C857A]"
+      >
         <Activity className="w-12 h-12 mb-3 opacity-30" />
-        <p className="text-sm">No recent activity</p>
+        <p className="text-sm font-medium">No recent activity</p>
         <p className="text-xs mt-1">Page views will appear here in real-time</p>
       </div>
     );
@@ -138,16 +144,27 @@ const RealtimeFeed: React.FC<RealtimeFeedProps> = ({ maxItems = 10 }) => {
       {events.map((event) => (
         <div
           key={event.id}
-          className="flex items-center gap-3 p-3 bg-[hsl(var(--admin-bg-card))] rounded-lg border border-transparent hover:border-[hsl(var(--admin-border-subtle))] transition-colors"
+          className="flex items-center gap-3 p-3 bg-[#F9F6F0] rounded-lg
+  border border-transparent hover:border-[#B8956C]/30 hover:bg-[#F3EDE4]
+  transition-all duration-200"
         >
-          <div className="w-8 h-8 rounded-full bg-[hsl(var(--admin-bg-elevated))] border border-[hsl(var(--admin-border-subtle))] flex items-center justify-center text-[hsl(var(--admin-text-muted))]">
+          <div
+            className="w-8 h-8 rounded-full bg-white border
+  border-[#B8956C]/20 flex items-center justify-center text-[#B8956C]"
+          >
             {getDeviceIcon(event.visitor_sessions?.device_type || null)}
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium text-[hsl(var(--admin-text))] truncate">
+            <p
+              className="text-sm font-medium text-[#1A1915] truncate
+  capitalize"
+            >
               {formatPageUrl(event.page_url)}
             </p>
-            <div className="flex items-center gap-2 text-xs text-[hsl(var(--admin-text-subtle))]">
+            <div
+              className="flex items-center gap-3 text-xs text-[#8C857A]
+  mt-0.5"
+            >
               {event.visitor_sessions?.country && (
                 <span className="flex items-center gap-1">
                   <Globe className="w-3 h-3" />
