@@ -31,7 +31,8 @@ export interface UseLeadsOptions {
   search?: string;
   sortBy?: 'created_at' | 'lead_score' | 'status';
   sortOrder?: 'asc' | 'desc';
-  limit?: number;
+  page?: number;
+  pageSize?: number;
 }
 
 export interface UseLeadsResult {
@@ -39,6 +40,8 @@ export interface UseLeadsResult {
   loading: boolean;
   error: string | null;
   totalCount: number;
+  currentPage: number;
+  totalPages: number;
   refetch: () => Promise<void>;
   updateLeadStatus: (leadId: string, status: string) => Promise<boolean>;
 }
@@ -56,7 +59,8 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
     search,
     sortBy = 'created_at',
     sortOrder = 'desc',
-    limit = 50,
+    page = 1,
+    pageSize = 10,
   } = options;
 
   const fetchLeads = useCallback(async () => {
@@ -93,8 +97,10 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
       // Apply sorting
       query = query.order(sortBy, { ascending: sortOrder === 'asc' });
 
-      // Apply limit
-      query = query.limit(limit);
+      // Apply pagination
+      const from = (page - 1) * pageSize;
+      const to = from + pageSize - 1;
+      query = query.range(from, to);
 
       const { data, error: queryError, count } = await query;
 
@@ -141,7 +147,7 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
     } finally {
       setLoading(false);
     }
-  }, [status, source, dateRange, search, sortBy, sortOrder, limit]);
+  }, [status, source, dateRange, search, sortBy, sortOrder, page, pageSize]);
 
   const updateLeadStatus = useCallback(async (leadId: string, newStatus: string): Promise<boolean> => {
     try {
@@ -173,6 +179,8 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
     loading,
     error,
     totalCount,
+    currentPage: page,
+    totalPages: Math.ceil(totalCount / pageSize),
     refetch: fetchLeads,
     updateLeadStatus,
   };
