@@ -124,6 +124,7 @@ class VisitorTracker {
 
   private async createSession() {
     try {
+      const utmParams = this.getUTMParameters();
       const { error } = await trackingSupabase.from("visitor_sessions").insert([{
         session_id: this.sessionId!,
         fingerprint_hash: this.fingerprint!,
@@ -131,7 +132,9 @@ class VisitorTracker {
         browser: this.getBrowser(),
         os: this.getOS(),
         referrer: document.referrer || null,
-        ...this.getUTMParameters(),
+        utm_source: utmParams.utm_source,
+        utm_medium: utmParams.utm_medium,
+        utm_campaign: utmParams.utm_campaign,
         lead_score: 0,
       }]);
       if (error) console.error("Error creating session:", error);
@@ -146,8 +149,6 @@ class VisitorTracker {
       utm_source: params.get("utm_source"),
       utm_medium: params.get("utm_medium"),
       utm_campaign: params.get("utm_campaign"),
-      utm_term: params.get("utm_term"),
-      utm_content: params.get("utm_content"),
     };
   }
 
