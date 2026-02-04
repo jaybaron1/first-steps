@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      campaigns: {
+        Row: {
+          budget: number | null
+          created_at: string | null
+          end_date: string | null
+          id: string
+          name: string
+          start_date: string | null
+          status: string | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          budget?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          name: string
+          start_date?: string | null
+          status?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          budget?: number | null
+          created_at?: string | null
+          end_date?: string | null
+          id?: string
+          name?: string
+          start_date?: string | null
+          status?: string | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Relationships: []
+      }
       keep_alive_logs: {
         Row: {
           executed_at: string
@@ -35,6 +74,94 @@ export type Database = {
         }
         Relationships: []
       }
+      leads: {
+        Row: {
+          company: string | null
+          created_at: string | null
+          email: string | null
+          id: string
+          lead_score: number | null
+          message: string | null
+          name: string | null
+          phone: string | null
+          session_id: string | null
+          source: string | null
+          status: string | null
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          lead_score?: number | null
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          session_id?: string | null
+          source?: string | null
+          status?: string | null
+        }
+        Update: {
+          company?: string | null
+          created_at?: string | null
+          email?: string | null
+          id?: string
+          lead_score?: number | null
+          message?: string | null
+          name?: string | null
+          phone?: string | null
+          session_id?: string | null
+          source?: string | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "visitor_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
+      page_views: {
+        Row: {
+          created_at: string | null
+          id: string
+          page_title: string | null
+          page_url: string
+          scroll_depth: number | null
+          session_id: string | null
+          time_on_page: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          page_title?: string | null
+          page_url: string
+          scroll_depth?: number | null
+          session_id?: string | null
+          time_on_page?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          page_title?: string | null
+          page_url?: string
+          scroll_depth?: number | null
+          session_id?: string | null
+          time_on_page?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_views_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "visitor_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -53,6 +180,110 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      visitor_events: {
+        Row: {
+          created_at: string | null
+          event_data: Json | null
+          event_type: string
+          id: string
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visitor_events_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "visitor_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
+      visitor_sessions: {
+        Row: {
+          browser: string | null
+          city: string | null
+          company_industry: string | null
+          company_name: string | null
+          company_size: string | null
+          country: string | null
+          device_type: string | null
+          fingerprint_hash: string | null
+          first_seen: string | null
+          id: string
+          ip_address: unknown
+          last_seen: string | null
+          lead_score: number | null
+          os: string | null
+          page_views: number | null
+          referrer: string | null
+          session_id: string
+          total_time_seconds: number | null
+          utm_campaign: string | null
+          utm_medium: string | null
+          utm_source: string | null
+        }
+        Insert: {
+          browser?: string | null
+          city?: string | null
+          company_industry?: string | null
+          company_name?: string | null
+          company_size?: string | null
+          country?: string | null
+          device_type?: string | null
+          fingerprint_hash?: string | null
+          first_seen?: string | null
+          id?: string
+          ip_address?: unknown
+          last_seen?: string | null
+          lead_score?: number | null
+          os?: string | null
+          page_views?: number | null
+          referrer?: string | null
+          session_id: string
+          total_time_seconds?: number | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
+        }
+        Update: {
+          browser?: string | null
+          city?: string | null
+          company_industry?: string | null
+          company_name?: string | null
+          company_size?: string | null
+          country?: string | null
+          device_type?: string | null
+          fingerprint_hash?: string | null
+          first_seen?: string | null
+          id?: string
+          ip_address?: unknown
+          last_seen?: string | null
+          lead_score?: number | null
+          os?: string | null
+          page_views?: number | null
+          referrer?: string | null
+          session_id?: string
+          total_time_seconds?: number | null
+          utm_campaign?: string | null
+          utm_medium?: string | null
+          utm_source?: string | null
         }
         Relationships: []
       }

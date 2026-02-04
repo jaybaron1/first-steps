@@ -1,1 +1,10 @@
 project_id = "pydbejawnenjqgnyyonf"
+
+[functions.keep-alive]
+verify_jwt = false
+
+[functions.get-visitor-info]
+verify_jwt = false
+
+[functions.track-page-exit]
+verify_jwt = false
