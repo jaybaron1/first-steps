@@ -75,6 +75,7 @@ const HeroSection = () => {
           <div className="flex flex-col sm:flex-row items-start gap-3 mb-10 opacity-0 animate-fade-up" style={{ animationDelay: '0.9s', animationFillMode: 'forwards' }}>
             <a
               href="https://calendly.com/jason-galavanteer/discovery_call"
+              data-track-cta="Hero - Book Clarity Call"
               className="group inline-flex items-center gap-3 px-6 py-3 bg-ink text-cream text-xs font-medium tracking-wider uppercase transition-all duration-300 hover:bg-gold hover:shadow-lg hover:-translate-y-0.5"
             >
               <span>Book a Clarity Call</span>
@@ -82,6 +83,7 @@ const HeroSection = () => {
             </a>
             <a
               href="#how-it-works"
+              data-track-cta="Hero - See How It Works"
               className="inline-flex items-center gap-2 px-6 py-3 text-xs font-medium tracking-wider uppercase text-ink-muted hover:text-gold transition-colors group"
             >
               <span>See how it works</span>
