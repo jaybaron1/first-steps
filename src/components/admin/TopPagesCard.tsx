@@ -109,8 +109,7 @@
     const formatPageUrl = (url: string) => {
       try {
         const path = new URL(url).pathname;
-        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, '
-  / ');
+        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, ' / ');
       } catch {
         return url;
       }
@@ -173,8 +172,7 @@
               <div className="flex items-start gap-3">
                 {/* Rank Badge */}
                 <div className={cn(
-                  "flex-shrink-0 w-7 h-7 rounded-md flex items-center
-  justify-center text-xs font-semibold",
+                  "flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center text-xs font-semibold",
                   isTopPage
                     ? "bg-[#B8956C] text-white"
                     : "bg-white border border-[#B8956C]/20 text-[#8C857A]"

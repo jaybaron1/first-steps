@@ -101,8 +101,7 @@
     };
 
     const getLeadScoreColor = (score: number) => {
-      if (score >= 70) return 'bg-emerald-100 text-emerald-700
-  border-emerald-200';
+      if (score >= 70) return 'bg-emerald-100 text-emerald-700 border-emerald-200';
       if (score >= 40) return 'bg-amber-100 text-amber-700 border-amber-200';
       return 'bg-slate-100 text-slate-600 border-slate-200';
     };
@@ -117,8 +116,7 @@
       if (!url) return 'Unknown';
       try {
         const path = new URL(url).pathname;
-        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, '
-  / ');
+        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, ' / ');
       } catch {
         return url;
       }
@@ -206,8 +204,7 @@
                       </h4>
                       {visitor.lead_score > 0 && (
                         <span className={cn(
-                          "px-2 py-0.5 text-[10px] font-semibold uppercase
-  tracking-wide rounded-full border",
+                          "px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full border",
                           getLeadScoreColor(visitor.lead_score)
                         )}>
                           {getLeadScoreLabel(visitor.lead_score)}
@@ -217,8 +214,7 @@
 
                     {/* Last Page Visited */}
                     {visitor.last_page && (
-                      <p className="text-xs text-[#8C857A] flex items-center
-  gap-1 truncate mb-1.5">
+                      <p className="text-xs text-[#8C857A] flex items-center gap-1 truncate mb-1.5">
                         <MousePointer className="w-3 h-3 flex-shrink-0" />
                         <span className="truncate capitalize">
                           {formatPageUrl(visitor.last_page)}

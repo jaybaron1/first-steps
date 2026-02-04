@@ -144,8 +144,7 @@
       if (!url) return 'Unknown';
       try {
         const path = new URL(url).pathname;
-        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, '
-  / ');
+        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, ' / ');
       } catch {
         return url;
       }
@@ -245,17 +244,14 @@
                 {/* Timeline Line */}
                 <div className="flex flex-col items-center">
                   <div className={cn(
-                    "w-8 h-8 rounded-full flex items-center justify-center
-  transition-all duration-200",
-                    "bg-white border-2 border-[#B8956C]/30
-  group-hover:border-[#B8956C] group-hover:shadow-md",
+                    "w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200",
+                    "bg-white border-2 border-[#B8956C]/30 group-hover:border-[#B8956C] group-hover:shadow-md",
                     "text-[#B8956C]"
                   )}>
                     {getEventIcon(event.event_type)}
                   </div>
                   {!isLast && (
-                    <div className="w-0.5 h-full min-h-[60px] bg-gradient-to-b
-  from-[#B8956C]/30 to-[#B8956C]/10 mt-2" />
+                    <div className="w-0.5 h-full min-h-[60px] bg-gradient-to-b from-[#B8956C]/30 to-[#B8956C]/10 mt-2" />
                   )}
                 </div>
 
@@ -266,8 +262,7 @@
                 )}>
                   <div className={cn(
                     "p-4 rounded-lg transition-all duration-200",
-                    "bg-[#F9F6F0] group-hover:bg-[#F3EDE4]
-  group-hover:shadow-sm",
+                    "bg-[#F9F6F0] group-hover:bg-[#F3EDE4] group-hover:shadow-sm",
                     "border border-transparent group-hover:border-[#B8956C]/30"
                   )}>
                     {/* Event Header */}
