@@ -152,6 +152,21 @@ class VisitorTracker {
     try {
       const utmParams = this.getUTMParameters();
       const screenInfo = this.getScreenInfo();
+      
+      // Fetch geo info including lat/lng from edge function
+      let geoInfo: { country?: string; city?: string; latitude?: number; longitude?: number } = {};
+      try {
+        const response = await fetch(
+          `https://pydbejawnenjqgnyyonf.supabase.co/functions/v1/get-visitor-info`,
+          { method: 'GET', headers: { 'Content-Type': 'application/json' } }
+        );
+        if (response.ok) {
+          geoInfo = await response.json();
+        }
+      } catch (geoError) {
+        console.warn("Error fetching geo info:", geoError);
+      }
+
       const { error } = await trackingSupabase.from("visitor_sessions").insert([{
         session_id: this.sessionId!,
         fingerprint_hash: this.fingerprint!,
@@ -169,6 +184,10 @@ class VisitorTracker {
         timezone: screenInfo.timezone,
         language: screenInfo.language,
         lead_score: 0,
+        country: geoInfo.country || null,
+        city: geoInfo.city || null,
+        latitude: geoInfo.latitude || null,
+        longitude: geoInfo.longitude || null,
       }]);
       if (error) console.error("Error creating session:", error);
     } catch (error) {

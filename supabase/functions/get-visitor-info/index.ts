@@ -86,6 +86,9 @@ serve(async (req) => {
       city = decodeURIComponent(vercelCity);
     }
 
+    let latitude: number | null = null;
+    let longitude: number | null = null;
+
     // If no geo headers, try ipinfo.io (more reliable with edge function IPs)
     if (!country && ip !== 'unknown' && ip !== '127.0.0.1') {
       try {
@@ -97,19 +100,29 @@ serve(async (req) => {
             country = countryCodeToName[geoData.country] || geoData.country;
             city = geoData.city || null;
           }
+          // Extract lat/lng from loc field (format: "lat,lng")
+          if (geoData.loc) {
+            const [lat, lng] = geoData.loc.split(',').map(Number);
+            if (!isNaN(lat) && !isNaN(lng)) {
+              latitude = lat;
+              longitude = lng;
+            }
+          }
         }
       } catch (geoError) {
         console.warn('[get-visitor-info] Geo lookup failed:', geoError);
       }
     }
 
-    console.log('[get-visitor-info] IP:', ip, 'Country:', country, 'City:', city);
+    console.log('[get-visitor-info] IP:', ip, 'Country:', country, 'City:', city, 'Lat:', latitude, 'Lng:', longitude);
 
     return new Response(
       JSON.stringify({
         ip_address: ip !== 'unknown' ? ip : null,
         country,
         city,
+        latitude,
+        longitude,
       }),
       {
         headers: {

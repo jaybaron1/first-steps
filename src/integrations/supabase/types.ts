@@ -435,7 +435,9 @@ export type Database = {
           ip_address: unknown
           language: string | null
           last_seen: string | null
+          latitude: number | null
           lead_score: number | null
+          longitude: number | null
           os: string | null
           page_views: number | null
           referrer: string | null
@@ -465,7 +467,9 @@ export type Database = {
           ip_address?: unknown
           language?: string | null
           last_seen?: string | null
+          latitude?: number | null
           lead_score?: number | null
+          longitude?: number | null
           os?: string | null
           page_views?: number | null
           referrer?: string | null
@@ -495,7 +499,9 @@ export type Database = {
           ip_address?: unknown
           language?: string | null
           last_seen?: string | null
+          latitude?: number | null
           lead_score?: number | null
+          longitude?: number | null
           os?: string | null
           page_views?: number | null
           referrer?: string | null
