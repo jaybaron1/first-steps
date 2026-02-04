@@ -73,7 +73,7 @@ const App = () => {
                 </>
               ) : (
                 <>
-                  {/* Main Galavanteer Site */}
+                  {/* Main Galavanteer Site - Clean Version */}
                   <Route path="/" element={<Index />} />
                   <Route path="/about" element={<AboutPage />} />
                   <Route path="/privacy" element={<PrivacyPage />} />
