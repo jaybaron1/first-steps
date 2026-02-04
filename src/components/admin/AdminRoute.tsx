@@ -138,12 +138,12 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children, requireRole }) => {
   // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-admin-bg flex items-center justify-center">
+      <div className="admin-theme min-h-screen bg-[hsl(var(--admin-bg))] flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-admin-accent/10 border border-admin-border mb-4">
-            <Shield className="w-8 h-8 text-admin-accent" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#B8956C]/10 border border-[hsl(var(--admin-border))] mb-4">
+            <Shield className="w-8 h-8 text-[#B8956C]" />
           </div>
-          <div className="flex items-center gap-2 text-admin-text-muted">
+          <div className="flex items-center gap-2 text-[hsl(var(--admin-text-muted))]">
             <Loader2 className="w-4 h-4 animate-spin" />
             <span>Verifying access...</span>
           </div>
@@ -160,19 +160,19 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children, requireRole }) => {
   // Missing required role
   if (requireRole && !hasRequiredRole) {
     return (
-      <div className="min-h-screen bg-admin-bg flex items-center justify-center p-4">
+      <div className="admin-theme min-h-screen bg-[hsl(var(--admin-bg))] flex items-center justify-center p-4">
         <div className="text-center max-w-md">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-admin-danger/10 border border-admin-danger/20 mb-4">
-            <Shield className="w-8 h-8 text-admin-danger" />
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-red-500/10 border border-red-500/20 mb-4">
+            <Shield className="w-8 h-8 text-red-600 dark:text-red-400" />
           </div>
-          <h1 className="text-xl font-medium text-admin-text mb-2">Access Denied</h1>
-          <p className="text-admin-text-muted mb-6">
+          <h1 className="text-xl font-medium text-[hsl(var(--admin-text))] mb-2">Access Denied</h1>
+          <p className="text-[hsl(var(--admin-text-muted))] mb-6">
             You don't have the required permissions to access this area.
             Contact an administrator if you believe this is an error.
           </p>
           <button
             onClick={() => supabase.auth.signOut()}
-            className="px-6 py-2 text-sm text-admin-text-muted hover:text-admin-text transition-colors"
+            className="px-6 py-2 text-sm text-[hsl(var(--admin-text-muted))] hover:text-[hsl(var(--admin-text))] transition-colors"
           >
             Sign Out
           </button>
