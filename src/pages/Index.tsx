@@ -13,6 +13,7 @@ import AggregateRatingSchema from '@/components/AggregateRatingSchema';
 import LocalBusinessSchema from '@/components/LocalBusinessSchema';
 import IndividualReviewSchema from '@/components/IndividualReviewSchema';
 import WebPageSchema from '@/components/WebPageSchema';
+import OrganizationSchema from '@/components/OrganizationSchema';
 
 const Index = () => {
   const homePageSchema = {
@@ -45,6 +46,7 @@ const Index = () => {
       <BreadcrumbSchema items={[{ name: "Home", url: "/" }]} />
       <PersonSchema />
       <WebPageSchema />
+      <OrganizationSchema />
       <ReviewSchema />
       <LocalBusinessSchema />
       <AggregateRatingSchema
