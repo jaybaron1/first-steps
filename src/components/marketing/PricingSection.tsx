@@ -111,6 +111,7 @@ const PricingSection = () => {
 
               <button
                 onClick={() => handlePlanClick(plan.name, plan.price)}
+                data-track-cta={`Pricing - ${plan.name}`}
                 className={`w-full py-3 px-6 rounded-lg font-semibold text-sm transition-all flex items-center justify-center gap-2 ${
                   plan.highlight
                     ? 'bg-[hsl(175_70%_45%)] text-[hsl(220_25%_6%)] hover:bg-[hsl(175_70%_38%)]'

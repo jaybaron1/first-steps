@@ -47,8 +47,20 @@ import {
   TrendingUp,
   AlertCircle,
   CheckCircle2,
+  ChevronDown,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+
+// Preset element selectors for common use cases
+const SELECTOR_PRESETS = [
+  { label: 'Hero CTA Button', value: '#hero-cta', description: 'Main call-to-action in hero section' },
+  { label: 'Booking Button', value: '.booking-button', description: 'Calendly/booking CTAs' },
+  { label: 'Pricing CTA', value: '[data-track-cta*="Pricing"]', description: 'Pricing section buttons' },
+  { label: 'Navigation CTA', value: '.nav-cta', description: 'Header navigation CTAs' },
+  { label: 'Final CTA Section', value: '#final-cta button', description: 'Bottom page CTA' },
+  { label: 'Form Submit', value: 'form button[type="submit"]', description: 'Form submission buttons' },
+  { label: 'Custom...', value: '', description: 'Enter custom selector' },
+];
 
 const ABTestingPanel: React.FC = () => {
   const {
@@ -70,6 +82,7 @@ const ABTestingPanel: React.FC = () => {
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newSelector, setNewSelector] = useState('');
+  const [selectedPreset, setSelectedPreset] = useState<string>('');
   const [newVariants, setNewVariants] = useState<ABVariant[]>([
     { id: 'control', name: 'Control', value: '', trafficPercent: 50 },
     { id: 'variant-b', name: 'Variant B', value: '', trafficPercent: 50 },
@@ -215,11 +228,44 @@ const ABTestingPanel: React.FC = () => {
 
               <div className="space-y-2">
                 <Label>Element Selector</Label>
+                <Select
+                  value={selectedPreset}
+                  onValueChange={(value) => {
+                    setSelectedPreset(value);
+                    const preset = SELECTOR_PRESETS.find(p => p.label === value);
+                    if (preset && preset.value) {
+                      setNewSelector(preset.value);
+                    }
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Choose a preset or enter custom..." />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border shadow-lg">
+                    {SELECTOR_PRESETS.map((preset) => (
+                      <SelectItem key={preset.label} value={preset.label}>
+                        <div className="flex flex-col">
+                          <span>{preset.label}</span>
+                          <span className="text-xs text-muted-foreground">{preset.description}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <Input
                   value={newSelector}
-                  onChange={(e) => setNewSelector(e.target.value)}
+                  onChange={(e) => {
+                    setNewSelector(e.target.value);
+                    setSelectedPreset('Custom...');
+                  }}
                   placeholder="e.g., #hero-cta, .booking-button"
+                  className="mt-2"
                 />
+                {newSelector && (
+                  <p className="text-xs text-muted-foreground">
+                    Current selector: <code className="bg-muted px-1 rounded">{newSelector}</code>
+                  </p>
+                )}
               </div>
 
               <div className="space-y-2">

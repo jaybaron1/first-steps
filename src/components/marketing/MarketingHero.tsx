@@ -50,11 +50,11 @@ const MarketingHero = () => {
               className="flex flex-col sm:flex-row gap-4 mb-6 mkt-animate-fade-up"
               style={{ animationDelay: '0.3s' }}
             >
-              <button onClick={handleBookCall} className="mkt-btn mkt-btn-primary">
+              <button onClick={handleBookCall} className="mkt-btn mkt-btn-primary" data-track-cta="Book AI Visibility Call">
                 Book an AI Visibility Call
                 <ArrowRight className="w-4 h-4" />
               </button>
-              <button onClick={scrollToScorecard} className="mkt-btn mkt-btn-secondary">
+              <button onClick={scrollToScorecard} className="mkt-btn mkt-btn-secondary" data-track-cta="Run Scorecard">
                 Run the Scorecard
               </button>
             </div>

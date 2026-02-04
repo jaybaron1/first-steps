@@ -106,7 +106,7 @@ const LeadsPanel: React.FC = () => {
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Status" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background border shadow-lg">
             <SelectItem value="all">All Status</SelectItem>
             {STATUS_OPTIONS.map(s => (
               <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>
@@ -118,7 +118,7 @@ const LeadsPanel: React.FC = () => {
           <SelectTrigger className="w-[140px]">
             <SelectValue placeholder="Source" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-background border shadow-lg">
             <SelectItem value="all">All Sources</SelectItem>
             {SOURCE_OPTIONS.map(s => (
               <SelectItem key={s} value={s} className="capitalize">{s}</SelectItem>
@@ -248,7 +248,7 @@ const LeadsPanel: React.FC = () => {
                             <MoreHorizontal className="w-4 h-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
+                        <DropdownMenuContent align="end" className="bg-background border shadow-lg">
                           {STATUS_OPTIONS.map(status => (
                             <DropdownMenuItem 
                               key={status}
