@@ -119,6 +119,32 @@ class VisitorTracker {
       sessionStorage.setItem("galavanteer_fingerprint", this.fingerprint);
 
       await this.createSession();
+    } else {
+      // Update UTM params if present in URL (for existing sessions)
+      await this.updateSessionUTMParams();
+    }
+  }
+
+  private async updateSessionUTMParams() {
+    const utmParams = this.getUTMParameters();
+    // Only update if at least one UTM param is present
+    const hasUTM = utmParams.utm_source || utmParams.utm_medium || utmParams.utm_campaign || utmParams.utm_term || utmParams.utm_content;
+    if (!hasUTM || !this.sessionId) return;
+
+    try {
+      const { error } = await trackingSupabase
+        .from("visitor_sessions")
+        .update({
+          utm_source: utmParams.utm_source,
+          utm_medium: utmParams.utm_medium,
+          utm_campaign: utmParams.utm_campaign,
+          utm_term: utmParams.utm_term,
+          utm_content: utmParams.utm_content,
+        })
+        .eq("session_id", this.sessionId);
+      if (error) console.error("Error updating UTM params:", error);
+    } catch (error) {
+      console.error("Error in updateSessionUTMParams:", error);
     }
   }
 
@@ -284,6 +310,56 @@ class VisitorTracker {
           cta_location: target.getAttribute("data-track-cta"),
         });
       }
+    });
+
+    // Track form focus (form_start events)
+    this.setupFormTracking();
+  }
+
+  private formStartTracked: Set<string> = new Set();
+
+  private setupFormTracking() {
+    // Track when user starts filling a form (first focus on input within form)
+    document.addEventListener("focusin", (e) => {
+      const target = e.target as HTMLElement;
+      
+      // Check if target is an input element
+      if (!target.matches("input, textarea, select")) return;
+      
+      // Find parent form
+      const form = target.closest("form");
+      if (!form) return;
+      
+      // Generate unique form identifier
+      const formId = form.id || form.getAttribute("name") || form.getAttribute("data-form") || 
+        `form-${Array.from(document.forms).indexOf(form as HTMLFormElement)}`;
+      
+      // Only track first focus on each form per session
+      if (this.formStartTracked.has(formId)) return;
+      this.formStartTracked.add(formId);
+      
+      this.trackEvent("form_start", {
+        form_id: formId,
+        form_action: form.action || null,
+        first_field: target.getAttribute("name") || target.id || target.tagName.toLowerCase(),
+        page_url: window.location.pathname,
+      });
+    });
+
+    // Also track standalone inputs (not in forms) like search boxes
+    document.addEventListener("focusin", (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.matches("input[data-track-input], textarea[data-track-input]")) return;
+      
+      const inputId = target.getAttribute("data-track-input") || target.id || target.getAttribute("name");
+      if (!inputId || this.formStartTracked.has(`input-${inputId}`)) return;
+      
+      this.formStartTracked.add(`input-${inputId}`);
+      this.trackEvent("input_focus", {
+        input_id: inputId,
+        input_type: (target as HTMLInputElement).type || "text",
+        page_url: window.location.pathname,
+      });
     });
   }
 

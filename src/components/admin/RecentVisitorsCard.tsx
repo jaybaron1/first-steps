@@ -3,6 +3,7 @@
   MousePointer } from 'lucide-react';                                           
   import { adminSupabase } from '@/lib/adminBackend';                           
   import { cn } from '@/lib/utils';
+  import LeadTemperatureBadge from './LeadTemperatureBadge';
 
   interface Visitor {
     session_id: string;
@@ -110,17 +111,7 @@
       }
     };
 
-    const getLeadScoreColor = (score: number) => {
-      if (score >= 70) return 'bg-emerald-100 text-emerald-700 border-emerald-200';
-      if (score >= 40) return 'bg-amber-100 text-amber-700 border-amber-200';
-      return 'bg-slate-100 text-slate-600 border-slate-200';
-    };
-
-    const getLeadScoreLabel = (score: number) => {
-      if (score >= 70) return 'Hot';
-      if (score >= 40) return 'Warm';
-      return 'Cold';
-    };
+  // Removed - using LeadTemperatureBadge component instead
 
     const formatPageUrl = (url: string | null) => {
       if (!url) return 'Unknown';
@@ -212,13 +203,11 @@
                       <h4 className="text-sm font-semibold text-[#1A1915]">
                         {visitor.city || visitor.country || 'Unknown Location'}
                       </h4>
-                      {visitor.lead_score > 0 && (
-                        <span className={cn(
-                          "px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide rounded-full border",
-                          getLeadScoreColor(visitor.lead_score)
-                        )}>
-                          {getLeadScoreLabel(visitor.lead_score)}
-                        </span>
+                      {(visitor.lead_score !== null && visitor.lead_score > 0) && (
+                        <LeadTemperatureBadge 
+                          score={visitor.lead_score} 
+                          size="sm"
+                        />
                       )}
                     </div>
 

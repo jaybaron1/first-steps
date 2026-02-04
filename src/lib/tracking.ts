@@ -251,10 +251,25 @@ export const initializeSession = async (): Promise<string> => {
       city: visitorInfo.city,
     });
   } else {
-    // Update last seen
+    // Update last seen and UTM params if present
+    const hasUTM = utmParams.utm_source || utmParams.utm_medium || utmParams.utm_campaign || utmParams.utm_term || utmParams.utm_content;
+    
+    const updateData: Record<string, unknown> = { 
+      last_seen: new Date().toISOString() 
+    };
+    
+    // Only update UTM params if at least one is present
+    if (hasUTM) {
+      updateData.utm_source = utmParams.utm_source;
+      updateData.utm_medium = utmParams.utm_medium;
+      updateData.utm_campaign = utmParams.utm_campaign;
+      updateData.utm_term = utmParams.utm_term;
+      updateData.utm_content = utmParams.utm_content;
+    }
+    
     await trackingSupabase
       .from('visitor_sessions')
-      .update({ last_seen: new Date().toISOString() })
+      .update(updateData)
       .eq('session_id', sessionId);
   }
 
