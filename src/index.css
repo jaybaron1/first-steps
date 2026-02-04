@@ -53,19 +53,39 @@
   --ring: 32 35% 57%;
   --radius: 0;
 
-  /* Admin Dark Theme Tokens */
-  --admin-bg: 240 6% 4%;
-  --admin-bg-elevated: 240 5% 7%;
-  --admin-bg-card: 240 5% 10%;
-  --admin-border: 240 5% 15%;
-  --admin-border-subtle: 240 5% 12%;
-  --admin-text: 0 0% 98%;
-  --admin-text-muted: 240 5% 65%;
-  --admin-text-subtle: 240 5% 45%;
-  --admin-accent: 160 60% 45%;
-  --admin-accent-muted: 160 40% 30%;
-  --admin-danger: 0 70% 50%;
-  --admin-warning: 40 90% 50%;
+  /* Admin Theme Tokens - Light Mode (System Default) */
+  --admin-bg: 45 50% 98%;
+  --admin-bg-elevated: 0 0% 100%;
+  --admin-bg-card: 45 30% 96%;
+  --admin-border: 35 15% 85%;
+  --admin-border-subtle: 35 15% 90%;
+  --admin-text: 40 10% 10%;
+  --admin-text-muted: 35 10% 35%;
+  --admin-text-subtle: 35 10% 50%;
+  --admin-accent: 32 35% 57%;
+  --admin-accent-muted: 32 25% 45%;
+  --admin-danger: 0 70% 45%;
+  --admin-warning: 40 90% 45%;
+  --admin-success: 142 70% 35%;
+}
+
+/* Admin Dark Mode - Respects System Preference */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --admin-bg: 240 6% 6%;
+    --admin-bg-elevated: 240 5% 9%;
+    --admin-bg-card: 240 5% 12%;
+    --admin-border: 35 15% 20%;
+    --admin-border-subtle: 35 15% 15%;
+    --admin-text: 45 30% 96%;
+    --admin-text-muted: 35 15% 70%;
+    --admin-text-subtle: 35 10% 55%;
+    --admin-accent: 32 45% 60%;
+    --admin-accent-muted: 32 35% 50%;
+    --admin-danger: 0 70% 55%;
+    --admin-warning: 40 90% 55%;
+    --admin-success: 142 70% 45%;
+  }
 }
 
 /* ============================================
@@ -475,13 +495,14 @@ textarea {
   -webkit-text-fill-color: #1A1915;
 }
 
-/* Admin portal inputs - dark theme */
-.bg-admin-bg input[type="text"],
-.bg-admin-bg input[type="email"],
-.bg-admin-bg input[type="password"],
-.bg-admin-bg textarea {
-  color: hsl(0 0% 98%) !important;
-  -webkit-text-fill-color: hsl(0 0% 98%);
+/* Admin portal inputs - theme aware */
+.admin-theme input[type="text"],
+.admin-theme input[type="email"],
+.admin-theme input[type="password"],
+.admin-theme textarea {
+  color: hsl(var(--admin-text)) !important;
+  -webkit-text-fill-color: hsl(var(--admin-text));
+  background-color: hsl(var(--admin-bg));
 }
 
 /* Override autofill styling */
@@ -494,10 +515,19 @@ textarea:-webkit-autofill {
   transition: background-color 5000s ease-in-out 0s;
 }
 
-/* Admin portal autofill - dark theme */
-.bg-admin-bg input:-webkit-autofill,
-.bg-admin-bg input:-webkit-autofill:hover,
-.bg-admin-bg input:-webkit-autofill:focus {
-  -webkit-text-fill-color: hsl(0 0% 98%);
-  -webkit-box-shadow: 0 0 0px 1000px hsl(240 6% 4%) inset;
+/* Admin portal autofill - theme aware */
+@media (prefers-color-scheme: dark) {
+  .admin-theme input:-webkit-autofill,
+  .admin-theme input:-webkit-autofill:hover,
+  .admin-theme input:-webkit-autofill:focus {
+    -webkit-text-fill-color: hsl(var(--admin-text));
+    -webkit-box-shadow: 0 0 0px 1000px hsl(var(--admin-bg)) inset;
+  }
+}
+
+/* Admin utility classes */
+.admin-theme {
+  --gold: #B8956C;
+  --gold-light: #D4B896;
+  --gold-dark: #8A6D4E;
 }
