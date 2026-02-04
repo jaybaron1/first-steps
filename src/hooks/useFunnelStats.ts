@@ -91,15 +91,9 @@ export function useFunnelStats(options: UseFunnelStatsOptions = {}): UseFunnelSt
       // Calculate visitors for each step
       const stepsWithVisitors = await Promise.all(
         funnelSteps.map(async (step) => {
-          // Build query for unique sessions matching this step's URL pattern
-          let query = supabase
-            .from('page_views')
-            .select('session_id');
-
           // Handle special patterns like 'calendly_booking_complete' (event-based)
           if (step.url_pattern.startsWith('calendly_')) {
             // This would be tracked as an event, not a page view
-            // For now, we'll check visitor_events
             let eventQuery = supabase
               .from('visitor_events')
               .select('session_id')
@@ -119,33 +113,60 @@ export function useFunnelStats(options: UseFunnelStatsOptions = {}): UseFunnelSt
             };
           }
 
-          // Apply URL pattern matching
-          if (step.url_pattern === '/') {
-            query = query.eq('page_url', '/');
-          } else {
-            query = query.ilike('page_url', step.url_pattern);
-          }
+          // Build query for page views
+          let query = supabase
+            .from('page_views')
+            .select('session_id, page_url');
 
           if (startDate) {
             query = query.gte('created_at', startDate.toISOString());
           }
 
+          const { data: pageData } = await query;
+          
+          // Filter by URL pattern - normalize URLs by removing query strings for matching
+          const matchingData = (pageData || []).filter(p => {
+            // Extract path without query string
+            let path = p.page_url;
+            try {
+              // Handle full URLs or paths with query strings
+              if (path.includes('?')) {
+                path = path.split('?')[0];
+              }
+              // Normalize trailing slashes
+              if (path !== '/' && path.endsWith('/')) {
+                path = path.slice(0, -1);
+              }
+            } catch {
+              // Keep original path if parsing fails
+            }
+
+            // Match patterns
+            if (step.url_pattern === '/') {
+              return path === '/' || path === '';
+            }
+            
+            // Convert SQL LIKE pattern to regex
+            const pattern = step.url_pattern
+              .replace(/%/g, '.*')
+              .replace(/_/g, '.');
+            const regex = new RegExp(`^${pattern}$`, 'i');
+            return regex.test(path);
+          });
+
           // Apply UTM source filter if specified
+          let filteredData = matchingData;
           if (utmSource) {
-            // Join with visitor_sessions to filter by UTM
             const { data: sessions } = await supabase
               .from('visitor_sessions')
               .select('session_id')
               .eq('utm_source', utmSource);
             
-            const sessionIds = sessions?.map(s => s.session_id) || [];
-            if (sessionIds.length > 0) {
-              query = query.in('session_id', sessionIds);
-            }
+            const sessionIds = new Set(sessions?.map(s => s.session_id) || []);
+            filteredData = matchingData.filter(p => p.session_id && sessionIds.has(p.session_id));
           }
 
-          const { data: pageData } = await query;
-          const uniqueSessions = new Set(pageData?.map(p => p.session_id) || []);
+          const uniqueSessions = new Set(filteredData.map(p => p.session_id).filter(Boolean));
 
           return {
             ...step,
