@@ -109,8 +109,7 @@
       if (!url) return 'Unknown page';
       try {
         const path = new URL(url).pathname;
-        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, '
-  / ');
+        return path === '/' ? 'Home' : path.replace(/^\//, '').replace(/\//g, ' / ');
       } catch {
         return url;
       }

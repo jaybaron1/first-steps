@@ -264,11 +264,10 @@
               const styles = getSeverityStyles(alert.severity);
 
               return (
-                <div
+              <div
                   key={alert.id}
                   className={cn(
-                    "relative group p-4 rounded-lg border transition-all
-  duration-200",
+                    "relative group p-4 rounded-lg border transition-all duration-200",
                     styles.bg,
                     alert.dismissed && "opacity-50"
                   )}
@@ -276,8 +275,7 @@
                   <div className="flex items-start gap-3">
                     {/* Icon */}
                     <div className={cn(
-                      "flex-shrink-0 w-9 h-9 rounded-lg flex items-center
-  justify-center",
+                      "flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center",
                       styles.icon
                     )}>
                       {getAlertIcon(alert.type)}
@@ -285,14 +283,11 @@
 
                     {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2
-  mb-1">
-                        <h4 className="text-sm font-semibold text-[#1A1915] flex
-   items-center gap-2">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h4 className="text-sm font-semibold text-[#1A1915] flex items-center gap-2">
                           {alert.title}
                           {!alert.dismissed && (
-                            <span className={cn("w-1.5 h-1.5 rounded-full
-  animate-pulse", styles.dot)} />
+                            <span className={cn("w-1.5 h-1.5 rounded-full animate-pulse", styles.dot)} />
                           )}
                         </h4>
 

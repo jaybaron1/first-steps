@@ -74,8 +74,7 @@
       };
 
       fetchActiveVisitors();
-      const interval = setInterval(fetchActiveVisitors, 30000); // Refresh every
-   30s
+      const interval = setInterval(fetchActiveVisitors, 30000);
 
       return () => clearInterval(interval);
     }, []);
