@@ -1,0 +1,435 @@
+import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { Eye, EyeOff, Lock, Mail, AlertCircle, Shield, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+
+// Rate limiting configuration
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
+const ALLOWED_EMAIL_DOMAIN = '@galavanteer.com';
+
+interface LoginAttempts {
+  count: number;
+  lastAttempt: number;
+  lockedUntil: number | null;
+}
+
+const AdminPortalPage: React.FC = () => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // Form state
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // View state
+  const [view, setView] = useState<'login' | 'reset' | 'reset-sent'>('login');
+  
+  // Rate limiting state
+  const [loginAttempts, setLoginAttempts] = useState<LoginAttempts>(() => {
+    const stored = sessionStorage.getItem('admin_login_attempts');
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    return { count: 0, lastAttempt: 0, lockedUntil: null };
+  });
+  const [lockoutRemaining, setLockoutRemaining] = useState<number>(0);
+
+  // Check if user is already logged in
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session?.user) {
+        // Verify email domain
+        if (session.user.email?.endsWith(ALLOWED_EMAIL_DOMAIN)) {
+          navigate('/admin');
+        } else {
+          // Sign out if not allowed domain
+          await supabase.auth.signOut();
+        }
+      }
+    };
+    checkSession();
+  }, [navigate]);
+
+  // Update lockout timer
+  useEffect(() => {
+    if (loginAttempts.lockedUntil) {
+      const interval = setInterval(() => {
+        const remaining = loginAttempts.lockedUntil! - Date.now();
+        if (remaining <= 0) {
+          // Reset attempts after lockout
+          const resetAttempts = { count: 0, lastAttempt: 0, lockedUntil: null };
+          setLoginAttempts(resetAttempts);
+          sessionStorage.setItem('admin_login_attempts', JSON.stringify(resetAttempts));
+          setLockoutRemaining(0);
+        } else {
+          setLockoutRemaining(remaining);
+        }
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [loginAttempts.lockedUntil]);
+
+  // Persist login attempts to session storage
+  useEffect(() => {
+    sessionStorage.setItem('admin_login_attempts', JSON.stringify(loginAttempts));
+  }, [loginAttempts]);
+
+  const isLockedOut = loginAttempts.lockedUntil && Date.now() < loginAttempts.lockedUntil;
+
+  const validateEmail = (email: string): boolean => {
+    if (!email.endsWith(ALLOWED_EMAIL_DOMAIN)) {
+      setError(`Access restricted to ${ALLOWED_EMAIL_DOMAIN} addresses only`);
+      return false;
+    }
+    return true;
+  };
+
+  const recordFailedAttempt = () => {
+    const newCount = loginAttempts.count + 1;
+    const now = Date.now();
+    
+    if (newCount >= MAX_ATTEMPTS) {
+      const lockedUntil = now + LOCKOUT_DURATION;
+      setLoginAttempts({
+        count: newCount,
+        lastAttempt: now,
+        lockedUntil,
+      });
+      setError(`Too many failed attempts. Account locked for 15 minutes.`);
+    } else {
+      setLoginAttempts({
+        count: newCount,
+        lastAttempt: now,
+        lockedUntil: null,
+      });
+      setError(`Invalid credentials. ${MAX_ATTEMPTS - newCount} attempts remaining.`);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (isLockedOut) {
+      setError('Account is temporarily locked. Please try again later.');
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { data, error: authError } = await supabase.auth.signInWithPassword({
+        email: email.trim().toLowerCase(),
+        password,
+      });
+
+      if (authError) {
+        recordFailedAttempt();
+        return;
+      }
+
+      if (data.user) {
+        // Reset login attempts on success
+        const resetAttempts = { count: 0, lastAttempt: 0, lockedUntil: null };
+        setLoginAttempts(resetAttempts);
+        sessionStorage.setItem('admin_login_attempts', JSON.stringify(resetAttempts));
+        
+        toast({
+          title: 'Welcome back',
+          description: 'Successfully signed in to Admin Portal',
+        });
+        
+        navigate('/admin');
+      }
+    } catch (err) {
+      setError('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (!validateEmail(email)) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const { error: resetError } = await supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+        redirectTo: `${window.location.origin}/admin-portal`,
+      });
+
+      if (resetError) {
+        setError(resetError.message);
+        return;
+      }
+
+      setView('reset-sent');
+      toast({
+        title: 'Check your email',
+        description: 'Password reset instructions have been sent.',
+      });
+    } catch (err) {
+      setError('Failed to send reset email. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const formatTime = (ms: number): string => {
+    const minutes = Math.floor(ms / 60000);
+    const seconds = Math.floor((ms % 60000) / 1000);
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  return (
+    <>
+      <Helmet>
+        <title>Admin Portal | Galavanteer</title>
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
+        <meta name="googlebot" content="noindex, nofollow" />
+        <meta name="bingbot" content="noindex, nofollow" />
+      </Helmet>
+
+      <div className="min-h-screen bg-[#0a0a0b] flex items-center justify-center p-4">
+        {/* Background effects */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-emerald-500/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl" />
+        </div>
+
+        {/* Login Card */}
+        <div className="relative w-full max-w-md">
+          {/* Logo/Brand */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 border border-white/10 mb-4">
+              <Shield className="w-8 h-8 text-emerald-400" />
+            </div>
+            <h1 className="text-2xl font-semibold text-white mb-1">Admin Portal</h1>
+            <p className="text-sm text-gray-500">Galavanteer Command Center</p>
+          </div>
+
+          {/* Card */}
+          <div className="bg-[#111113] border border-white/5 rounded-2xl p-8 shadow-2xl">
+            {view === 'login' && (
+              <form onSubmit={handleLogin} className="space-y-6">
+                {/* Error Alert */}
+                {error && (
+                  <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-300">{error}</p>
+                  </div>
+                )}
+
+                {/* Lockout Warning */}
+                {isLockedOut && (
+                  <div className="flex items-center gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
+                    <Lock className="w-5 h-5 text-amber-400 shrink-0" />
+                    <div>
+                      <p className="text-sm text-amber-300 font-medium">Account Temporarily Locked</p>
+                      <p className="text-xs text-amber-400/70">
+                        Try again in {formatTime(lockoutRemaining)}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Email Field */}
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm text-gray-400">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Input
+                      id="email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@galavanteer.com"
+                      disabled={isLoading || isLockedOut}
+                      className="pl-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Password Field */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="password" className="text-sm text-gray-400">
+                      Password
+                    </Label>
+                    <button
+                      type="button"
+                      onClick={() => setView('reset')}
+                      className="text-xs text-emerald-400 hover:text-emerald-300 transition-colors"
+                    >
+                      Forgot password?
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Input
+                      id="password"
+                      type={showPassword ? 'text' : 'password'}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder="••••••••"
+                      disabled={isLoading || isLockedOut}
+                      className="pl-11 pr-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-400"
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Submit Button */}
+                <Button
+                  type="submit"
+                  disabled={isLoading || isLockedOut}
+                  className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isLoading ? (
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                      <span>Signing in...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <span>Sign In</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </div>
+                  )}
+                </Button>
+
+                {/* Security Notice */}
+                <p className="text-center text-xs text-gray-600">
+                  Access restricted to authorized personnel only.
+                  <br />
+                  All login attempts are logged.
+                </p>
+              </form>
+            )}
+
+            {view === 'reset' && (
+              <form onSubmit={handlePasswordReset} className="space-y-6">
+                <div className="text-center mb-2">
+                  <h2 className="text-lg font-medium text-white">Reset Password</h2>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Enter your email to receive reset instructions
+                  </p>
+                </div>
+
+                {error && (
+                  <div className="flex items-start gap-3 p-4 bg-red-500/10 border border-red-500/20 rounded-lg">
+                    <AlertCircle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
+                    <p className="text-sm text-red-300">{error}</p>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label htmlFor="reset-email" className="text-sm text-gray-400">
+                    Email Address
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+                    <Input
+                      id="reset-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="you@galavanteer.com"
+                      disabled={isLoading}
+                      className="pl-11 h-12 bg-[#0a0a0b] border-white/10 text-white placeholder:text-gray-600 focus:border-emerald-500/50 focus:ring-emerald-500/20"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full h-12 bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-medium rounded-lg"
+                  >
+                    {isLoading ? 'Sending...' : 'Send Reset Link'}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    onClick={() => {
+                      setView('login');
+                      setError(null);
+                    }}
+                    className="w-full h-12 text-gray-400 hover:text-white hover:bg-white/5"
+                  >
+                    Back to Sign In
+                  </Button>
+                </div>
+              </form>
+            )}
+
+            {view === 'reset-sent' && (
+              <div className="text-center space-y-6">
+                <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-500/10 border border-emerald-500/20">
+                  <Mail className="w-8 h-8 text-emerald-400" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-medium text-white">Check Your Email</h2>
+                  <p className="text-sm text-gray-500 mt-2">
+                    We've sent password reset instructions to{' '}
+                    <span className="text-gray-300">{email}</span>
+                  </p>
+                </div>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  onClick={() => {
+                    setView('login');
+                    setError(null);
+                    setEmail('');
+                  }}
+                  className="w-full h-12 text-gray-400 hover:text-white hover:bg-white/5"
+                >
+                  Back to Sign In
+                </Button>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <p className="text-center text-xs text-gray-600 mt-6">
+            © {new Date().getFullYear()} Galavanteer. All rights reserved.
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AdminPortalPage;

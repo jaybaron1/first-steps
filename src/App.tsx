@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
+import AdminPortalPage from "./pages/admin/AdminPortalPage";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminRoute from "./components/admin/AdminRoute";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -50,6 +53,17 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            
+            {/* Admin Portal - Authentication */}
+            <Route path="/admin-portal" element={<AdminPortalPage />} />
+            
+            {/* Protected Admin Routes */}
+            <Route path="/admin" element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            } />
+            
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

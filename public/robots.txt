@@ -79,6 +79,8 @@ Disallow: /*?*gclid=
 Disallow: /*?*calendly=
 Disallow: /api/
 Disallow: /admin/
+Disallow: /admin-portal
+Disallow: /admin-portal/
 Disallow: /*.json$
 
 # Allow Important Resources
