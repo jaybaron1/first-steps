@@ -18,6 +18,7 @@ import {
   Map,
   Route,
   Sparkles,
+  Globe,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import StatsCard from "@/components/admin/StatsCard";
@@ -28,6 +29,7 @@ import AlertsPanel from "@/components/admin/AlertsPanel";
 import LiveVisitorMap from "@/components/admin/LiveVisitorMap";
 import ActiveUsersPanel from "@/components/admin/ActiveUsersPanel";
 import VisitorTimeline from "@/components/admin/VisitorTimeline";
+import GeoHeatMap from "@/components/admin/GeoHeatMap";
 import { useAdminStats } from "@/hooks/useAdminStats";
 
 const AdminDashboard: React.FC = () => {
@@ -267,6 +269,31 @@ const AdminDashboard: React.FC = () => {
               </div>
             </div>
             <LiveVisitorMap />
+          </div>
+
+          {/* Geographic Distribution Heat Map */}
+          <div
+            className="bg-white border border-[#B8956C]/20 rounded-2xl p-8
+  mb-10 shadow-lg animate-fadeInUp"
+            style={{ animationDelay: "750ms" }}
+          >
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-[#B8956C]/10">
+                  <Globe className="w-6 h-6 text-[#B8956C]" />
+                </div>
+                <div>
+                  <h3
+                    className="text-lg font-display font-semibold
+  text-[#1A1915]"
+                  >
+                    Geographic Distribution
+                  </h3>
+                  <p className="text-xs text-[#8C857A]">Visitor density by country</p>
+                </div>
+              </div>
+            </div>
+            <GeoHeatMap />
           </div>
 
           {/* Main Grid */}

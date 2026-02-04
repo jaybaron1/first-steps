@@ -232,16 +232,22 @@ export type Database = {
           first_seen: string | null
           id: string
           ip_address: unknown
+          language: string | null
           last_seen: string | null
           lead_score: number | null
           os: string | null
           page_views: number | null
           referrer: string | null
+          screen_resolution: string | null
           session_id: string
+          timezone: string | null
           total_time_seconds: number | null
           utm_campaign: string | null
+          utm_content: string | null
           utm_medium: string | null
           utm_source: string | null
+          utm_term: string | null
+          viewport_size: string | null
         }
         Insert: {
           browser?: string | null
@@ -256,16 +262,22 @@ export type Database = {
           first_seen?: string | null
           id?: string
           ip_address?: unknown
+          language?: string | null
           last_seen?: string | null
           lead_score?: number | null
           os?: string | null
           page_views?: number | null
           referrer?: string | null
+          screen_resolution?: string | null
           session_id: string
+          timezone?: string | null
           total_time_seconds?: number | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
+          viewport_size?: string | null
         }
         Update: {
           browser?: string | null
@@ -280,16 +292,22 @@ export type Database = {
           first_seen?: string | null
           id?: string
           ip_address?: unknown
+          language?: string | null
           last_seen?: string | null
           lead_score?: number | null
           os?: string | null
           page_views?: number | null
           referrer?: string | null
+          screen_resolution?: string | null
           session_id?: string
+          timezone?: string | null
           total_time_seconds?: number | null
           utm_campaign?: string | null
+          utm_content?: string | null
           utm_medium?: string | null
           utm_source?: string | null
+          utm_term?: string | null
+          viewport_size?: string | null
         }
         Relationships: []
       }
@@ -298,6 +316,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_lead_score: { Args: { p_session_id: string }; Returns: number }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
