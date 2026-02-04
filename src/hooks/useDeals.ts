@@ -24,7 +24,18 @@ export interface Deal {
 export interface DealWithRevenue extends Deal {
   total_revenue: number;
   touchpoint_count: number;
+  daysInStage: number;
+  isAtRisk: boolean;
 }
+
+const STAGE_THRESHOLDS: Record<DealStage, number> = {
+  lead: 5,
+  qualified: 7,
+  proposal: 14,
+  negotiation: 21,
+  closed_won: 0,
+  closed_lost: 0,
+};
 
 export interface PipelineMetrics {
   totalPipeline: number;
@@ -59,11 +70,19 @@ export function useDeals() {
 
       if (dealsError) throw dealsError;
 
-      const enrichedDeals: DealWithRevenue[] = (dealsData || []).map((deal: any) => ({
-        ...deal,
-        total_revenue: (deal.revenue_events || []).reduce((sum: number, e: any) => sum + Number(e.amount), 0),
-        touchpoint_count: (deal.attribution_touchpoints || []).length,
-      }));
+      const enrichedDeals: DealWithRevenue[] = (dealsData || []).map((deal: any) => {
+        const daysInStage = (Date.now() - new Date(deal.updated_at).getTime()) / (1000 * 60 * 60 * 24);
+        const threshold = STAGE_THRESHOLDS[deal.stage as DealStage] * 1.5;
+        const isAtRisk = !deal.stage.startsWith('closed') && daysInStage > threshold;
+        
+        return {
+          ...deal,
+          total_revenue: (deal.revenue_events || []).reduce((sum: number, e: any) => sum + Number(e.amount), 0),
+          touchpoint_count: (deal.attribution_touchpoints || []).length,
+          daysInStage,
+          isAtRisk,
+        };
+      });
 
       setDeals(enrichedDeals);
 
