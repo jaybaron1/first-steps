@@ -603,7 +603,7 @@ const AboutPage = () => {
             {/* Instagram Embed */}
             <div className="relative bg-black" style={{ paddingBottom: '125%' }}>
               <iframe
-                src="https://www.instagram.com/p/DKQNIg_RKSh/embed"
+                src="https://www.instagram.com/p/DUTS3b-jQYf/embed"
                 className="absolute inset-0 w-full h-full"
                 frameBorder="0"
                 scrolling="no"
