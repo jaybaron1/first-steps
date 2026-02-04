@@ -139,7 +139,7 @@ const AdminLayout: React.FC = () => {
         </header>
 
         {/* Main Content */}
-        <main className="relative max-w-[1800px] mx-auto px-8 py-10">
+        <main className="relative max-w-[1800px] mx-auto px-8 py-10 overflow-x-hidden">
           <Outlet />
         </main>
       </div>
