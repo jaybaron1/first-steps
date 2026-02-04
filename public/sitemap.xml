@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://galavanteer.com/</loc>
-    <lastmod>2025-11-07</lastmod>
+    <lastmod>2025-02-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://galavanteer.com/social-images/homepage-og.jpg</image:loc>
-      <image:title>Galavanteer Custom AI Solutions</image:title>
+      <image:title>Galavanteer - The Roundtable Executive Decision Intelligence</image:title>
     </image:image>
     <image:image>
       <image:loc>https://galavanteer.com/lovable-uploads/64da8d28-80eb-4cc4-8422-5a6e3ec44ebb.png</image:loc>
@@ -18,7 +17,7 @@
   </url>
   <url>
     <loc>https://galavanteer.com/about</loc>
-    <lastmod>2025-11-07</lastmod>
+    <lastmod>2025-02-04</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -27,69 +26,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://galavanteer.com/examples</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://galavanteer.com/social-images/examples-og.jpg</image:loc>
-      <image:title>AI Examples and Case Studies</image:title>
-    </image:image>
-    <video:video>
-      <video:thumbnail_loc>https://galavanteer.com/lovable-uploads/64da8d28-80eb-4cc4-8422-5a6e3ec44ebb.png</video:thumbnail_loc>
-      <video:title>Custom AI Solutions Demo</video:title>
-      <video:description>Interactive demonstrations of custom AI assistants and GPT systems</video:description>
-    </video:video>
-  </url>
-  <url>
-    <loc>https://galavanteer.com/real-wins</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://galavanteer.com/experience</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-    <image:image>
-      <image:loc>https://galavanteer.com/social-images/experience-og.jpg</image:loc>
-      <image:title>Experience Galavanteer AI</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://galavanteer.com/pricing</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-    <image:image>
-      <image:loc>https://galavanteer.com/social-images/pricing-og.jpg</image:loc>
-      <image:title>AI Solutions Pricing</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://galavanteer.com/clarity</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-    <image:image>
-      <image:loc>https://galavanteer.com/social-images/clarity-og.jpg</image:loc>
-      <image:title>Clarity Session</image:title>
-    </image:image>
-  </url>
-  <url>
-    <loc>https://galavanteer.com/faq</loc>
-    <lastmod>2025-11-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-    <image:image>
-      <image:loc>https://galavanteer.com/social-images/faq-og.jpg</image:loc>
-      <image:title>Frequently Asked Questions</image:title>
-    </image:image>
-  </url>
-  <url>
     <loc>https://galavanteer.com/privacy</loc>
-    <lastmod>2025-11-07</lastmod>
+    <lastmod>2025-02-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
