@@ -114,8 +114,8 @@ const AdminLayout: React.FC = () => {
           </div>
 
           {/* Tab Navigation */}
-          <div className="max-w-[1800px] mx-auto px-8">
-            <nav className="flex gap-1 -mb-px">
+          <div className="max-w-[1800px] mx-auto px-8 overflow-x-auto scrollbar-hide">
+            <nav className="flex gap-1 -mb-px min-w-max">
               {navItems.map((item) => (
                 <NavLink
                   key={item.path}
@@ -123,7 +123,7 @@ const AdminLayout: React.FC = () => {
                   end={item.end}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors',
+                      'flex items-center gap-2 px-4 py-3 text-sm font-medium border-b-2 transition-colors whitespace-nowrap',
                       isActive
                         ? 'border-[#B8956C] text-[#B8956C]'
                         : 'border-transparent text-[#8C857A] hover:text-[#4A4640] hover:border-[#B8956C]/30'
