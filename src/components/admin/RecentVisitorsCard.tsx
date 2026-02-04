@@ -6,18 +6,28 @@
 
   interface Visitor {
     session_id: string;
-    fingerprint_hash: string;
-    ip_address: string;
+    fingerprint_hash: string | null;
+    ip_address: unknown;
     country: string | null;
     city: string | null;
     device_type: string | null;
     browser: string | null;
     os: string | null;
     referrer: string | null;
-    created_at: string;
+    first_seen: string | null;
+    last_seen: string | null;
     page_count: number;
     last_page: string | null;
-    lead_score: number;
+    lead_score: number | null;
+    page_views: number | null;
+    total_time_seconds: number | null;
+    utm_source: string | null;
+    utm_medium: string | null;
+    utm_campaign: string | null;
+    company_name: string | null;
+    company_size: string | null;
+    company_industry: string | null;
+    id: string;
   }
 
   interface RecentVisitorsCardProps {
@@ -52,7 +62,7 @@
         const { data: sessions, error: sessionsError } = await adminSupabase
           .from('visitor_sessions')
           .select('*')
-          .order('created_at', { ascending: false })
+          .order('first_seen', { ascending: false })
           .limit(maxVisitors);
 
         if (sessionsError) throw sessionsError;
@@ -227,7 +237,7 @@
                   <div className="flex items-center gap-1 text-xs text-[#8C857A]
    flex-shrink-0">
                     <Clock className="w-3 h-3" />
-                    <span>{formatTimeAgo(visitor.created_at)}</span>
+                    <span>{formatTimeAgo(visitor.first_seen || '')}</span>
                   </div>
                 </div>
 
