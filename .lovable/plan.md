@@ -1,190 +1,289 @@
 
+# Section 2: Conversion & Lead Intelligence - Complete Implementation
 
-# Enhanced Visitor Tracking & Analytics Implementation
-
-This plan adds complete UTM tracking, lead scoring, device details, and a geographic heat map to your admin dashboard.
-
----
-
-## Overview
-
-We'll implement four key enhancements:
-1. Add `utm_term` and `utm_content` columns for complete UTM tracking
-2. Add `screen_resolution` and `viewport_size` columns for device details
-3. Implement an automated lead scoring algorithm
-4. Create a geographic heat map dashboard
+This plan implements all remaining features from Section 2, building on existing tracking infrastructure.
 
 ---
 
-## Phase 1: Database Schema Updates
+## Current State Analysis
 
-### New Columns for `visitor_sessions` table
+### Already Implemented
+- Lead capture via ChatDiscovery chatbot and SessionRequestForm
+- Lead scoring algorithm (0-100) with database triggers
+- CTA click tracking via `data-track-cta` attribute
+- Form start event tracking (`form_start` events)
+- Lead temperature badges (Hot/Warm/Cool/Cold)
 
-| Column | Type | Purpose |
-|--------|------|---------|
-| `utm_term` | text | Paid keywords |
-| `utm_content` | text | A/B test variants |
-| `screen_resolution` | text | e.g., "1920x1080" |
-| `viewport_size` | text | e.g., "1440x900" |
-| `timezone` | text | e.g., "America/New_York" |
-| `language` | text | e.g., "en-US" |
-
-### Migration SQL
-```sql
-ALTER TABLE visitor_sessions 
-ADD COLUMN IF NOT EXISTS utm_term text,
-ADD COLUMN IF NOT EXISTS utm_content text,
-ADD COLUMN IF NOT EXISTS screen_resolution text,
-ADD COLUMN IF NOT EXISTS viewport_size text,
-ADD COLUMN IF NOT EXISTS timezone text,
-ADD COLUMN IF NOT EXISTS language text;
-```
+### To Be Implemented
+- Leads management dashboard with filtering and search
+- Conversion funnel visualization with drop-off analysis
+- CTA performance dashboard with heatmaps
+- Google Sheets integration for lead sync
+- A/B testing framework
 
 ---
 
-## Phase 2: Update Tracking Code
+## Phase 1: Leads Management Dashboard
 
-### Files to Modify
+### New Component: `LeadsPanel.tsx`
 
-**1. `src/lib/visitorTracking.ts`**
-- Update `getUTMParameters()` to capture all 5 UTM params:
-  - `utm_source`, `utm_medium`, `utm_campaign`, `utm_term`, `utm_content`
-- Add `getScreenInfo()` method to capture:
-  - `screen_resolution`: `screen.width + "x" + screen.height`
-  - `viewport_size`: `window.innerWidth + "x" + window.innerHeight`
-  - `timezone`: `Intl.DateTimeFormat().resolvedOptions().timeZone`
-  - `language`: `navigator.language`
-- Update `createSession()` to include all new fields in the database insert
+Creates a comprehensive leads management interface showing:
 
-**2. `src/lib/tracking.ts`**
-- Update `parseUTMParams()` to return all 5 UTM parameters
-- Update `initializeSession()` to include screen/viewport/timezone/language data
-
----
-
-## Phase 3: Lead Scoring Algorithm
-
-### Scoring Logic
-
-Create a new database function that calculates a lead score (0-100) based on:
-
-| Factor | Points | Logic |
-|--------|--------|-------|
-| Page views | 0-25 | +5 per page, max 25 |
-| Time on site | 0-25 | +1 per 30 seconds, max 25 |
-| Scroll depth avg | 0-15 | +15 if avg > 75%, +10 if > 50%, +5 if > 25% |
-| High-value pages | 0-20 | +10 for /pricing, +5 for /about, /examples |
-| CTA clicks | 0-10 | +5 per CTA click, max 10 |
-| Form interactions | 0-5 | +5 if started any form |
-
-### Implementation
-
-**1. Create database function `calculate_lead_score`**
-```sql
-CREATE OR REPLACE FUNCTION calculate_lead_score(p_session_id text)
-RETURNS integer AS $$
-DECLARE
-  score integer := 0;
-  page_count integer;
-  total_time integer;
-  avg_scroll integer;
-  high_value_pages integer;
-  cta_clicks integer;
-  form_starts integer;
-BEGIN
-  -- Get session data
-  SELECT page_views, total_time_seconds INTO page_count, total_time
-  FROM visitor_sessions WHERE session_id = p_session_id;
-  
-  -- Calculate page view score (max 25)
-  score := score + LEAST(page_count * 5, 25);
-  
-  -- Calculate time score (max 25)
-  score := score + LEAST(FLOOR(total_time / 30), 25);
-  
-  -- Get average scroll depth
-  SELECT COALESCE(AVG(scroll_depth), 0) INTO avg_scroll
-  FROM page_views WHERE session_id = p_session_id;
-  
-  -- Scroll depth score
-  IF avg_scroll > 75 THEN score := score + 15;
-  ELSIF avg_scroll > 50 THEN score := score + 10;
-  ELSIF avg_scroll > 25 THEN score := score + 5;
-  END IF;
-  
-  -- High-value pages
-  SELECT COUNT(*) INTO high_value_pages
-  FROM page_views WHERE session_id = p_session_id
-  AND (page_url LIKE '%/pricing%' OR page_url LIKE '%/about%' OR page_url LIKE '%/examples%');
-  score := score + LEAST(high_value_pages * 5, 20);
-  
-  -- CTA clicks
-  SELECT COUNT(*) INTO cta_clicks
-  FROM visitor_events WHERE session_id = p_session_id AND event_type = 'cta_click';
-  score := score + LEAST(cta_clicks * 5, 10);
-  
-  -- Form starts
-  SELECT COUNT(*) INTO form_starts
-  FROM visitor_events WHERE session_id = p_session_id AND event_type = 'form_start';
-  IF form_starts > 0 THEN score := score + 5; END IF;
-  
-  RETURN LEAST(score, 100);
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-```
-
-**2. Create trigger to auto-update lead score**
-- Trigger on `page_views` INSERT/UPDATE
-- Trigger on `visitor_events` INSERT
-- Recalculates and updates `visitor_sessions.lead_score`
-
-**3. Update tracking code to track `form_start` events**
-- Add form focus listener to capture when users start filling forms
-
----
-
-## Phase 4: Geographic Heat Map Dashboard
-
-### New Component: `GeoHeatMap.tsx`
-
-Location: `src/components/admin/GeoHeatMap.tsx`
+| Column | Description |
+|--------|-------------|
+| Name/Email | Lead contact info |
+| Source | chatbot, form, contact |
+| Status | new, contacted, qualified, converted |
+| Lead Score | Temperature badge + numeric score |
+| Journey | Pages visited count + entry page |
+| Created | Timestamp with relative time |
+| Actions | View details, change status |
 
 **Features:**
-- Shows visitor density by country with color intensity
-- Time range selector (Today, 7 days, 30 days, All time)
-- Country list with visitor counts sorted by volume
-- Interactive tooltips showing country stats
+- Filter by status, source, date range
+- Search by name/email
+- Sort by score, date, status
+- Expandable rows showing full journey
+- Bulk status updates
 
-**Visual Design:**
-- SVG world map with country polygons
-- Color scale: Light gold (#F3EDE4) to deep gold (#B8956C) based on visitor count
-- Hover states showing visitor count and percentage
-- Legend showing color scale
-
-### Data Structure
+### New Hook: `useLeads.ts`
 
 ```typescript
-interface CountryStats {
-  country: string;
-  visitor_count: number;
-  percentage: number;
-  avg_time_on_site: number;
-  conversion_rate: number;
+interface UseLeadsOptions {
+  status?: string[];
+  source?: string[];
+  dateRange?: { start: Date; end: Date };
+  search?: string;
+  sortBy?: 'created_at' | 'lead_score' | 'status';
+  sortOrder?: 'asc' | 'desc';
 }
 ```
 
-### Integration
+---
 
-**1. Create `useGeoStats` hook**
-- Location: `src/hooks/useGeoStats.ts`
-- Fetches aggregated country data from `visitor_sessions`
-- Supports time range filtering
-- Returns sorted country stats array
+## Phase 2: Conversion Funnel Visualization
 
-**2. Add to AdminDashboard**
-- New section between "Live Visitor Map" and "Real-Time Activity"
-- Title: "Geographic Distribution"
-- Subtitle: "Visitor density by country"
+### Database: New `funnel_steps` Table
+
+```sql
+CREATE TABLE funnel_steps (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  url_pattern text NOT NULL,
+  step_order integer NOT NULL,
+  funnel_name text DEFAULT 'default',
+  created_at timestamptz DEFAULT now()
+);
+
+-- Default funnel: Homepage -> Services -> Pricing -> Contact -> Booked
+INSERT INTO funnel_steps (name, url_pattern, step_order) VALUES
+  ('Homepage', '/', 1),
+  ('Services', '/services%', 2),
+  ('Pricing', '/pricing%', 3),
+  ('Contact', '/contact%', 4),
+  ('Booked', 'calendly_booking_complete', 5);
+```
+
+### New Component: `ConversionFunnel.tsx`
+
+Visual funnel showing:
+
+```text
++------------------------------------------+
+|  Homepage                    2,450 (100%)|
++------------------------------------------+
+          |
+          v  (68% continue)
++------------------------------------------+
+|  Services                    1,666  (68%)|
++------------------------------------------+
+          |
+          v  (45% continue)
++------------------------------------------+
+|  Pricing                       750  (31%)|
++------------------------------------------+
+          |
+          v  (40% continue)
++------------------------------------------+
+|  Contact                       300  (12%)|
++------------------------------------------+
+          |
+          v  (33% continue)
++------------------------------------------+
+|  Booked                        100   (4%)|
++------------------------------------------+
+```
+
+**Features:**
+- Animated bars showing visitor volume
+- Drop-off percentages between steps
+- Time range selector (7d, 30d, 90d)
+- Source filter (show funnel by UTM source)
+- Click step to see visitor list who reached it
+
+### New Hook: `useFunnelStats.ts`
+
+Calculates:
+- Visitors at each funnel step
+- Drop-off rate between steps
+- Conversion rate (step 1 to final step)
+- Average time between steps
+- Breakdown by traffic source
+
+---
+
+## Phase 3: CTA Performance Dashboard
+
+### New Component: `CTAPerformance.tsx`
+
+Dashboard showing all tracked CTAs with:
+
+| CTA | Location | Clicks | Conversions | Rate | Mobile/Desktop |
+|-----|----------|--------|-------------|------|----------------|
+| "Book a Call" | Hero | 245 | 45 | 18.4% | 60/40 |
+| "Get Started" | Pricing | 189 | 32 | 16.9% | 55/45 |
+| "Learn More" | Services | 156 | 12 | 7.7% | 70/30 |
+
+**Features:**
+- Click count trends over time (sparkline charts)
+- Device breakdown (mobile vs desktop)
+- Conversion attribution (clicks that led to leads)
+- Top performing CTAs ranking
+- CTA click heatmap per page
+
+### New Hook: `useCTAStats.ts`
+
+Aggregates from `visitor_events` where `event_type = 'cta_click'`:
+- Total clicks per CTA
+- Unique sessions clicking
+- Device type breakdown
+- Page location distribution
+- Time-series data for trends
+
+### CTA Heatmap Component: `CTAHeatmap.tsx`
+
+Visual representation of click density on page mockup:
+- Page sections with color intensity based on clicks
+- Overlay showing CTA positions
+- Compare periods (this week vs last week)
+
+---
+
+## Phase 4: Google Sheets Integration
+
+### New Edge Function: `sync-leads-to-sheets`
+
+Syncs new leads to a Google Sheet automatically:
+
+```typescript
+// Triggered via webhook or scheduled
+export async function handler(req: Request) {
+  // 1. Get unsynced leads
+  // 2. Append to Google Sheet
+  // 3. Mark leads as synced
+}
+```
+
+### Database: Add `sheets_synced_at` Column
+
+```sql
+ALTER TABLE leads ADD COLUMN sheets_synced_at timestamptz;
+```
+
+### Admin UI: Sheets Configuration
+
+Simple settings panel to:
+- Enter Google Sheet ID
+- Test connection
+- Toggle auto-sync on/off
+- Manual sync button
+- View sync history
+
+---
+
+## Phase 5: A/B Testing Framework
+
+### Database: New Tables
+
+```sql
+-- Experiments table
+CREATE TABLE ab_experiments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  description text,
+  element_selector text NOT NULL,
+  variants jsonb NOT NULL DEFAULT '[]',
+  status text DEFAULT 'draft',
+  start_date timestamptz,
+  end_date timestamptz,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Variant assignments (which visitor saw which variant)
+CREATE TABLE ab_assignments (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  experiment_id uuid REFERENCES ab_experiments(id),
+  session_id text NOT NULL,
+  variant_id text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+-- Variant conversions
+CREATE TABLE ab_conversions (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  experiment_id uuid REFERENCES ab_experiments(id),
+  session_id text NOT NULL,
+  variant_id text NOT NULL,
+  conversion_type text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+```
+
+### New Component: `ABTestingPanel.tsx`
+
+Admin interface to:
+- Create new experiments
+- Define variants (control + variations)
+- Set traffic split percentage
+- View real-time results
+- Declare winners
+
+### A/B Results Display
+
+```text
+Experiment: "Hero CTA Copy"
+Status: Running (Day 5 of 14)
+
++------------------+--------+-------+------+------------+
+| Variant          | Views  | Conv. | Rate | Confidence |
++------------------+--------+-------+------+------------+
+| A: "Book a Call" | 1,245  | 89    | 7.1% | Baseline   |
+| B: "Start Free"  | 1,198  | 112   | 9.3% | 94%        |
+| C: "Get Started" | 1,201  | 95    | 7.9% | 72%        |
++------------------+--------+-------+------+------------+
+
+Recommendation: Variant B showing +31% lift. 
+Needs 2 more days to reach 95% confidence.
+```
+
+---
+
+## Phase 6: Dashboard Integration
+
+### Update `AdminDashboard.tsx`
+
+Add new sections:
+1. **Leads Panel** - After Recent Visitors
+2. **Conversion Funnel** - New dedicated section
+3. **CTA Performance** - New dedicated section
+
+### New Admin Sub-Pages
+
+Create dedicated pages for deeper analysis:
+- `/admin/leads` - Full leads management
+- `/admin/funnels` - Funnel analysis
+- `/admin/cta-performance` - CTA analytics
+- `/admin/experiments` - A/B testing
 
 ---
 
@@ -192,60 +291,84 @@ interface CountryStats {
 
 | File | Action | Description |
 |------|--------|-------------|
-| `visitor_sessions` table | Migrate | Add 6 new columns |
-| `src/lib/visitorTracking.ts` | Modify | Capture all UTM + screen data |
-| `src/lib/tracking.ts` | Modify | Update parseUTMParams + initializeSession |
-| `calculate_lead_score` | Create | Database function |
-| `update_lead_score_trigger` | Create | Auto-update trigger |
-| `src/hooks/useGeoStats.ts` | Create | Hook for geo data |
-| `src/components/admin/GeoHeatMap.tsx` | Create | Heat map component |
-| `src/pages/admin/AdminDashboard.tsx` | Modify | Add heat map section |
+| `funnel_steps` table | Create | Define funnel stages |
+| `ab_experiments` table | Create | A/B test definitions |
+| `ab_assignments` table | Create | Variant assignments |
+| `ab_conversions` table | Create | Conversion tracking |
+| `leads.sheets_synced_at` | Alter | Track sync status |
+| `src/hooks/useLeads.ts` | Create | Leads data hook |
+| `src/hooks/useFunnelStats.ts` | Create | Funnel analytics hook |
+| `src/hooks/useCTAStats.ts` | Create | CTA performance hook |
+| `src/hooks/useABTests.ts` | Create | A/B testing hook |
+| `src/components/admin/LeadsPanel.tsx` | Create | Leads management UI |
+| `src/components/admin/ConversionFunnel.tsx` | Create | Funnel visualization |
+| `src/components/admin/CTAPerformance.tsx` | Create | CTA analytics |
+| `src/components/admin/CTAHeatmap.tsx` | Create | Click heatmap |
+| `src/components/admin/ABTestingPanel.tsx` | Create | A/B test management |
+| `src/pages/admin/AdminDashboard.tsx` | Modify | Add new sections |
+| `supabase/functions/sync-leads-to-sheets` | Create | Google Sheets sync |
 
 ---
 
-## Technical Details
+## Technical Implementation Details
 
-### UTM Parameters Captured
+### Funnel Calculation Logic
 
-After implementation, the tracking system will capture:
+```typescript
+// For each funnel step, count unique sessions that visited
+async function calculateFunnelMetrics(dateRange, source?) {
+  const steps = await getFunnelSteps();
+  
+  return Promise.all(steps.map(async step => {
+    // Match page_views against url_pattern
+    const { count } = await supabase
+      .from('page_views')
+      .select('session_id', { count: 'exact' })
+      .ilike('page_url', step.url_pattern)
+      .gte('created_at', dateRange.start)
+      .lte('created_at', dateRange.end);
+    
+    return { step: step.name, visitors: count };
+  }));
+}
+```
 
-| Parameter | Example | Purpose |
-|-----------|---------|---------|
-| `utm_source` | google, newsletter | Traffic source |
-| `utm_medium` | cpc, email | Marketing medium |
-| `utm_campaign` | summer_sale | Campaign name |
-| `utm_term` | luxury+travel | Paid search keywords |
-| `utm_content` | banner_v2 | A/B test variant |
+### CTA Attribution Logic
 
-### Lead Score Temperature Mapping
+Link CTA clicks to eventual conversions:
+1. Get all `cta_click` events
+2. For each, check if same `session_id` has a lead
+3. Calculate conversion rate per CTA
 
-| Score Range | Temperature | Color |
-|-------------|-------------|-------|
-| 0-25 | Cold | Gray |
-| 26-50 | Cool | Blue |
-| 51-75 | Warm | Yellow |
-| 76-100 | Hot | Red/Orange |
+### A/B Variant Assignment
 
-### Heat Map Color Scale
-
-The geographic heat map uses a logarithmic color scale to handle the typical power-law distribution of visitor locations:
-
-```text
-+--------------------------------------------------+
-|  0 visitors    |------------>|    Max visitors   |
-|  #F3EDE4       |    Gradient |    #B8956C        |
-|  (Light cream) |             |    (Deep gold)    |
-+--------------------------------------------------+
+```typescript
+// Deterministic assignment based on session fingerprint
+function assignVariant(sessionId: string, experiment: ABExperiment) {
+  const hash = hashString(sessionId + experiment.id);
+  const bucket = parseInt(hash.slice(0, 8), 16) % 100;
+  
+  // Find variant based on traffic split
+  let cumulative = 0;
+  for (const variant of experiment.variants) {
+    cumulative += variant.trafficPercent;
+    if (bucket < cumulative) return variant.id;
+  }
+  return experiment.variants[0].id; // Fallback to control
+}
 ```
 
 ---
 
 ## Execution Order
 
-1. Run database migration (add columns)
-2. Deploy database function and trigger
-3. Update tracking code files
-4. Create new hook and component
-5. Update AdminDashboard layout
-6. Test end-to-end
-
+1. Run database migrations (funnel_steps, A/B tables)
+2. Create data hooks (useLeads, useFunnelStats, useCTAStats, useABTests)
+3. Build LeadsPanel component
+4. Build ConversionFunnel component
+5. Build CTAPerformance and CTAHeatmap components
+6. Build ABTestingPanel component
+7. Create sync-leads-to-sheets edge function
+8. Update AdminDashboard with new sections
+9. Add navigation for dedicated admin sub-pages
+10. Test end-to-end
