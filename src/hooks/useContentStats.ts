@@ -1,9 +1,38 @@
 import { useQuery } from "@tanstack/react-query";
 import { adminSupabase as supabase } from "@/lib/adminBackend";
 
+// Helper to normalize URL by stripping query strings and hash
+const normalizeUrl = (url: string): string => {
+  try {
+    const parsed = new URL(url, "https://example.com");
+    // Return just the pathname, strip query strings and hash
+    return parsed.pathname || "/";
+  } catch {
+    // Fallback: strip everything after ? or #
+    return url.split(/[?#]/)[0] || "/";
+  }
+};
+
+// Get friendly page name from URL
+const getPageName = (url: string): string => {
+  const path = normalizeUrl(url);
+  if (path === "/" || path === "") return "Homepage";
+  // Convert /about -> About, /examples -> Examples, /pricing-page -> Pricing Page
+  return path
+    .replace(/^\//, "")
+    .split("/")
+    .map(segment => 
+      segment
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    )
+    .join(" / ");
+};
+
 interface PageStats {
   page_url: string;
-  page_title: string | null;
+  page_title: string;
   total_views: number;
   unique_sessions: number;
   avg_time_on_page: number;
@@ -14,7 +43,7 @@ interface PageStats {
 
 interface ContentStats {
   pages: PageStats[];
-  topExitPages: { page_url: string; exit_count: number; exit_rate: number }[];
+  topExitPages: { page_url: string; exit_count: number; exit_rate: number; avg_exit_scroll: number }[];
   summary: {
     totalPageViews: number;
     avgTimeOnPage: number;
@@ -60,7 +89,7 @@ export const useContentStats = (days: number = 30): ContentStats => {
       // Aggregate by page URL
       const pageMap = new Map<string, {
         page_url: string;
-        page_title: string | null;
+        page_title: string;
         views: number;
         sessions: Set<string>;
         totalTime: number;
@@ -71,11 +100,11 @@ export const useContentStats = (days: number = 30): ContentStats => {
       }>();
 
       pageViews?.forEach((pv) => {
-        const key = pv.page_url;
+        const key = normalizeUrl(pv.page_url);
         if (!pageMap.has(key)) {
           pageMap.set(key, {
-            page_url: pv.page_url,
-            page_title: pv.page_title,
+            page_url: key,
+            page_title: pv.page_title || getPageName(key),
             views: 0,
             sessions: new Set(),
             totalTime: 0,
@@ -104,27 +133,37 @@ export const useContentStats = (days: number = 30): ContentStats => {
       });
 
       // Calculate exit pages (last page view per session)
-      const sessionLastPage = new Map<string, string>();
+      const sessionLastPage = new Map<string, { page_url: string; scroll_depth: number | null }>();
       const sortedByTime = [...(pageViews || [])].sort(
         (a, b) => new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime()
       );
       sortedByTime.forEach((pv) => {
         if (pv.session_id) {
-          sessionLastPage.set(pv.session_id, pv.page_url);
+          sessionLastPage.set(pv.session_id, {
+            page_url: normalizeUrl(pv.page_url),
+            scroll_depth: pv.scroll_depth,
+          });
         }
       });
 
-      const exitCounts = new Map<string, number>();
-      sessionLastPage.forEach((pageUrl) => {
-        exitCounts.set(pageUrl, (exitCounts.get(pageUrl) || 0) + 1);
+      const exitData = new Map<string, { count: number; scrollDepths: number[] }>();
+      sessionLastPage.forEach(({ page_url, scroll_depth }) => {
+        if (!exitData.has(page_url)) {
+          exitData.set(page_url, { count: 0, scrollDepths: [] });
+        }
+        const data = exitData.get(page_url)!;
+        data.count++;
+        if (scroll_depth !== null && scroll_depth !== undefined) {
+          data.scrollDepths.push(scroll_depth);
+        }
       });
 
       // Build page stats array
       const pages: PageStats[] = Array.from(pageMap.values()).map((stats) => {
-        const exitCount = exitCounts.get(stats.page_url) || 0;
+        const exitCount = exitData.get(stats.page_url)?.count || 0;
         return {
           page_url: stats.page_url,
-          page_title: stats.page_title,
+          page_title: stats.page_title || getPageName(stats.page_url),
           total_views: stats.views,
           unique_sessions: stats.sessions.size,
           avg_time_on_page: stats.viewsWithTime > 0 ? Math.round(stats.totalTime / stats.viewsWithTime) : 0,
@@ -135,13 +174,18 @@ export const useContentStats = (days: number = 30): ContentStats => {
       }).sort((a, b) => b.total_views - a.total_views);
 
       // Top exit pages
-      const topExitPages = Array.from(exitCounts.entries())
-        .map(([page_url, exit_count]) => {
+      const topExitPages = Array.from(exitData.entries())
+        .map(([page_url, data]) => {
           const pageStats = pageMap.get(page_url);
+          const avgScroll = data.scrollDepths.length > 0
+            ? Math.round(data.scrollDepths.reduce((a, b) => a + b, 0) / data.scrollDepths.length)
+            : 0;
           return {
             page_url,
-            exit_count,
-            exit_rate: pageStats ? Math.round((exit_count / pageStats.views) * 100) : 0,
+            page_title: getPageName(page_url),
+            exit_count: data.count,
+            exit_rate: pageStats ? Math.round((data.count / pageStats.views) * 100) : 0,
+            avg_exit_scroll: avgScroll,
           };
         })
         .sort((a, b) => b.exit_count - a.exit_count)
@@ -165,7 +209,7 @@ export const useContentStats = (days: number = 30): ContentStats => {
 
       // Find most engaging page (highest time + scroll combo)
       const engagementScores = pages.map((p) => ({
-        page_url: p.page_url,
+        page_url: p.page_title || p.page_url,
         score: (p.avg_time_on_page / 60) + (p.avg_scroll_depth / 10),
       })).sort((a, b) => b.score - a.score);
 
@@ -179,9 +223,9 @@ export const useContentStats = (days: number = 30): ContentStats => {
           avgTimeOnPage,
           avgScrollDepth,
           overallBounceRate,
-          mostViewedPage: pages[0]?.page_url || null,
+          mostViewedPage: pages[0]?.page_title || pages[0]?.page_url || null,
           mostEngagingPage: engagementScores[0]?.page_url || null,
-          highestBounceRatePage: highestBounce?.page_url || null,
+          highestBounceRatePage: highestBounce?.page_title || highestBounce?.page_url || null,
         },
       };
     },

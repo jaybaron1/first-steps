@@ -5,6 +5,36 @@ import ContentPerformanceTable from "@/components/admin/ContentPerformanceTable"
 import TopExitPagesCard from "@/components/admin/TopExitPagesCard";
 import StatsCard from "@/components/admin/StatsCard";
 
+// Get friendly page name from URL or title
+const getDisplayName = (pageUrl: string | null): string => {
+  if (!pageUrl) return "—";
+  // If it's already a friendly name (no slashes except leading), return as-is
+  if (!pageUrl.startsWith("/") && !pageUrl.startsWith("http")) return pageUrl;
+  
+  // Normalize: strip query strings and protocol
+  let path = pageUrl;
+  try {
+    const parsed = new URL(pageUrl, "https://example.com");
+    path = parsed.pathname || "/";
+  } catch {
+    path = pageUrl.split(/[?#]/)[0] || "/";
+  }
+  
+  if (path === "/" || path === "") return "Homepage";
+  
+  // Convert /about -> About, /examples -> Examples
+  return path
+    .replace(/^\//, "")
+    .split("/")
+    .map(segment => 
+      segment
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    )
+    .join(" / ");
+};
+
 const ContentPage: React.FC = () => {
   const [days, setDays] = useState(30);
   const { pages, topExitPages, summary, loading } = useContentStats(days);
@@ -86,7 +116,7 @@ const ContentPage: React.FC = () => {
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Most Viewed</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {summary.mostViewedPage ? summary.mostViewedPage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
+                {getDisplayName(summary.mostViewedPage)}
               </p>
             </div>
           </div>
@@ -100,7 +130,7 @@ const ContentPage: React.FC = () => {
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Most Engaging</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {summary.mostEngagingPage ? summary.mostEngagingPage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
+                {getDisplayName(summary.mostEngagingPage)}
               </p>
             </div>
           </div>
@@ -114,7 +144,7 @@ const ContentPage: React.FC = () => {
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Highest Bounce</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {summary.highestBounceRatePage ? summary.highestBounceRatePage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
+                {getDisplayName(summary.highestBounceRatePage)}
               </p>
             </div>
           </div>
