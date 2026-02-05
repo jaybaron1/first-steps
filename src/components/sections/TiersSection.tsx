@@ -19,7 +19,7 @@ const TiersSection = () => {
       level: "02",
       name: "Connected",
       tagline: "Your operations integrated",
-      description: "Everything in Level 1, plus secure connectors to your business. Runs in a private Teams space.",
+      description: "Everything in Level 1, plus API connections to enterprise-level tools you already use. Runs in a private ChatGPT Teams space.",
       features: [
         "Email & calendar integration",
         "Notion, docs & knowledge bases",
