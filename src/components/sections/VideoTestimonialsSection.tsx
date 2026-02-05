@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Play } from 'lucide-react';
 
-const VideoTestimonialsSection = () => {
-  const [showCrisPoster, setShowCrisPoster] = useState(true);
-  return (
-    <section className="section relative overflow-hidden" style={{ background: '#1A1915' }}>
+ const VideoTestimonialsSection = () => {
+   const [showCrisPoster, setShowCrisPoster] = useState(true);
+   return (
+     <section data-section="video-testimonials" className="section relative overflow-hidden" style={{ background: '#1A1915' }}>
       {/* The Golden Thread continues through dark section */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/20" />
 

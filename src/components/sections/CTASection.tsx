@@ -1,9 +1,9 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-const CTASection = () => {
-  return (
-    <section className="relative overflow-hidden" style={{ background: '#1A1915' }}>
+ const CTASection = () => {
+   return (
+     <section data-section="final-cta" className="relative overflow-hidden" style={{ background: '#1A1915' }}>
       {/* The Golden Thread — ends here with a fade */}
       <div className="absolute left-8 lg:left-16 top-0 h-32 w-px bg-gradient-to-b from-gold/10 to-transparent" />
 

@@ -659,6 +659,53 @@ export type Database = {
           },
         ]
       }
+      section_engagement: {
+        Row: {
+          created_at: string | null
+          entered_at: string | null
+          entry_scroll_depth: number | null
+          exit_scroll_depth: number | null
+          exited_at: string | null
+          focus_duration_seconds: number | null
+          id: string
+          page_url: string
+          section_id: string
+          session_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          entered_at?: string | null
+          entry_scroll_depth?: number | null
+          exit_scroll_depth?: number | null
+          exited_at?: string | null
+          focus_duration_seconds?: number | null
+          id?: string
+          page_url: string
+          section_id: string
+          session_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          entered_at?: string | null
+          entry_scroll_depth?: number | null
+          exit_scroll_depth?: number | null
+          exited_at?: string | null
+          focus_duration_seconds?: number | null
+          id?: string
+          page_url?: string
+          section_id?: string
+          session_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "section_engagement_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "visitor_sessions"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string

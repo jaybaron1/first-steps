@@ -1,9 +1,11 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
 
-const HeroSection = () => {
-  return (
-    <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden"
+ const HeroSection = () => {
+   return (
+     <section
+       data-section="hero"
+       className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden"
       style={{ background: 'linear-gradient(180deg, #FDFBF7 0%, #F9F6F0 100%)' }}
     >
       {/* Grain overlay */}
