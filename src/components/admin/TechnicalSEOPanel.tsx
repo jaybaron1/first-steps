@@ -182,47 +182,93 @@ const TechnicalSEOPanel: React.FC = () => {
       currentValue: ogTagsPresent.length > 0 ? ogTagsPresent.join('\n') : 'No OG tags found',
     });
 
-    // Check structured data by fetching homepage
-    try {
-      const homeRes = await fetch('/');
-      if (homeRes.ok) {
-        const html = await homeRes.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
-        const jsonLdCount = jsonLdScripts.length;
-        const schemaTypes: string[] = [];
-        jsonLdScripts.forEach((script) => {
+    // Check structured data by loading the homepage in a hidden iframe.
+    // Reason: this is an SPA, so `fetch('/')` returns the app shell HTML and won't include
+    // react-helmet-async injected JSON-LD. We need the *rendered DOM* for '/'.
+    const getHomepageJsonLd = async () => {
+      const wait = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+      return await new Promise<{ jsonLdCount: number; schemaTypes: string[] }>((resolve, reject) => {
+        const iframe = document.createElement('iframe');
+        iframe.src = '/';
+        iframe.setAttribute('aria-hidden', 'true');
+        iframe.tabIndex = -1;
+        iframe.style.position = 'absolute';
+        iframe.style.left = '-99999px';
+        iframe.style.top = '0';
+        iframe.style.width = '1px';
+        iframe.style.height = '1px';
+        iframe.style.opacity = '0';
+        iframe.style.pointerEvents = 'none';
+
+        const cleanup = () => {
+          iframe.onload = null;
           try {
-            const data = JSON.parse(script.textContent || '');
-            if (data['@type']) schemaTypes.push(data['@type']);
+            iframe.remove();
           } catch {}
-        });
-        results.push({
-          name: 'Structured Data',
-          status: jsonLdCount > 0 ? 'pass' : 'warning',
-          details: jsonLdCount > 0 ? `${jsonLdCount} JSON-LD blocks found` : 'No structured data found',
-          whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
-          whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
-          howToFix: 'Add schema.org markup using OrganizationSchema, FAQSchema, or other relevant schema components.',
-          currentValue: schemaTypes.length > 0 ? `Schema types: ${schemaTypes.join(', ')}` : 'No schemas detected',
-        });
-      } else {
-        results.push({
-          name: 'Structured Data',
-          status: 'warning',
-          details: 'Could not fetch homepage to check structured data',
-          whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
-          whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
-          howToFix: 'Ensure the homepage is accessible and add schema.org markup.',
-        });
-      }
+        };
+
+        const pollForJsonLd = async () => {
+          // Give hydration + Helmet a moment to run.
+          // Then poll briefly in case scripts are injected after initial render.
+          const maxAttempts = 16; // ~4s at 250ms
+          for (let attempt = 0; attempt < maxAttempts; attempt++) {
+            const doc = iframe.contentDocument;
+            if (doc) {
+              const scripts = doc.querySelectorAll('script[type="application/ld+json"]');
+              if (scripts.length > 0) {
+                const schemaTypes: string[] = [];
+                scripts.forEach((script) => {
+                  try {
+                    const data = JSON.parse(script.textContent || '');
+                    const type = data?.['@type'];
+                    if (type) schemaTypes.push(type);
+                  } catch {}
+                });
+                cleanup();
+                resolve({ jsonLdCount: scripts.length, schemaTypes });
+                return;
+              }
+            }
+            // eslint-disable-next-line no-await-in-loop
+            await wait(250);
+          }
+
+          cleanup();
+          resolve({ jsonLdCount: 0, schemaTypes: [] });
+        };
+
+        const timeout = window.setTimeout(() => {
+          cleanup();
+          reject(new Error('Timeout loading homepage for structured data check'));
+        }, 8000);
+
+        iframe.onload = () => {
+          window.clearTimeout(timeout);
+          void pollForJsonLd();
+        };
+
+        document.body.appendChild(iframe);
+      });
+    };
+
+    try {
+      const { jsonLdCount, schemaTypes } = await getHomepageJsonLd();
+      results.push({
+        name: 'Structured Data',
+        status: jsonLdCount > 0 ? 'pass' : 'warning',
+        details: jsonLdCount > 0 ? `${jsonLdCount} JSON-LD blocks found` : 'No structured data found',
+        whatItChecks: 'Loads the homepage and counts JSON-LD script blocks (schema.org structured data) in the rendered DOM.',
+        whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
+        howToFix: 'Add schema.org markup using OrganizationSchema, FAQSchema, or other relevant schema components.',
+        currentValue: schemaTypes.length > 0 ? `Schema types: ${schemaTypes.join(', ')}` : 'No schemas detected',
+      });
     } catch {
       results.push({
         name: 'Structured Data',
         status: 'warning',
-        details: 'Could not fetch homepage to check structured data',
-        whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
+        details: 'Could not load homepage to check structured data',
+        whatItChecks: 'Loads the homepage and counts JSON-LD script blocks (schema.org structured data) in the rendered DOM.',
         whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
         howToFix: 'Ensure the homepage is accessible and add schema.org markup.',
       });
