@@ -184,11 +184,10 @@
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-sm font-medium text-[#1A1915] truncate
-   capitalize">
+                      <h4 className="text-sm font-medium text-[#1A1915] break-words whitespace-normal capitalize">
                         {page.page_title || formatPageUrl(page.page_url)}
                       </h4>
-                      <p className="text-xs text-[#8C857A] truncate mt-0.5">
+                      <p className="text-xs text-[#8C857A] break-all mt-0.5">
                         {page.page_url}
                       </p>
                     </div>
