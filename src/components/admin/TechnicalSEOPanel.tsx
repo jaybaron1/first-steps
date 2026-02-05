@@ -19,8 +19,10 @@ const TechnicalSEOPanel: React.FC = () => {
   const [checks, setChecks] = useState<SEOCheck[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const runChecks = async () => {
-    setLoading(true);
+  const runChecks = async (isInitialLoad = false) => {
+    if (isInitialLoad) {
+      setLoading(true);
+    }
     const results: SEOCheck[] = [];
 
     // Check robots.txt
@@ -249,10 +251,10 @@ const TechnicalSEOPanel: React.FC = () => {
   };
 
   useEffect(() => {
-    runChecks();
+    runChecks(true);
     
     // Re-run checks periodically for real-time updates
-    const interval = setInterval(runChecks, 10000);
+    const interval = setInterval(() => runChecks(false), 30000);
     return () => clearInterval(interval);
   }, []);
 
