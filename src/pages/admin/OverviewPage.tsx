@@ -154,7 +154,7 @@ const OverviewPage: React.FC = () => {
 
       {/* Timeline & Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Route className="w-6 h-6 text-[#B8956C]" />
@@ -166,10 +166,10 @@ const OverviewPage: React.FC = () => {
               <p className="text-xs text-[#8C857A]">Session timelines</p>
             </div>
           </div>
-          <VisitorTimeline />
+          <VisitorTimeline maxEvents={10} />
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Bell className="w-6 h-6 text-[#B8956C]" />
@@ -184,8 +184,8 @@ const OverviewPage: React.FC = () => {
       </div>
 
       {/* Bottom Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <FileText className="w-6 h-6 text-[#B8956C]" />
@@ -200,7 +200,7 @@ const OverviewPage: React.FC = () => {
           <TopPagesCard />
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-8 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-[#B8956C]/10">
               <Users className="w-6 h-6 text-[#B8956C]" />

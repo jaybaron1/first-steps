@@ -14,8 +14,8 @@ const TechnicalSEOPanel: React.FC = () => {
   const [checks, setChecks] = useState<SEOCheck[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const runChecks = async () => {
+  const runChecks = async () => {
+    setLoading(true);
       const results: SEOCheck[] = [];
 
       // Check robots.txt
@@ -127,12 +127,19 @@ const TechnicalSEOPanel: React.FC = () => {
         details: `${ogTags}/3 essential OG tags present`,
       });
 
-      // Check structured data
-      const jsonLd = document.querySelectorAll('script[type="application/ld+json"]');
+      // Check structured data - use MutationObserver for dynamic content
+      const checkStructuredData = () => {
+        const jsonLd = document.querySelectorAll('script[type="application/ld+json"]');
+        return jsonLd.length;
+      };
+      
+      // Wait a moment for react-helmet-async to inject structured data
+      await new Promise(resolve => setTimeout(resolve, 500));
+      const jsonLdCount = checkStructuredData();
       results.push({
         name: 'Structured Data',
-        status: jsonLd.length > 0 ? 'pass' : 'warning',
-        details: jsonLd.length > 0 ? `${jsonLd.length} JSON-LD blocks found` : 'No structured data found',
+        status: jsonLdCount > 0 ? 'pass' : 'warning',
+        details: jsonLdCount > 0 ? `${jsonLdCount} JSON-LD blocks found` : 'No structured data found',
       });
 
       // Check HTTPS
@@ -159,11 +166,16 @@ const TechnicalSEOPanel: React.FC = () => {
         details: htmlLang ? `Language set to "${htmlLang}"` : 'Missing lang attribute',
       });
 
-      setChecks(results);
-      setLoading(false);
-    };
+    setChecks(results);
+    setLoading(false);
+  };
 
+  useEffect(() => {
     runChecks();
+    
+    // Re-run checks periodically for real-time updates
+    const interval = setInterval(runChecks, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {

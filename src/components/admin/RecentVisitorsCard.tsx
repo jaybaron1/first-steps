@@ -125,7 +125,7 @@ const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({
           countries={countries}
         />
       )}
-      <div className="space-y-2">
+      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
         {visitors.map((visitor) => (
           <div
             key={visitor.session_id}
