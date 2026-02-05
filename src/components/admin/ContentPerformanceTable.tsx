@@ -77,7 +77,7 @@ const ContentPerformanceTable: React.FC<ContentPerformanceTableProps> = ({
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-[#FDFBF7]">
@@ -119,12 +119,12 @@ const ContentPerformanceTable: React.FC<ContentPerformanceTableProps> = ({
                   key={page.page_url} 
                   className="hover:bg-[#FDFBF7]/50 transition-colors"
                 >
-                  <TableCell className="max-w-[300px]">
+                  <TableCell className="max-w-[250px]">
                     <div className="space-y-1">
-                      <p className="font-medium text-[#1A1915] truncate">
+                      <p className="font-medium text-[#1A1915] break-words whitespace-normal leading-tight">
                         {page.page_title || formatUrl(page.page_url)}
                       </p>
-                      <p className="text-xs text-[#8C857A] truncate font-mono">
+                      <p className="text-xs text-[#8C857A] break-words whitespace-normal font-mono leading-tight">
                         {formatUrl(page.page_url)}
                       </p>
                     </div>

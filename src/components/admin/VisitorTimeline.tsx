@@ -233,7 +233,7 @@
     }
 
     return (
-      <div className="relative overflow-hidden">
+      <div className="relative overflow-hidden max-h-[500px] overflow-y-auto pr-2">
         {/* Timeline */}
         <div className="space-y-0">
           {events.map((event, index) => {

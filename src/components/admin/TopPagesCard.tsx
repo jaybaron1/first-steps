@@ -155,7 +155,7 @@
     }
 
     return (
-      <div className="space-y-2">
+      <div className="space-y-2 max-h-[400px] overflow-y-auto pr-1">
         {pages.map((page, index) => {
           const percentage = (page.view_count / maxViews) * 100;
           const isTopPage = index === 0;

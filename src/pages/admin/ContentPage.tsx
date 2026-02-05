@@ -78,43 +78,43 @@ const ContentPage: React.FC = () => {
 
       {/* Engagement Highlights */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-emerald-50 rounded-lg">
+            <div className="p-2 bg-emerald-50 rounded-lg flex-shrink-0">
               <BarChart3 className="w-5 h-5 text-emerald-600" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Most Viewed</p>
-              <p className="text-sm font-semibold text-[#1A1915] truncate max-w-[200px]">
-                {summary.mostViewedPage ? summary.mostViewedPage.replace(/^https?:\/\/[^/]+/, "") : "—"}
+              <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
+                {summary.mostViewedPage ? summary.mostViewedPage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-blue-50 rounded-lg">
+            <div className="p-2 bg-blue-50 rounded-lg flex-shrink-0">
               <Clock className="w-5 h-5 text-blue-600" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Most Engaging</p>
-              <p className="text-sm font-semibold text-[#1A1915] truncate max-w-[200px]">
-                {summary.mostEngagingPage ? summary.mostEngagingPage.replace(/^https?:\/\/[^/]+/, "") : "—"}
+              <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
+                {summary.mostEngagingPage ? summary.mostEngagingPage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg">
+        <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-red-50 rounded-lg">
+            <div className="p-2 bg-red-50 rounded-lg flex-shrink-0">
               <TrendingDown className="w-5 h-5 text-red-600" />
             </div>
-            <div>
+            <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-[#8C857A]">Highest Bounce</p>
-              <p className="text-sm font-semibold text-[#1A1915] truncate max-w-[200px]">
-                {summary.highestBounceRatePage ? summary.highestBounceRatePage.replace(/^https?:\/\/[^/]+/, "") : "—"}
+              <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
+                {summary.highestBounceRatePage ? summary.highestBounceRatePage.replace(/^https?:\/\/[^/]+/, "") || "/" : "—"}
               </p>
             </div>
           </div>

@@ -50,7 +50,7 @@ interface SectionData {
 }
 
 const CTAHeatmap: React.FC = () => {
-  const [selectedPage, setSelectedPage] = useState<string>('/marketing');
+  const [selectedPage, setSelectedPage] = useState<string>('/');
   const { stats, loading, error, refetch } = useCTAStats({ timeRange: '30d' });
 
   // Get available pages from stats
