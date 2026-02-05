@@ -65,7 +65,7 @@
              return (
                <React.Fragment key={step.section_id}>
                  <div
-                   className={`flex flex-col items-center justify-center min-w-[80px] px-3 py-2 rounded-lg border transition-colors ${
+                    className={`flex flex-col items-center justify-center min-w-[70px] max-w-[100px] px-2 py-2 rounded-lg border transition-colors ${
                      step.reach_percentage >= 80
                        ? "bg-emerald-50 border-emerald-200"
                        : step.reach_percentage >= 50
@@ -73,7 +73,7 @@
                        : "bg-red-50 border-red-200"
                    }`}
                  >
-                   <span className="text-xs font-medium text-[#4A4640] text-center leading-tight">
+                    <span className="text-[10px] sm:text-xs font-medium text-[#4A4640] text-center leading-tight break-words whitespace-normal">
                      {step.section_name}
                    </span>
                    <span
