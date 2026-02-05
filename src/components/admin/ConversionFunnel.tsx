@@ -28,10 +28,10 @@ const ConversionFunnel: React.FC = () => {
   return (
     <div className="space-y-6">
       {/* Controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-2 sm:gap-4">
           <Select value={timeRange} onValueChange={(v) => setTimeRange(v as TimeRange)}>
-            <SelectTrigger className="w-[140px]">
+            <SelectTrigger className="w-[120px] sm:w-[140px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -43,18 +43,18 @@ const ConversionFunnel: React.FC = () => {
           </Select>
         </div>
 
-        <div className="flex items-center gap-6 text-sm">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-3 sm:gap-6 text-xs sm:text-sm">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Users className="w-4 h-4 text-muted-foreground" />
             <span className="text-muted-foreground">Total:</span>
             <span className="font-semibold">{metrics.totalVisitors.toLocaleString()}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <Target className="w-4 h-4 text-muted-foreground" />
             <span className="text-muted-foreground">Converted:</span>
             <span className="font-semibold">{metrics.totalConverted.toLocaleString()}</span>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <TrendingUp className="w-4 h-4 text-green-600" />
             <span className="text-muted-foreground">Rate:</span>
             <span className="font-semibold text-green-600">{metrics.totalConversionRate}%</span>
@@ -104,11 +104,11 @@ const ConversionFunnel: React.FC = () => {
                 {/* Funnel Step Bar */}
                 <div 
                   className="relative group cursor-pointer"
-                  style={{ width: `${widthPercent}%`, margin: '0 auto' }}
+                  style={{ width: `${widthPercent}%`, minWidth: '200px', maxWidth: '100%', margin: '0 auto' }}
                 >
                   <div 
                     className={`
-                      relative h-16 rounded-lg transition-all duration-300
+                      relative h-14 sm:h-16 rounded-lg transition-all duration-300
                       ${index === metrics.steps.length - 1 
                         ? 'bg-gradient-to-r from-green-500 to-emerald-500' 
                         : 'bg-gradient-to-r from-[#B8956C] to-[#9A7B58]'
@@ -116,14 +116,14 @@ const ConversionFunnel: React.FC = () => {
                       hover:shadow-lg hover:scale-[1.02]
                     `}
                   >
-                    <div className="absolute inset-0 flex items-center justify-between px-4 text-white">
-                      <div>
-                        <p className="font-medium">{step.name}</p>
-                        <p className="text-xs opacity-80">{step.url_pattern}</p>
+                    <div className="absolute inset-0 flex items-center justify-between px-3 sm:px-4 text-white">
+                      <div className="min-w-0 flex-1 mr-2">
+                        <p className="font-medium text-sm sm:text-base truncate">{step.name}</p>
+                        <p className="text-[10px] sm:text-xs opacity-80 truncate">{step.url_pattern}</p>
                       </div>
-                      <div className="text-right">
-                        <p className="font-bold text-lg">{step.visitors.toLocaleString()}</p>
-                        <p className="text-xs opacity-80">{step.percentage}%</p>
+                      <div className="text-right flex-shrink-0">
+                        <p className="font-bold text-base sm:text-lg">{step.visitors.toLocaleString()}</p>
+                        <p className="text-[10px] sm:text-xs opacity-80">{step.percentage}%</p>
                       </div>
                     </div>
                   </div>
