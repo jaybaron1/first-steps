@@ -182,32 +182,51 @@ const TechnicalSEOPanel: React.FC = () => {
       currentValue: ogTagsPresent.length > 0 ? ogTagsPresent.join('\n') : 'No OG tags found',
     });
 
-    // Check structured data
-    const getStructuredData = () => {
-      const jsonLd = document.querySelectorAll('script[type="application/ld+json"]');
-      return jsonLd;
-    };
-    
-    // Wait a moment for react-helmet-async to inject structured data
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const jsonLdScripts = getStructuredData();
-    const jsonLdCount = jsonLdScripts.length;
-    const schemaTypes: string[] = [];
-    jsonLdScripts.forEach((script) => {
-      try {
-        const data = JSON.parse(script.textContent || '');
-        if (data['@type']) schemaTypes.push(data['@type']);
-      } catch {}
-    });
-    results.push({
-      name: 'Structured Data',
-      status: jsonLdCount > 0 ? 'pass' : 'warning',
-      details: jsonLdCount > 0 ? `${jsonLdCount} JSON-LD blocks found` : 'No structured data found',
-      whatItChecks: 'Counts JSON-LD script blocks (schema.org structured data) on the page.',
-      whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
-      howToFix: 'Add schema.org markup using OrganizationSchema, FAQSchema, or other relevant schema components.',
-      currentValue: schemaTypes.length > 0 ? `Schema types: ${schemaTypes.join(', ')}` : 'No schemas detected',
-    });
+    // Check structured data by fetching homepage
+    try {
+      const homeRes = await fetch('/');
+      if (homeRes.ok) {
+        const html = await homeRes.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+        const jsonLdScripts = doc.querySelectorAll('script[type="application/ld+json"]');
+        const jsonLdCount = jsonLdScripts.length;
+        const schemaTypes: string[] = [];
+        jsonLdScripts.forEach((script) => {
+          try {
+            const data = JSON.parse(script.textContent || '');
+            if (data['@type']) schemaTypes.push(data['@type']);
+          } catch {}
+        });
+        results.push({
+          name: 'Structured Data',
+          status: jsonLdCount > 0 ? 'pass' : 'warning',
+          details: jsonLdCount > 0 ? `${jsonLdCount} JSON-LD blocks found` : 'No structured data found',
+          whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
+          whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
+          howToFix: 'Add schema.org markup using OrganizationSchema, FAQSchema, or other relevant schema components.',
+          currentValue: schemaTypes.length > 0 ? `Schema types: ${schemaTypes.join(', ')}` : 'No schemas detected',
+        });
+      } else {
+        results.push({
+          name: 'Structured Data',
+          status: 'warning',
+          details: 'Could not fetch homepage to check structured data',
+          whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
+          whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
+          howToFix: 'Ensure the homepage is accessible and add schema.org markup.',
+        });
+      }
+    } catch {
+      results.push({
+        name: 'Structured Data',
+        status: 'warning',
+        details: 'Could not fetch homepage to check structured data',
+        whatItChecks: 'Fetches the homepage and counts JSON-LD script blocks (schema.org structured data).',
+        whyItMatters: 'Structured data enables rich snippets in search results (reviews, FAQs, breadcrumbs, etc.).',
+        howToFix: 'Ensure the homepage is accessible and add schema.org markup.',
+      });
+    }
 
     // Check HTTPS
     const isHttps = window.location.protocol === 'https:';
