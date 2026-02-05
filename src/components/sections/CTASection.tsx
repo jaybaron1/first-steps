@@ -40,7 +40,7 @@ import { ArrowRight } from 'lucide-react';
             data-track-cta="Final CTA - Book Clarity Call"
             className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-cream text-ink font-medium text-xs tracking-wide uppercase transition-all group hover:bg-gold hover:text-cream hover:shadow-lg"
           >
-            <span>Book Your Clarity Call</span>
+            <span>BOOK YOUR DEMO</span>
             <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
           </a>
 
