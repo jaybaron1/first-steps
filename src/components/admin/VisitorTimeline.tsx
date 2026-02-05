@@ -270,12 +270,11 @@
   mb-2">
                       <div className="flex-1 min-w-0">
                         <h4 className="text-sm font-medium text-[#1A1915]
-  capitalize truncate">
-                          {event.page_title || formatPageUrl(event.page_url) ||
-  'Custom Event'}
+  capitalize break-words whitespace-normal">
+                          {event.page_title || formatPageUrl(event.page_url) || 'Custom Event'}
                         </h4>
                         {event.page_url && (
-                          <p className="text-xs text-[#8C857A] truncate mt-0.5 max-w-full">
+                          <p className="text-xs text-[#8C857A] break-all mt-0.5">
                             {event.page_url}
                           </p>
                         )}

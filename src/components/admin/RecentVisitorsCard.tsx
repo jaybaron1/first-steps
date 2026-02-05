@@ -157,9 +157,9 @@ const RecentVisitorsCard: React.FC<RecentVisitorsCardProps> = ({
 
                     {/* Last Page Visited */}
                     {visitor.last_page && (
-                      <p className="text-xs text-[#8C857A] flex items-center gap-1 truncate mb-1.5">
+                      <p className="text-xs text-[#8C857A] flex items-center gap-1 mb-1.5">
                         <MousePointer className="w-3 h-3 flex-shrink-0" />
-                        <span className="truncate capitalize">{formatPageUrl(visitor.last_page)}</span>
+                        <span className="break-all capitalize">{formatPageUrl(visitor.last_page)}</span>
                       </p>
                     )}
                   </div>
