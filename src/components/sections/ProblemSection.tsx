@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ProblemSection = () => {
-  return (
-    <section className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
+ const ProblemSection = () => {
+   return (
+     <section data-section="the-problem" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 

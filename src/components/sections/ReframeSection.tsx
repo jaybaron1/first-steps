@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ReframeSection = () => {
-  return (
-    <section className="relative overflow-hidden" style={{ background: '#1A1915' }}>
+ const ReframeSection = () => {
+   return (
+     <section data-section="reframe" className="relative overflow-hidden" style={{ background: '#1A1915' }}>
       {/* Full-bleed dramatic moment */}
 
       {/* The Golden Thread continues */}

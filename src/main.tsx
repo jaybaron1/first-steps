@@ -4,6 +4,7 @@ import "./index.css";
 import visitorTracking from "@/lib/visitorTracking";
 import "@/lib/mediaTracking"; // Auto-initializes video/download tracking
 import { initWebVitalsTracking } from "@/lib/webVitalsTracking";
+ import "@/lib/sectionTracking"; // Auto-initializes section engagement tracking
 
 // Make tracking globally available for manual event tracking
 declare global {

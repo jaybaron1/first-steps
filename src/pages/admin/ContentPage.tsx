@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { FileText, Eye, Clock, MousePointer, TrendingDown, BarChart3 } from "lucide-react";
+ import { Eye, Clock, TrendingDown, Lightbulb, Target, MousePointer } from "lucide-react";
 import { useContentStats } from "@/hooks/useContentStats";
-import ContentPerformanceTable from "@/components/admin/ContentPerformanceTable";
 import TopExitPagesCard from "@/components/admin/TopExitPagesCard";
 import StatsCard from "@/components/admin/StatsCard";
+ import SectionEngagementTable from "@/components/admin/SectionEngagementTable";
+ import SectionFlowCard from "@/components/admin/SectionFlowCard";
+ import { useSectionStats } from "@/hooks/useSectionStats";
 
 // Get friendly page name from URL or title
 const getDisplayName = (pageUrl: string | null): string => {
@@ -37,7 +39,8 @@ const getDisplayName = (pageUrl: string | null): string => {
 
 const ContentPage: React.FC = () => {
   const [days, setDays] = useState(30);
-  const { pages, topExitPages, summary, loading } = useContentStats(days);
+   const { topExitPages, summary, loading } = useContentStats(days);
+   const { sections, flow, summary: sectionSummary, loading: sectionsLoading } = useSectionStats(days);
 
   const formatTime = (seconds: number): string => {
     if (seconds < 60) return `${seconds}s`;
@@ -110,13 +113,15 @@ const ContentPage: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-emerald-50 rounded-lg flex-shrink-0">
-              <BarChart3 className="w-5 h-5 text-emerald-600" />
+             <div className="p-2 bg-[#B8956C]/10 rounded-lg flex-shrink-0">
+               <Target className="w-5 h-5 text-[#B8956C]" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-[#8C857A]">Most Viewed</p>
+               <p className="text-sm font-medium text-[#8C857A]">Most Engaging Section</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {getDisplayName(summary.mostViewedPage)}
+                 {sectionSummary.mostEngaging 
+                   ? `${sectionSummary.mostEngaging.section} (${formatTime(sectionSummary.mostEngaging.avgFocus)} avg)`
+                   : "—"}
               </p>
             </div>
           </div>
@@ -124,13 +129,15 @@ const ContentPage: React.FC = () => {
 
         <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-blue-50 rounded-lg flex-shrink-0">
-              <Clock className="w-5 h-5 text-blue-600" />
+             <div className="p-2 bg-red-50 rounded-lg flex-shrink-0">
+               <TrendingDown className="w-5 h-5 text-red-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-[#8C857A]">Most Engaging</p>
+               <p className="text-sm font-medium text-[#8C857A]">Drop-off Point</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {getDisplayName(summary.mostEngagingPage)}
+                 {sectionSummary.dropOffPoint 
+                   ? `After ${sectionSummary.dropOffPoint.section} (${sectionSummary.dropOffPoint.rate}% leave)`
+                   : "—"}
               </p>
             </div>
           </div>
@@ -138,23 +145,28 @@ const ContentPage: React.FC = () => {
 
         <div className="bg-white border border-[#B8956C]/20 rounded-2xl p-6 shadow-lg overflow-hidden min-w-0">
           <div className="flex items-center gap-3 mb-4">
-            <div className="p-2 bg-red-50 rounded-lg flex-shrink-0">
-              <TrendingDown className="w-5 h-5 text-red-600" />
+             <div className="p-2 bg-purple-50 rounded-lg flex-shrink-0">
+               <Lightbulb className="w-5 h-5 text-purple-600" />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-medium text-[#8C857A]">Highest Bounce</p>
+               <p className="text-sm font-medium text-[#8C857A]">Hidden Gem</p>
               <p className="text-sm font-semibold text-[#1A1915] break-words whitespace-normal leading-tight">
-                {getDisplayName(summary.highestBounceRatePage)}
+                 {sectionSummary.hiddenGem 
+                   ? `${sectionSummary.hiddenGem.section} (${sectionSummary.hiddenGem.impressions} views, ${formatTime(sectionSummary.hiddenGem.avgFocus)} focus)`
+                   : "—"}
               </p>
             </div>
           </div>
         </div>
       </div>
 
+       {/* Section Flow Visualization */}
+       <SectionFlowCard flow={flow} loading={sectionsLoading} />
+ 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <ContentPerformanceTable pages={pages} loading={loading} />
+           <SectionEngagementTable sections={sections} loading={sectionsLoading} />
         </div>
         <div>
           <TopExitPagesCard pages={topExitPages} loading={loading} />

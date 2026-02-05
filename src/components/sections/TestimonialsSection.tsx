@@ -48,8 +48,8 @@ const TestimonialsSection = () => {
     },
   ];
 
-  return (
-    <section className="section relative overflow-hidden" style={{ background: '#FDFBF7' }}>
+   return (
+     <section data-section="testimonials" className="section relative overflow-hidden" style={{ background: '#FDFBF7' }}>
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 

@@ -42,8 +42,8 @@ const TiersSection = () => {
     },
   ];
 
-  return (
-    <section id="pricing" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
+   return (
+     <section id="pricing" data-section="pricing" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 
