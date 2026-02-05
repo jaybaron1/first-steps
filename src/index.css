@@ -51,6 +51,10 @@
   --border: 35 15% 90%;
   --input: 35 15% 90%;
   --ring: 32 35% 57%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 40 10% 10%;
+  --accent: 45 30% 94%;
+  --accent-foreground: 40 10% 10%;
   --radius: 0;
 
   /* Admin Theme Tokens - Light Mode (System Default) */
