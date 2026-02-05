@@ -5,8 +5,10 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface ExitPage {
   page_url: string;
+  page_title?: string;
   exit_count: number;
   exit_rate: number;
+  avg_exit_scroll?: number;
 }
 
 interface TopExitPagesCardProps {
@@ -14,13 +16,20 @@ interface TopExitPagesCardProps {
   loading?: boolean;
 }
 
-const formatUrl = (url: string): string => {
-  try {
-    const parsed = new URL(url, "https://example.com");
-    return parsed.pathname || "/";
-  } catch {
-    return url.replace(/^https?:\/\/[^/]+/, "") || "/";
-  }
+const getDisplayName = (page: ExitPage): string => {
+  if (page.page_title) return page.page_title;
+  const path = page.page_url;
+  if (path === "/" || path === "") return "Homepage";
+  return path
+    .replace(/^\//, "")
+    .split("/")
+    .map(segment => 
+      segment
+        .split("-")
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    )
+    .join(" / ");
 };
 
 const TopExitPagesCard: React.FC<TopExitPagesCardProps> = ({ pages, loading = false }) => {
@@ -60,9 +69,16 @@ const TopExitPagesCard: React.FC<TopExitPagesCardProps> = ({ pages, loading = fa
               <div className="flex items-center justify-between mb-1.5">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   <span className="text-xs font-medium text-[#8C857A] w-5">{idx + 1}.</span>
-                  <span className="text-sm font-medium text-[#1A1915] truncate">
-                    {formatUrl(page.page_url)}
-                  </span>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium text-[#1A1915] break-words whitespace-normal">
+                      {getDisplayName(page)}
+                    </span>
+                    {page.avg_exit_scroll !== undefined && page.avg_exit_scroll > 0 && (
+                      <p className="text-xs text-[#8C857A] mt-0.5">
+                        Exited at ~{page.avg_exit_scroll}% scroll
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex items-center gap-3 shrink-0">
                   <span className="text-sm font-semibold text-[#1A1915]">
