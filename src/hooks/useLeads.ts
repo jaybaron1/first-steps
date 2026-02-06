@@ -44,6 +44,7 @@ export interface UseLeadsResult {
   totalPages: number;
   refetch: () => Promise<void>;
   updateLeadStatus: (leadId: string, status: string) => Promise<boolean>;
+  deleteLead: (leadId: string) => Promise<boolean>;
 }
 
 export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
@@ -170,6 +171,26 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
     }
   }, []);
 
+  const deleteLead = useCallback(async (leadId: string): Promise<boolean> => {
+    try {
+      const { error: deleteError } = await supabase
+        .from('leads')
+        .delete()
+        .eq('id', leadId);
+
+      if (deleteError) throw deleteError;
+
+      // Update local state
+      setLeads(prev => prev.filter(lead => lead.id !== leadId));
+      setTotalCount(prev => prev - 1);
+
+      return true;
+    } catch (err) {
+      console.error('[useLeads] Delete error:', err);
+      return false;
+    }
+  }, []);
+
   useEffect(() => {
     fetchLeads();
   }, [fetchLeads]);
@@ -183,5 +204,6 @@ export function useLeads(options: UseLeadsOptions = {}): UseLeadsResult {
     totalPages: Math.ceil(totalCount / pageSize),
     refetch: fetchLeads,
     updateLeadStatus,
+    deleteLead,
   };
 }

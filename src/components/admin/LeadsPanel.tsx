@@ -23,8 +23,19 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Badge } from '@/components/ui/badge';
 import { Skeleton } from '@/components/ui/skeleton';
 import {
@@ -41,6 +52,7 @@ import {
   Briefcase,
   Users,
   Sparkles,
+  Trash2,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -56,8 +68,10 @@ const LeadsPanel: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [expandedLead, setExpandedLead] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
-  const { leads, loading, error, totalCount, totalPages, refetch, updateLeadStatus } = useLeads({
+  const { leads, loading, error, totalCount, totalPages, refetch, updateLeadStatus, deleteLead } = useLeads({
     search: search.trim() || undefined,
     status: statusFilter !== 'all' ? [statusFilter] : undefined,
     source: sourceFilter !== 'all' ? [sourceFilter] : undefined,
@@ -66,6 +80,19 @@ const LeadsPanel: React.FC = () => {
     page: currentPage,
     pageSize: PAGE_SIZE,
   });
+
+  const handleDeleteClick = (lead: Lead) => {
+    setLeadToDelete(lead);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (leadToDelete) {
+      await deleteLead(leadToDelete.id);
+      setDeleteDialogOpen(false);
+      setLeadToDelete(null);
+    }
+  };
 
   const handleStatusChange = async (leadId: string, newStatus: string) => {
     await updateLeadStatus(leadId, newStatus);
@@ -268,6 +295,17 @@ const LeadsPanel: React.FC = () => {
                               Mark as {status}
                             </DropdownMenuItem>
                           ))}
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleDeleteClick(lead);
+                            }}
+                            className="text-red-600 focus:text-red-600"
+                          >
+                            <Trash2 className="w-4 h-4 mr-2" />
+                            Delete Lead
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -361,6 +399,28 @@ const LeadsPanel: React.FC = () => {
           setExpandedLead(null);
         }}
       />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Lead</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete the lead "{leadToDelete?.name || leadToDelete?.email || 'Unknown'}"? 
+              This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
