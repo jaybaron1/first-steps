@@ -1,7 +1,19 @@
-import React from 'react';
-import { useDeals, DealStage } from '@/hooks/useDeals';
+import React, { useState } from 'react';
+import { useDeals, DealStage, DealWithRevenue } from '@/hooks/useDeals';
 import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { cn } from '@/lib/utils';
+import { Trash2 } from 'lucide-react';
 
 const STAGE_CONFIG: Record<DealStage, { label: string; color: string; bgColor: string }> = {
   lead: { label: 'Lead', color: 'text-slate-600', bgColor: 'bg-slate-100' },
@@ -15,7 +27,23 @@ const STAGE_CONFIG: Record<DealStage, { label: string; color: string; bgColor: s
 const PIPELINE_STAGES: DealStage[] = ['lead', 'qualified', 'proposal', 'negotiation', 'closed_won'];
 
 const SalesPipeline: React.FC = () => {
-  const { deals, metrics, loading } = useDeals();
+  const { deals, metrics, loading, deleteDeal } = useDeals();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [dealToDelete, setDealToDelete] = useState<DealWithRevenue | null>(null);
+
+  const handleDeleteClick = (deal: DealWithRevenue, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setDealToDelete(deal);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (dealToDelete) {
+      await deleteDeal(dealToDelete.id);
+      setDeleteDialogOpen(false);
+      setDealToDelete(null);
+    }
+  };
 
   if (loading) {
     return (
@@ -114,7 +142,7 @@ const SalesPipeline: React.FC = () => {
             return (
               <div 
                 key={deal.id} 
-                className="flex items-center justify-between p-3 bg-[#F9F6F0] rounded-lg"
+                className="flex items-center justify-between p-3 bg-[#F9F6F0] rounded-lg group"
               >
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-[#1A1915] truncate">
@@ -135,6 +163,14 @@ const SalesPipeline: React.FC = () => {
                   <span className="text-sm font-semibold text-[#1A1915]">
                     ${deal.value.toLocaleString()}
                   </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:text-red-600 hover:bg-red-50"
+                    onClick={(e) => handleDeleteClick(deal, e)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             );
@@ -146,6 +182,28 @@ const SalesPipeline: React.FC = () => {
           )}
         </div>
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Deal</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete the deal "{dealToDelete?.name}"? 
+              This will also remove any associated revenue events. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction 
+              onClick={handleDeleteConfirm}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
