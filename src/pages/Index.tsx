@@ -4,7 +4,7 @@ import Footer from '@/components/Footer';
 import HomePage from '@/components/sections/HomePage';
 import SEOHead from '@/components/SEOHead';
 import ContentSummary from '@/components/ContentSummary';
-import MobileStickyCTA from '@/components/MobileStickyCTA';
+
 import ChatDiscovery from '@/components/ChatDiscovery';
 import BreadcrumbSchema from '@/components/BreadcrumbSchema';
 import PersonSchema from '@/components/PersonSchema';
@@ -117,7 +117,7 @@ const Index = () => {
         />
         <HomePage />
       </main>
-      <MobileStickyCTA />
+      
       <Footer />
       <ChatDiscovery />
     </div>
