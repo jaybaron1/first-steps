@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, DollarSign, Calendar, FileText, Tag } from 'lucide-react';
+import { DollarSign, Calendar } from 'lucide-react';
 import { adminSupabase as supabase } from '@/lib/adminBackend';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,6 +7,12 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface RevenueEntryModalProps {
   isOpen: boolean;
@@ -60,7 +66,7 @@ const RevenueEntryModal: React.FC<RevenueEntryModalProps> = ({ isOpen, onClose }
     }
   };
 
-  if (!isOpen) return null;
+  // Note: Early return removed - Dialog handles visibility via open prop
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -108,27 +114,16 @@ const RevenueEntryModal: React.FC<RevenueEntryModalProps> = ({ isOpen, onClose }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
-      <div className="relative bg-white rounded-2xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-[#B8956C]/20">
-          <h2 className="text-xl font-display font-semibold text-[#1A1915]">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent className="max-w-md">
+        <DialogHeader>
+          <DialogTitle className="text-xl font-display font-semibold text-[#1A1915]">
             Record Revenue
-          </h2>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-[#B8956C]/10 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5 text-[#8C857A]" />
-          </button>
-        </div>
+          </DialogTitle>
+        </DialogHeader>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4">
           {/* Deal Selection */}
           <div className="space-y-2">
             <Label>Associated Deal *</Label>
@@ -237,8 +232,8 @@ const RevenueEntryModal: React.FC<RevenueEntryModalProps> = ({ isOpen, onClose }
             </Button>
           </div>
         </form>
-      </div>
-    </div>
+      </DialogContent>
+    </Dialog>
   );
 };
 
