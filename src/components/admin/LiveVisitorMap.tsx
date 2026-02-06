@@ -2,10 +2,12 @@ import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import Map, { Source, Layer, Popup, NavigationControl, type MapRef, type MapMouseEvent } from 'react-map-gl/mapbox';
 import type { GeoJSONSource } from 'mapbox-gl';
 import { adminSupabase as supabase } from '@/lib/adminBackend';
-import { MapPin } from 'lucide-react';
+import { MapPin, History, Radio } from 'lucide-react';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
 const MAPBOX_TOKEN = 'pk.eyJ1IjoiamF5YmFyb24xIiwiYSI6ImNtbDhuODdnYjA5OGgzZHB0d2o1NzdrZHYifQ.i_RjDQ3_PTj3KfSnf1bxOw';
+
+type ViewMode = 'live' | 'today' | '7days' | '30days' | 'all';
 
 interface VisitorLocation {
   id: string;
@@ -15,6 +17,7 @@ interface VisitorLocation {
   longitude: number;
   device_type: string | null;
   browser: string | null;
+  first_seen?: string;
 }
 
 interface PopupInfo {
@@ -24,43 +27,67 @@ interface PopupInfo {
   country: string | null;
   device_type: string | null;
   count?: number;
+  first_seen?: string;
 }
 
 const LiveVisitorMap: React.FC = () => {
   const mapRef = useRef<MapRef>(null);
   const [visitors, setVisitors] = useState<VisitorLocation[]>([]);
-  const [totalActiveVisitors, setTotalActiveVisitors] = useState(0);
+  const [totalVisitors, setTotalVisitors] = useState(0);
   const [loading, setLoading] = useState(true);
   const [popupInfo, setPopupInfo] = useState<PopupInfo | null>(null);
+  const [viewMode, setViewMode] = useState<ViewMode>('live');
   const [viewState, setViewState] = useState({
     longitude: 0,
     latitude: 20,
     zoom: 1.5,
   });
 
-  const fetchActiveVisitors = useCallback(async () => {
-    const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
-
-    const { data, error, count } = await supabase
+  const fetchVisitors = useCallback(async () => {
+    setLoading(true);
+    
+    let query = supabase
       .from('visitor_sessions')
-      .select('id, country, city, latitude, longitude, device_type, browser', { count: 'exact' })
-      .gte('last_seen', fiveMinutesAgo);
+      .select('id, country, city, latitude, longitude, device_type, browser, first_seen', { count: 'exact' });
+
+    const now = new Date();
+    
+    if (viewMode === 'live') {
+      // Last 5 minutes for live view
+      const fiveMinutesAgo = new Date(now.getTime() - 5 * 60 * 1000).toISOString();
+      query = query.gte('last_seen', fiveMinutesAgo);
+    } else if (viewMode === 'today') {
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();
+      query = query.gte('first_seen', startOfDay);
+    } else if (viewMode === '7days') {
+      const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
+      query = query.gte('first_seen', sevenDaysAgo);
+    } else if (viewMode === '30days') {
+      const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000).toISOString();
+      query = query.gte('first_seen', thirtyDaysAgo);
+    }
+    // 'all' mode has no date filter
+
+    const { data, error, count } = await query;
 
     if (!error && data) {
       const withCoords = data.filter(
         (v) => v.latitude !== null && v.longitude !== null
       ) as VisitorLocation[];
       setVisitors(withCoords);
-      setTotalActiveVisitors(count || data.length);
+      setTotalVisitors(count || data.length);
     }
     setLoading(false);
-  }, []);
+  }, [viewMode]);
 
   useEffect(() => {
-    fetchActiveVisitors();
-    const interval = setInterval(fetchActiveVisitors, 15000);
-    return () => clearInterval(interval);
-  }, [fetchActiveVisitors]);
+    fetchVisitors();
+    // Only poll for live mode
+    if (viewMode === 'live') {
+      const interval = setInterval(fetchVisitors, 15000);
+      return () => clearInterval(interval);
+    }
+  }, [fetchVisitors, viewMode]);
 
   const geojson = useMemo(() => ({
     type: 'FeatureCollection' as const,
@@ -72,6 +99,7 @@ const LiveVisitorMap: React.FC = () => {
         country: v.country,
         device_type: v.device_type,
         browser: v.browser,
+        first_seen: v.first_seen,
       },
       geometry: {
         type: 'Point' as const,
@@ -103,6 +131,7 @@ const LiveVisitorMap: React.FC = () => {
         city: feature.properties?.city,
         country: feature.properties?.country,
         device_type: feature.properties?.device_type,
+        first_seen: feature.properties?.first_seen,
       });
     }
   }, []);
@@ -119,7 +148,19 @@ const LiveVisitorMap: React.FC = () => {
     }
   }, []);
 
-  if (loading) {
+  const getModeLabel = () => {
+    switch (viewMode) {
+      case 'live': return 'Live (5 min)';
+      case 'today': return 'Today';
+      case '7days': return 'Last 7 Days';
+      case '30days': return 'Last 30 Days';
+      case 'all': return 'All Time';
+    }
+  };
+
+  const getMarkerColor = () => viewMode === 'live' ? '#10b981' : '#B8956C';
+
+  if (loading && visitors.length === 0) {
     return (
       <div className="h-[300px] flex items-center justify-center bg-muted rounded-lg">
         <div className="w-6 h-6 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin" />
@@ -129,6 +170,62 @@ const LiveVisitorMap: React.FC = () => {
 
   return (
     <div className="relative rounded-lg overflow-hidden" style={{ height: '300px' }}>
+      {/* Mode Selector */}
+      <div className="absolute top-3 left-3 z-10 flex gap-1 bg-black/70 backdrop-blur-sm rounded-lg p-1">
+        <button
+          onClick={() => setViewMode('live')}
+          className={`flex items-center gap-1 px-2 py-1 text-xs rounded transition-colors ${
+            viewMode === 'live' 
+              ? 'bg-emerald-500 text-white' 
+              : 'text-white/70 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          <Radio className="w-3 h-3" />
+          Live
+        </button>
+        <button
+          onClick={() => setViewMode('today')}
+          className={`px-2 py-1 text-xs rounded transition-colors ${
+            viewMode === 'today' 
+              ? 'bg-[#B8956C] text-white' 
+              : 'text-white/70 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          Today
+        </button>
+        <button
+          onClick={() => setViewMode('7days')}
+          className={`px-2 py-1 text-xs rounded transition-colors ${
+            viewMode === '7days' 
+              ? 'bg-[#B8956C] text-white' 
+              : 'text-white/70 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          7d
+        </button>
+        <button
+          onClick={() => setViewMode('30days')}
+          className={`px-2 py-1 text-xs rounded transition-colors ${
+            viewMode === '30days' 
+              ? 'bg-[#B8956C] text-white' 
+              : 'text-white/70 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          30d
+        </button>
+        <button
+          onClick={() => setViewMode('all')}
+          className={`flex items-center gap-1 px-2 py-1 text-xs rounded transition-colors ${
+            viewMode === 'all' 
+              ? 'bg-[#B8956C] text-white' 
+              : 'text-white/70 hover:text-white hover:bg-white/10'
+          }`}
+        >
+          <History className="w-3 h-3" />
+          All
+        </button>
+      </div>
+
       <Map
         ref={mapRef}
         {...viewState}
@@ -151,17 +248,19 @@ const LiveVisitorMap: React.FC = () => {
           clusterMaxZoom={14}
           clusterRadius={50}
         >
-          {/* Pulse effect layer */}
-          <Layer
-            id="pulse"
-            type="circle"
-            filter={['!', ['has', 'point_count']]}
-            paint={{
-              'circle-color': '#10b981',
-              'circle-radius': 16,
-              'circle-opacity': 0.3,
-            }}
-          />
+          {/* Pulse effect layer - only for live mode */}
+          {viewMode === 'live' && (
+            <Layer
+              id="pulse"
+              type="circle"
+              filter={['!', ['has', 'point_count']]}
+              paint={{
+                'circle-color': '#10b981',
+                'circle-radius': 16,
+                'circle-opacity': 0.3,
+              }}
+            />
+          )}
           
           {/* Cluster circles */}
           <Layer
@@ -169,7 +268,7 @@ const LiveVisitorMap: React.FC = () => {
             type="circle"
             filter={['has', 'point_count']}
             paint={{
-              'circle-color': [
+              'circle-color': viewMode === 'live' ? [
                 'step',
                 ['get', 'point_count'],
                 '#10b981',
@@ -177,6 +276,14 @@ const LiveVisitorMap: React.FC = () => {
                 '#059669',
                 15,
                 '#047857',
+              ] : [
+                'step',
+                ['get', 'point_count'],
+                '#B8956C',
+                5,
+                '#9A7A5A',
+                15,
+                '#7C5F48',
               ],
               'circle-radius': [
                 'step',
@@ -213,7 +320,7 @@ const LiveVisitorMap: React.FC = () => {
             type="circle"
             filter={['!', ['has', 'point_count']]}
             paint={{
-              'circle-color': '#10b981',
+              'circle-color': viewMode === 'live' ? '#10b981' : '#B8956C',
               'circle-radius': 8,
               'circle-stroke-width': 2,
               'circle-stroke-color': '#ffffff',
@@ -242,6 +349,11 @@ const LiveVisitorMap: React.FC = () => {
                   {popupInfo.device_type}
                 </p>
               )}
+              {popupInfo.first_seen && viewMode !== 'live' && (
+                <p className="text-muted-foreground text-xs mt-1">
+                  {new Date(popupInfo.first_seen).toLocaleDateString()}
+                </p>
+              )}
             </div>
           </Popup>
         )}
@@ -249,23 +361,31 @@ const LiveVisitorMap: React.FC = () => {
 
       {/* Legend */}
       <div className="absolute bottom-3 right-3 flex items-center gap-2 text-xs text-white bg-black/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
-        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className={`w-2 h-2 rounded-full ${viewMode === 'live' ? 'bg-emerald-500 animate-pulse' : 'bg-[#B8956C]'}`} />
         <span className="font-medium">
-          {totalActiveVisitors} active visitor{totalActiveVisitors !== 1 ? 's' : ''}
+          {totalVisitors} visitor{totalVisitors !== 1 ? 's' : ''} ({getModeLabel()})
         </span>
-        {visitors.length < totalActiveVisitors && (
+        {visitors.length < totalVisitors && (
           <span className="text-white/60">
             ({visitors.length} with location)
           </span>
         )}
       </div>
 
+      {/* Loading overlay for mode switches */}
+      {loading && visitors.length > 0 && (
+        <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
+          <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
+        </div>
+      )}
+
       {/* Empty state */}
       {visitors.length === 0 && !loading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="text-center text-white/80">
             <MapPin className="w-8 h-8 mx-auto mb-2 opacity-50" />
-            <p className="text-sm font-medium">No active visitors with location data</p>
+            <p className="text-sm font-medium">No visitors with location data</p>
+            <p className="text-xs text-white/60 mt-1">for {getModeLabel().toLowerCase()}</p>
           </div>
         </div>
       )}
