@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import AboutPage from "./pages/AboutPage";
 import PrivacyPage from "./pages/PrivacyPage";
 import NotFound from "./pages/NotFound";
+import OnePager from "./pages/OnePager";
 import AdminLayout from "./components/admin/AdminLayout";
 import AdminRoute from "./components/admin/AdminRoute";
 import OverviewPage from "./pages/admin/OverviewPage";
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
+            <Route path="/one-pager" element={<OnePager />} />
             
             {/* Admin - Tab-based layout with nested routes */}
             <Route path="/admin" element={
