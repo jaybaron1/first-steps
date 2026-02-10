@@ -4,7 +4,7 @@ import HeroSection from "./HeroSection";
 import ProblemSection from "./ProblemSection";
 import RevealSection from "./RevealSection";
 import ComparisonSection from "./ComparisonSection";
-import VideoTestimonialsSection from "./VideoTestimonialsSection";
+
 import TestimonialsSection from "./TestimonialsSection";
 import TiersSection from "./TiersSection";
 import CTASection from "./CTASection";
@@ -39,8 +39,6 @@ const HomePage = () => {
       {/* Show: ChatGPT vs Boardroom comparison */}
       <ComparisonSection />
 
-      {/* Prove: Video testimonials */}
-      <VideoTestimonialsSection />
 
       {/* Prove: Text testimonials */}
       <TestimonialsSection />
