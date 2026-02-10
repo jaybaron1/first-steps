@@ -7,7 +7,7 @@ const TiersSection = () => {
       level: "01",
       name: "The Roundtable",
       tagline: "60+ experts. Any decision.",
-      description: "Bring a decision. They debate it. You get the verdict.",
+      description: "Pose a question. They debate it. You get the verdict.",
       detail: "Start here.",
       trial: "10-day free trial",
       cta: "Start Free Trial",
