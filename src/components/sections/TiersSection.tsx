@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { ArrowRight } from "lucide-react";
+import FreeTrialModal from "@/components/FreeTrialModal";
 
 const TiersSection = () => {
+  const [trialModalOpen, setTrialModalOpen] = useState(false);
   const tiers = [
     {
       level: "01",
@@ -172,13 +174,23 @@ const TiersSection = () => {
 
                 {/* CTA */}
                 <div className="mt-6">
-                  <a
-                    href="https://calendly.com/jason-galavanteer/discovery_call"
-                    className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
-                  >
-                    {tier.cta || "Book Call"}
-                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                  </a>
+                  {tier.cta ? (
+                    <button
+                      onClick={() => setTrialModalOpen(true)}
+                      className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
+                    >
+                      {tier.cta}
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </button>
+                  ) : (
+                    <a
+                      href="https://calendly.com/jason-galavanteer/discovery_call"
+                      className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
+                    >
+                      Book Call
+                      <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                    </a>
+                  )}
                 </div>
               </div>
             </div>
@@ -194,6 +206,8 @@ const TiersSection = () => {
           <p className="text-xs text-warm-gray">Pricing based on scope. Every engagement starts with a Clarity Call.</p>
         </div>
       </div>
+
+      <FreeTrialModal open={trialModalOpen} onOpenChange={setTrialModalOpen} />
     </section>
   );
 };
