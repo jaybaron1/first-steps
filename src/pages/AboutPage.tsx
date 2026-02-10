@@ -526,7 +526,7 @@ const AboutPage = () => {
 
               <div className="space-y-10 mb-16">
                 <p className="text-[18px] leading-loose" style={{ color: "#3D3830", lineHeight: 1.8 }}>
-                  I design systems that sit with you while you think.
+                  We design systems that sit with you while you think.
                 </p>
 
                 <div className="relative pl-6">
