@@ -192,7 +192,7 @@ const ChatDiscovery: React.FC<ChatDiscoveryProps> = ({ onComplete }) => {
         });
       }
 
-      // Continue with EmailJS
+      // Send instant email notification via Resend edge function
       try {
         const serviceDisplay = finalData.servicePath === 'customgpt'
           ? 'Custom GPT (The Doing)'
@@ -200,49 +200,35 @@ const ChatDiscovery: React.FC<ChatDiscoveryProps> = ({ onComplete }) => {
           ? 'The Roundtable (The Thinking)'
           : 'Both (Custom GPT + Roundtable)';
 
-        const templateParams = {
-          name: finalData.name,
-          email: finalData.email,
-          servicePath: serviceDisplay,
-          role: finalData.role,
-          timeWaster: finalData.thinkingPartner || 'Not specified',
-          solution: finalData.whatWouldChange || 'Not specified',
-          customResponse: finalData.customResponse || 'None provided',
-          additionalContext: finalData.additionalContext || 'None provided',
-          conversation: conversationText,
-          timestamp: new Date().toLocaleString()
-        };
+        const notifyResponse = await fetch(
+          `https://pydbejawnenjqgnyyonf.supabase.co/functions/v1/notify-lead`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: finalData.name,
+              email: finalData.email,
+              role: finalData.role,
+              interest: finalData.interest,
+              serviceDisplay,
+              thinkingPartner: finalData.thinkingPartner || '',
+              whatWouldChange: finalData.whatWouldChange || '',
+              customResponse: finalData.customResponse || '',
+              additionalContext: finalData.additionalContext || '',
+              conversation: conversationText
+            })
+          }
+        );
 
-        console.log('📧 Sending email with params:', templateParams);
-
-        const emailPayload = {
-          service_id: 'service_30dtwbt',
-          template_id: 'template_n7rx8ed',
-          user_id: 'fsXPunV8X_7DNozBf',
-          template_params: templateParams
-        };
-
-        console.log('📬 EmailJS payload:', JSON.stringify(emailPayload, null, 2));
-
-        const response = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(emailPayload)
-        });
-
-        console.log('📬 EmailJS response status:', response.status);
-
-        if (response.ok) {
-          console.log('✅ Email sent successfully to jason@galavanteer.com via EmailJS');
+        if (notifyResponse.ok) {
+          console.log('✅ Lead notification email sent to jason@galavanteer.com');
           return true;
         } else {
-          const errorText = await response.text();
-          console.log('❌ EmailJS response not OK:', response.status, errorText);
+          const errorText = await notifyResponse.text();
+          console.log('❌ Lead notification failed:', notifyResponse.status, errorText);
         }
-      } catch (emailJSError) {
-        console.log('❌ EmailJS failed with error:', emailJSError);
+      } catch (notifyError) {
+        console.log('❌ Lead notification error:', notifyError);
       }
 
       const chatHistory = JSON.parse(localStorage.getItem('chatDiscoveryHistory') || '[]');
