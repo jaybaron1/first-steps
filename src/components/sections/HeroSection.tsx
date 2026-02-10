@@ -79,7 +79,7 @@ const HeroSection = () => {
               fontWeight: 500,
             }}
           >
-            The Roundtable is your personal advisory board, on-demand.<br></br> 60+ experts debate your decisions and
+            <span className="font-display italic text-gold">The Roundtable</span> is your personal advisory board, on-demand.<br></br> 60+ experts debate your decisions and
             show you what you're not seeing.
           </p>
 
