@@ -79,8 +79,8 @@ const HeroSection = () => {
               fontWeight: 500,
             }}
           >
-            <span className="font-bold">The Roundtable</span> is your personal advisory board, on-demand.<br></br> 60+ experts debate your decisions and
-            show you what you're not seeing.
+            <span className="font-bold">The Roundtable</span> is your personal advisory board, on-demand.<br></br> 60+
+            experts debate your decisions and show you what you're not seeing.
           </p>
 
           {/* CTAs — animated */}
@@ -111,7 +111,7 @@ const HeroSection = () => {
           >
             <div className="absolute -left-4 top-0 bottom-0 w-px bg-gold/30" />
             <blockquote className="font-display italic text-ink leading-relaxed pl-4" style={{ fontSize: "1.0625rem" }}>
-              "He built a system that challenges my reasoning and makes me defend my choices."
+              "Galavanteer built a system that challenges my reasoning and makes me defend my choices."
             </blockquote>
             <div className="mt-3 pl-4 flex items-center gap-2">
               <span className="text-xs font-medium text-ink">Jason Ward</span>
