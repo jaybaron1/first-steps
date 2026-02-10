@@ -4,21 +4,21 @@ import { Play } from 'lucide-react';
  const VideoTestimonialsSection = () => {
    const [showCrisPoster, setShowCrisPoster] = useState(true);
    return (
-     <section data-section="video-testimonials" className="section relative overflow-hidden" style={{ background: '#1A1915' }}>
+     <section data-section="video-testimonials" className="section relative overflow-hidden" style={{ background: '#FDFBF7' }}>
       {/* The Golden Thread continues through dark section */}
-      <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/20" />
+      <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 
       <div className="container relative z-10">
         {/* Header */}
         <div className="lg:pl-12 mb-16 max-w-2xl">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-px bg-gradient-to-r from-gold to-gold-light" />
-            <span className="label text-gold-light">Unscripted</span>
+            <span className="label">Unscripted</span>
           </div>
-          <h2 className="font-display" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', color: '#FDFBF7' }}>
+          <h2 className="font-display text-ink" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)' }}>
             Hear it from them.
           </h2>
-          <p className="mt-4 text-base leading-relaxed" style={{ color: '#FDFBF7', opacity: 0.8 }}>
+          <p className="mt-4 text-base leading-relaxed text-warm-gray">
             Real clients. Real outcomes. No scripts.
           </p>
         </div>
@@ -55,23 +55,23 @@ import { Play } from 'lucide-react';
 
             {/* Pull Quote - Brandon */}
             <div className="relative pl-6 border-l-2 border-gold/30">
-              <p className="font-display italic text-lg leading-snug mb-3" style={{ color: '#FDFBF7' }}>
+              <p className="font-display italic text-lg leading-snug mb-3 text-ink">
                 "One of the coolest things about what Jason does is he helps you become more efficient. So you can focus on the things you need to be doing to grow your business."
               </p>
               <div className="text-xs">
-                <p className="font-medium mb-1" style={{ color: '#FDFBF7' }}>Brandon Gaydorus</p>
-                <p style={{ color: '#C9C3B8' }}>5x Author / Founder of Warm Heart Life / Business & Public Speaking Coach</p>
+                <p className="font-medium mb-1 text-ink">Brandon Gaydorus</p>
+                <p className="text-warm-gray">5x Author / Founder of Warm Heart Life / Business & Public Speaking Coach</p>
               </div>
             </div>
 
             {/* Pull Quote - Carl */}
             <div className="relative pl-6 border-l-2 border-gold/30">
-              <p className="font-display italic text-lg leading-snug mb-3" style={{ color: '#FDFBF7' }}>
+              <p className="font-display italic text-lg leading-snug mb-3 text-ink">
                 "Having a custom GPT is like having a virtual assistant. I'm able to get the thoughts out of my mind and have it structured in a way that is easy for me, but also in my own voice."
               </p>
               <div className="text-xs">
-                <p className="font-medium mb-1" style={{ color: '#FDFBF7' }}>Carl Michel</p>
-                <p style={{ color: '#C9C3B8' }}>Executive Producer at Youth Empowerment Show | Motivational Speaker | Best-Selling Author</p>
+                <p className="font-medium mb-1 text-ink">Carl Michel</p>
+                <p className="text-warm-gray">Executive Producer at Youth Empowerment Show | Motivational Speaker | Best-Selling Author</p>
               </div>
             </div>
           </div>
@@ -121,14 +121,14 @@ import { Play } from 'lucide-react';
             <div className="relative">
               <div className="absolute -left-4 top-0 bottom-0 w-px" style={{ background: '#B8956C', opacity: 0.4 }} />
               <blockquote className="pl-6">
-                <p className="font-display italic text-lg leading-snug mb-3" style={{ color: '#FDFBF7' }}>
+                <p className="font-display italic text-lg leading-snug mb-3 text-ink">
                   "He built systems that actually work the way you think. He doesn't just answer questions. He gives you tools to solve problems yourself."
                 </p>
                 <div className="flex items-center gap-3 text-xs">
                   <div className="w-6 h-px" style={{ background: '#B8956C', opacity: 0.4 }} />
-                  <span className="font-medium" style={{ color: '#FDFBF7' }}>Dr. Cris Andrade</span>
+                  <span className="font-medium text-ink">Dr. Cris Andrade</span>
                 </div>
-                <p className="text-xs mt-1 pl-9" style={{ color: '#FDFBF7', opacity: 0.7 }}>Manhattan Med Spa</p>
+                <p className="text-xs mt-1 pl-9 text-warm-gray">Manhattan Med Spa</p>
               </blockquote>
             </div>
           </div>
@@ -136,7 +136,7 @@ import { Play } from 'lucide-react';
 
         {/* Bottom Note */}
         <div className="lg:pl-12 mt-16 text-center">
-          <p className="text-sm italic" style={{ color: '#FDFBF7', opacity: 0.7 }}>
+          <p className="text-sm italic text-warm-gray">
             Real clients sharing real experiences.
           </p>
         </div>
