@@ -92,7 +92,7 @@ const HeroSection = () => {
               href="https://calendly.com/jason-galavanteer/discovery_call"
               className="group inline-flex items-center gap-3 px-6 py-3 bg-ink text-cream text-xs font-medium tracking-wider uppercase transition-all duration-300 hover:bg-gold hover:shadow-lg hover:-translate-y-0.5"
             >
-              <span>Bring a decision</span>
+              <span>Book a demo</span>
               <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
             </a>
             <a
