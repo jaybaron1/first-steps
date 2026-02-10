@@ -284,7 +284,7 @@ const AboutPage = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                I didn't set out to build an AI company.
+                We didn't set out to build an AI company.
               </h2>
 
               <div className="grid lg:grid-cols-12 gap-16 lg:gap-20">
