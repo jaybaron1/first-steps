@@ -1,160 +1,197 @@
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React from "react";
+import { ArrowRight } from "lucide-react";
 
 const TiersSection = () => {
   const tiers = [
     {
       level: "01",
-      name: "The Roundtable",
-      tagline: "Your thinking partner",
-      description: "60+ expert personas debating your real decisions. Just provide your company, your name, and your website.",
-      features: [
-        "Full Roundtable access",
-        "60+ expert archetypes",
-        "Executive summaries & action plans",
-      ],
-      cta: "Start Here",
+      name: "The Boardroom",
+      tagline: "60+ experts. Any decision.",
+      description: "Bring a decision. They debate it. You get the verdict.",
+      detail: "Start here.",
+      trial: "10-day free trial",
+      cta: "Start Free Trial",
+      hasConnectors: true,
     },
     {
       level: "02",
-      name: "Connected",
-      tagline: "Your operations integrated",
-      description: "Everything in Level 1, plus API connections to enterprise-level tools you already use. Runs in a private ChatGPT Teams space.",
-      features: [
-        "Email & calendar integration",
-        "Notion, docs & knowledge bases",
-        "Sales materials & SOPs",
-      ],
-      featured: true,
-      cta: "Most Popular",
+      name: "Operating Frame",
+      tagline: "Your company context.",
+      description: "How your organization thinks. What you optimize for. What you never compromise on.",
+      detail: "Experts who understand your reality.",
+      includes: "Includes Level 1",
     },
     {
       level: "03",
-      name: "Replicated",
-      tagline: "Your mind, captured",
-      description: "Everything in Levels 1 & 2, plus deep voice profiling. A system that thinks and speaks like you.",
-      features: [
-        "Deep cognitive profiling",
-        "Voice & reasoning capture",
-        "Team deployment ready",
-      ],
-      cta: "Premium Access",
+      name: "Present Persona",
+      tagline: "Your decision style.",
+      description: "Your biases. Your defaults. The tradeoffs you make.",
+      detail: "Most people stay here.",
+      includes: "Includes Levels 1 & 2",
+      recommended: true,
+    },
+    {
+      level: "04",
+      name: "Future Me",
+      tagline: "Who you're becoming.",
+      description: "Five years from now. The patterns you're growing into.",
+      detail: "Accountability to your future self.",
+      includes: "Includes Levels 1, 2 & 3",
     },
   ];
 
-   return (
-     <section id="pricing" data-section="pricing" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
+  const connectors = [
+    {
+      name: "Microsoft Teams",
+      description: "Search, summarize, and reference 1:1 chats, group chats, and channel conversations",
+    },
+    {
+      name: "Outlook & Calendar",
+      description: "Search email threads, draft follow-up emails, check availability",
+    },
+    {
+      name: "SharePoint/OneDrive",
+      description: "Index files to query documents, spreadsheets, and presentations",
+    },
+    {
+      name: "Other Tools",
+      description: "GitHub, Slack, Jira, Notion, HubSpot, Asana, Google Drive",
+    },
+  ];
+
+  return (
+    <section id="pricing" className="section relative overflow-hidden" style={{ background: "#F9F6F0" }}>
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 
       <div className="container relative z-10">
         {/* Header */}
-        <div className="max-w-xl mb-12">
+        <div className="max-w-2xl mb-12">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-px bg-gradient-to-r from-gold to-gold-light" />
-            <span className="label">The Path</span>
+            <span className="label">The Levels</span>
           </div>
-          <h2 className="font-display text-ink mb-4">
-            Three levels.
-            <span className="italic text-warm-gray"> One destination.</span>
+          <h2 className="font-display text-ink mb-4" style={{ fontSize: "clamp(1.75rem, 4vw, 2.5rem)" }}>
+            Start simple.{" "}
+            <span className="italic" style={{ color: "#B8956C" }}>
+              Go deeper when ready.
+            </span>
           </h2>
-          <p className="text-sm text-warm-gray">
-            Each level builds on the last. Start where it makes sense.
+          <p className="text-sm" style={{ color: "#5C554A", lineHeight: 1.7 }}>
+            Each level includes the ones before it. Most people find their fit at Level 3.
           </p>
         </div>
 
         {/* Tiers */}
-        <div className="grid lg:grid-cols-3 gap-4 lg:gap-0">
+        <div className="grid lg:grid-cols-4 gap-6">
           {tiers.map((tier, i) => (
-            <div
-              key={tier.level}
-              className={`relative ${tier.featured ? 'lg:-my-4 lg:z-10' : ''}`}
-            >
+            <div key={tier.level} className="relative flex">
               <div
-                className={`h-full p-6 transition-all duration-300 ${
-                  tier.featured
-                    ? 'bg-ink text-cream shadow-elevated'
-                    : 'bg-white hover:shadow-soft'
-                }`}
-                style={!tier.featured ? { border: '1px solid rgba(26, 25, 21, 0.05)' } : {}}
+                className="flex flex-col w-full p-6 bg-white transition-all duration-300 hover:shadow-soft hover:-translate-y-1"
+                style={{ border: "1px solid rgba(26, 25, 21, 0.05)" }}
               >
-                {tier.featured && (
-                  <div className="absolute -top-2 left-1/2 -translate-x-1/2 bg-gold text-ink text-[10px] font-medium px-3 py-0.5 uppercase tracking-wider">
+                {/* Trial badge */}
+                {tier.trial && (
+                  <div className="absolute -top-3 left-6 bg-gold text-cream text-[10px] font-medium px-3 py-1 uppercase tracking-wider">
+                    {tier.trial}
+                  </div>
+                )}
+
+                {/* Recommended badge */}
+                {tier.recommended && (
+                  <div className="absolute -top-3 left-6 bg-ink text-cream text-[10px] font-medium px-3 py-1 uppercase tracking-wider">
                     Recommended
                   </div>
                 )}
 
-                <div className="flex items-start justify-between mb-6">
+                {/* Level number */}
+                <div className="mb-6">
                   <span
-                    className="font-display text-3xl"
-                    style={{ color: tier.featured ? '#D4B896' : '#B8956C' }}
+                    className="font-display"
+                    style={{
+                      fontSize: "3rem",
+                      color: "#B8956C",
+                      fontWeight: 300,
+                      lineHeight: 1,
+                    }}
                   >
                     {tier.level}
                   </span>
-                  {tier.featured && (
-                    <div className="w-1.5 h-1.5 rotate-45 bg-gold" />
-                  )}
                 </div>
 
+                {/* Name and tagline */}
                 <div className="mb-4">
-                  <h3 className={`font-display text-xl ${
-                    tier.featured ? 'text-cream' : 'text-ink'
-                  }`}>
-                    {tier.name}
-                  </h3>
-                  <p className={`text-xs mt-1 italic ${
-                    tier.featured ? 'text-gold-light' : 'text-gold-dark'
-                  }`}>
+                  <h3 className="font-display text-lg text-ink font-semibold mb-1">{tier.name}</h3>
+                  <p className="text-xs uppercase tracking-wide" style={{ color: "#B8956C", letterSpacing: "0.05em" }}>
                     {tier.tagline}
                   </p>
                 </div>
 
-                <p
-                  className="text-xs leading-relaxed mb-6"
-                  style={{ color: tier.featured ? '#C9C3B8' : '#5C554A' }}
-                >
-                  {tier.description}
-                </p>
+                <div className="w-8 h-px bg-gold/20 mb-4" />
 
-                <div className={`w-8 h-px mb-5 ${
-                  tier.featured ? 'bg-gold/40' : 'bg-gold/20'
-                }`} />
+                {/* Description - fixed height for alignment */}
+                <div style={{ minHeight: "80px" }}>
+                  <p className="text-sm leading-relaxed mb-3" style={{ color: "#3D3830", lineHeight: 1.7 }}>
+                    {tier.description}
+                  </p>
+                </div>
 
-                <ul className="space-y-2 mb-6">
-                  {tier.features.map((feature) => (
-                    <li
-                      key={feature}
-                      className="text-xs flex items-start gap-2"
-                      style={{ color: tier.featured ? '#C9C3B8' : '#3D3830' }}
+                {/* Detail/highlight - fixed height for alignment */}
+                <div style={{ minHeight: "52px" }}>
+                  {tier.detail && (
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: "#1A1915", lineHeight: 1.7, fontWeight: 500 }}
                     >
-                      <span style={{ color: tier.featured ? '#D4B896' : '#B8956C' }}>·</span>
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
+                      {tier.detail}
+                    </p>
+                  )}
+                </div>
 
-                <a
-                  href="https://calendly.com/jason-galavanteer/discovery_call"
-                  data-track-cta={`Pricing - ${tier.name}`}
-                  className={`flex items-center justify-center gap-2 w-full py-3 text-xs font-medium tracking-wide uppercase transition-all group ${
-                    tier.featured
-                      ? 'bg-cream text-ink hover:bg-gold hover:text-cream'
-                      : 'bg-ink text-cream hover:bg-gold'
-                  }`}
-                >
-                  {tier.cta}
-                  <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
-                </a>
+                {/* Connectors note */}
+                {tier.hasConnectors && (
+                  <div className="mt-4 pt-4 border-t border-ink/5" style={{ minHeight: "90px" }}>
+                    <p className="text-xs font-medium text-ink mb-2">Includes work connectors when paid:</p>
+                    <p className="text-[10px] text-warm-gray leading-relaxed">
+                      Microsoft Teams, Outlook, SharePoint, GitHub, Slack, Jira, Notion, HubSpot, Asana, Google Drive
+                    </p>
+                  </div>
+                )}
+
+                {/* Includes note - aligned with connectors */}
+                {tier.includes && (
+                  <div className="mt-4 pt-4" style={{ minHeight: "90px" }}>
+                    <p className="text-xs italic" style={{ color: "#7A7368" }}>
+                      {tier.includes}
+                    </p>
+                  </div>
+                )}
+
+                {/* Spacer to push CTA to bottom */}
+                <div className="flex-grow" />
+
+                {/* CTA */}
+                <div className="mt-6">
+                  <a
+                    href="https://calendly.com/jason-galavanteer/discovery_call"
+                    className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
+                  >
+                    {tier.cta || "Book Call"}
+                    <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                </div>
               </div>
             </div>
           ))}
         </div>
 
         {/* Footnote */}
-        <div className="mt-10 text-center">
+        <div className="mt-10 text-center space-y-2">
           <p className="text-xs text-warm-gray">
-            Pricing based on scope. Every engagement starts with a Clarity Call.
+            Work connectors are enabled once you upgrade to a paid plan. All paid tiers require a ChatGPT Teams plan
+            with one seat reserved for data security.
           </p>
+          <p className="text-xs text-warm-gray">Pricing based on scope. Every engagement starts with a Clarity Call.</p>
         </div>
       </div>
     </section>
