@@ -521,7 +521,7 @@ const AboutPage = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                What I build now is simple to describe and hard to fake.
+                What we build now is simple to describe and hard to fake.
               </h2>
 
               <div className="space-y-10 mb-16">
