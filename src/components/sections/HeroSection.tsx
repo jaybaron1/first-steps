@@ -79,8 +79,11 @@ const HeroSection = () => {
               fontWeight: 500,
             }}
           >
-            <b>The Roundtable</b> is your personal advisory board, on-demand.<br></br> 60+ expert personas debate your
-            decisions and show you what you're not seeing.
+            <b>
+              <i>The Roundtable</i>
+            </b>{" "}
+            is your personal advisory board, on-demand.<br></br> 60+ expert personas debate your decisions and show you
+            what you're not seeing.
           </p>
 
           {/* CTAs — animated */}
