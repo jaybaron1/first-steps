@@ -609,7 +609,7 @@ const AboutPage = () => {
               >
                 If you want to explore how this could support your thinking,
                 <span className="block mt-3 italic" style={{ color: "#B8956C" }}>
-                  I'd be glad to sit with you.
+                  We'd be glad to sit with you.
                 </span>
               </h2>
 
