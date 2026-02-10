@@ -574,7 +574,7 @@ const AboutPage = () => {
                   letterSpacing: "-0.01em",
                 }}
               >
-                Galavanteer exists because I watched too many capable people carry decisions alone, then live with the
+                Galavanteer exists because we watched too many capable people carry decisions alone, then live with the
                 consequences quietly.
               </p>
 
