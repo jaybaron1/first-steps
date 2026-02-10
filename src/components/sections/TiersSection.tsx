@@ -5,7 +5,7 @@ const TiersSection = () => {
   const tiers = [
     {
       level: "01",
-      name: "The Boardroom",
+      name: "The Roundtable",
       tagline: "60+ experts. Any decision.",
       description: "Bring a decision. They debate it. You get the verdict.",
       detail: "Start here.",

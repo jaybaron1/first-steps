@@ -407,7 +407,7 @@ const OnePager = () => {
                     01
                   </div>
                   <h3 className="font-display text-xl font-semibold mb-3" style={{ color: "#1A1915" }}>
-                    The Boardroom
+                    The Roundtable
                   </h3>
                   <p
                     className="text-xs uppercase tracking-wider mb-6"
