@@ -240,7 +240,7 @@ const RevealSection = () => {
           {/* The process */}
           <div className="pt-10 border-t border-ink/10">
             <p
-              className="font-display text-center mb-8"
+              className="font-display text-left mb-8"
               style={{
                 fontSize: "1.125rem",
                 color: "#1A1915",
