@@ -329,7 +329,7 @@ const DecisionProcess = () => {
           </div>
         </div>
 
-        <div>
+        <div className="pb-5 border-b border-ink/5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-gold text-sm font-display">04</span>
             <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Risks</span>
@@ -337,6 +337,21 @@ const DecisionProcess = () => {
           <div className="text-xs text-ink-muted space-y-1.5">
             {executiveOutput.risks.map((r, i) => (
               <p key={i}>• {r}</p>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">05</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Stakeholder Map</span>
+          </div>
+          <div className="space-y-3">
+            {executiveOutput.stakeholders.map((s, i) => (
+              <div key={i} className="flex flex-col sm:flex-row sm:gap-4">
+                <span className="text-xs font-medium text-ink min-w-[200px]">{s.who}</span>
+                <span className="text-xs text-ink-muted">{s.strategy}</span>
+              </div>
             ))}
           </div>
         </div>
