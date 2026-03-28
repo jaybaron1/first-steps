@@ -132,15 +132,6 @@ const TiersSection = () => {
                 </div>
 
 
-                {/* Includes note - aligned with connectors */}
-                {tier.includes && (
-                  <div className="mt-4 pt-4" style={{ minHeight: "90px" }}>
-                    <p className="text-xs italic" style={{ color: "#7A7368" }}>
-                      {tier.includes}
-                    </p>
-                  </div>
-                )}
-
                 {/* Spacer to push CTA to bottom */}
                 <div className="flex-grow" />
 
