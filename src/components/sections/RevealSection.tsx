@@ -67,7 +67,7 @@ const RevealSection = () => {
               </div>
 
               {/* Foreground text */}
-              <div className="relative z-10 pt-12">
+              <div className="relative z-10 pt-12 lg:pl-8">
                 <h3
                   className="font-display mb-4"
                   style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", color: "#1A1915", lineHeight: 1.3 }}
