@@ -202,28 +202,29 @@ const boardroomDialogue: DialogueEntry[] = [
 ];
 
 const executiveOutput = {
-  summary: 'You will say yes to the opportunity, but not to an uncontrolled six-month commitment. You will counter with a phased engagement that protects delivery quality, preserves your reputation, and allows you to scale with integrity.',
+  summary: 'You will say yes to the opportunity, but not to an uncontrolled six-month commitment. You will counter with a phased enterprise engagement that preserves delivery quality, protects your reputation, and allows you to scale with integrity. This approach positions The Winning Moments as thoughtful, professional, and enterprise-ready without overextending founder capacity. The decision is intentionally structured to keep control with you while still stepping into a higher tier of corporate partnership.',
   actions: [
     'Design Phase One as a 90-day pilot (7–10 days)',
     'Define non-negotiable scope boundaries',
     'Build expansion language for months 4–6',
     'Identify where leverage or support may be added',
   ],
-  insights: [
-    'The real risk was irreversible commitment without control',
-    'Enterprise clients value clarity over exaggerated confidence',
-    'A phased structure increases credibility',
-    'Founder sustainability is a delivery requirement',
-  ],
-  risks: [
-    'Client resists phased structure',
-    'Founder remains bottleneck',
-    'Undervaluing Phase One',
-  ],
   stakeholders: [
     { who: 'Fortune 500 sponsor / HR / L&D leader', strategy: 'Position phased structure as intentional transformation design' },
     { who: 'Senior executive team (participants)', strategy: 'Emphasize behavior change, not inspiration' },
     { who: 'John Lim (internal)', strategy: 'Protect energy, standards, and long-term brand equity' },
+  ],
+  insights: [
+    'The real risk was not scale, but irreversible commitment without control',
+    'Enterprise clients value professionalism and clarity more than exaggerated confidence',
+    'A phased structure increases credibility, not hesitation',
+    'Founder sustainability is a delivery requirement, not a personal weakness',
+    'Growth happens by redesigning promises, not by blindly accepting them',
+  ],
+  risks: [
+    'Client resists phased structure',
+    'Founder remains central bottleneck',
+    'Undervaluing Phase One',
   ],
 };
 
