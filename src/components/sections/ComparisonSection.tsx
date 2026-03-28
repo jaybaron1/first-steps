@@ -65,11 +65,11 @@ import DecisionProcess from './DecisionProcess';
                   </div>
                 ))}
               </div>
-            </div>
 
-            <div className="mt-8 bg-white p-5 lg:p-6 text-center">
-              <p className="text-sm font-semibold text-ink">You can prompt ChatGPT.</p>
-              <p className="text-sm text-warm-gray mt-1">It won't challenge your thinking like this.</p>
+              <div className="mt-6 pt-4 border-t border-ink/5 text-center">
+                <p className="text-sm font-semibold text-ink">You can prompt ChatGPT.</p>
+                <p className="text-sm text-warm-gray mt-1">It won't challenge your thinking like this.</p>
+              </div>
             </div>
           </div>
 
