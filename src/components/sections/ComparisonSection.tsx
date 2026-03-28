@@ -228,11 +228,9 @@ import DecisionProcess from './DecisionProcess';
           <div className="flex justify-end mt-4">
             <button
               onClick={() => {
+                roundtableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 setShowDeliverables(false);
                 setShowDecision(false);
-                setTimeout(() => {
-                  roundtableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }, 100);
               }}
               className="group inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider text-warm-gray hover:text-gold-dark transition-all duration-300"
             >
