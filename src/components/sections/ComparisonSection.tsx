@@ -40,7 +40,7 @@ import DecisionProcess from './DecisionProcess';
                 </div>
               </div>
 
-              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed max-h-40 overflow-y-auto" style={{ color: '#5C554A' }}>
+              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed" style={{ color: '#5C554A' }}>
                 <p className="italic">
                   "First—pause and breathe. The fact that a Fortune 500 company reached out means you're already operating at the level that attracts enterprise attention. That's not nothing—it's validation of your expertise and reputation.
                 </p>
