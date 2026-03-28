@@ -68,6 +68,7 @@ const ComparisonSection = () => {
  
    return (
      <section
+      ref={sectionRef}
       data-section="comparison"
       className="section relative overflow-hidden"
       style={{ background: '#F9F6F0' }}
