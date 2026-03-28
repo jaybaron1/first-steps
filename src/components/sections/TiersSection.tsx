@@ -61,7 +61,7 @@ const TiersSection = () => {
             </span>
           </h2>
           <p className="text-sm" style={{ color: "#5C554A", lineHeight: 1.7 }}>
-            Go deeper as your decisions get more complex.
+            As your decisions get more complex, your thinking needs to go deeper.
           </p>
         </div>
 
