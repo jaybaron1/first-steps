@@ -27,7 +27,7 @@ const ProblemSection = () => {
         {/* Three-column cards with flow */}
         <div className="flex flex-col lg:flex-row gap-8 lg:items-stretch max-w-5xl">
           {/* Card 1 */}
-          <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
+          <div className="bg-white px-8 py-5 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">You think alone.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
@@ -49,7 +49,7 @@ const ProblemSection = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
+          <div className="bg-white px-8 py-5 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">Input is fragmented.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
@@ -71,7 +71,7 @@ const ProblemSection = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
+          <div className="bg-white px-8 py-5 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">
               The decision moves forward under-tested.
