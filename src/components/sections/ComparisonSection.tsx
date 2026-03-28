@@ -61,7 +61,7 @@ const ComparisonSection = () => {
      <section
       data-section="comparison"
       className="section relative overflow-hidden"
-      style={{ background: '#F9F6F0', overflowAnchor: 'none' }}
+      style={{ background: '#F9F6F0' }}
     >
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
@@ -293,10 +293,10 @@ const ComparisonSection = () => {
         )}
 
         {/* Cream spacer between cards area and quote */}
-        <div className="h-8" style={{ overflowAnchor: 'none' }} />
+        <div className="h-8" />
 
         {/* Pull quote */}
-        <div ref={quoteRef} className="max-w-xl mx-auto text-center" style={{ overflowAnchor: 'none' }}>
+        <div ref={quoteRef} className="max-w-xl mx-auto text-center">
           <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
