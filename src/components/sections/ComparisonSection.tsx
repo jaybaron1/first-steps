@@ -293,10 +293,10 @@ const ComparisonSection = () => {
         )}
 
         {/* Cream spacer between cards area and quote */}
-        <div className="h-8" />
+        <div className="h-8" style={{ overflowAnchor: 'none' }} />
 
         {/* Pull quote */}
-        <div ref={quoteRef} className="max-w-xl mx-auto text-center">
+        <div ref={quoteRef} className="max-w-xl mx-auto text-center" style={{ overflowAnchor: 'none' }}>
           <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
