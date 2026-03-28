@@ -1,45 +1,18 @@
 
 
-## Plan: Enhance DecisionProcess with Stakeholder Map, Restored Lines, and Closing Offer
+## Changes
 
-Three targeted enhancements to the existing curated transcript, all in `src/components/sections/DecisionProcess.tsx`.
+Three targeted edits to `ComparisonSection.tsx`:
 
-### 1. Restore Key Advisor Lines
+1. **White box behind ChatGPT tagline** (lines 70-73): Wrap the tagline text in a white card (`bg-white p-5 lg:p-6`) and bold the first line (`font-semibold`).
 
-Add back these high-impact lines that were trimmed but add real persuasive depth:
+2. **Increase Bravado quote font size** (line 225): Change from `text-lg` to `text-2xl lg:text-3xl` to give it proper visual weight.
 
-- **Sarah** (after her "building something together" line): *"If they reached out to you, they already believe you can deliver something meaningful. The danger is pretending you're a large firm when you're still founder-led. The smartest partners name that reality upfront."*
-- **Monica** (in her structure recommendation): *"If they won't accept that structure, that tells you something important about the risk profile of the client."*
-- **Sarah** (in her phased credibility response): *"This is not 'I'm not sure I can do this.' This is 'We want to ensure this delivers real transformation before scaling.' That language earns respect."*
-- **David** (final line addition): *"Your yes must include permission to build leverage, support, or structure as the program evolves. If you lock yourself into a promise frozen in time, you will resent it. That resentment always leaks into delivery."*
-
-### 2. Add Stakeholder Map (New Section 05)
-
-Add a new numbered section after Risks in the Executive Output:
-
-| Stakeholder | Strategy |
-|---|---|
-| Fortune 500 sponsor / HR / L&D leader | Position phased structure as intentional transformation design |
-| Senior executive team (participants) | Emphasize behavior change, not inspiration |
-| John Lim (internal) | Protect energy, standards, and long-term brand equity |
-
-Styled as a compact grid/list matching existing Executive Output aesthetic.
-
-### 3. Expand Facilitator Closing with Reconvene Offer
-
-Replace the single closing line with the full facilitator sign-off including the reconvene options:
-
-- Pressure-test your Phase One proposal language
-- Rehearse the client conversation
-- Design the internal delivery architecture before you commit
-
-Styled as a subtle list under the closing statement, reinforcing ongoing value.
+3. **Bump attribution text** (line 229): Change from `text-xs` to `text-sm`.
 
 ### Technical Details
 
-- All changes in `src/components/sections/DecisionProcess.tsx`
-- Add lines to existing `boardroomDialogue` array entries
-- Add `stakeholders` array to `executiveOutput` object
-- Add section 05 JSX block and update facilitator closing JSX
-- No new dependencies or files needed
+- Lines 70-73: Replace the plain `div` with a white card container, add `font-semibold` to "You can prompt ChatGPT."
+- Line 225: `text-lg` → `text-2xl lg:text-3xl`
+- Line 229: `text-xs` → `text-sm`
 
