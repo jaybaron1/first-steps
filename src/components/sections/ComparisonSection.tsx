@@ -247,7 +247,7 @@ const ComparisonSection = () => {
 
                 <div>
                   <button
-                    onClick={() => setShowDecision(!showDecision)}
+                    onClick={() => anchoredCollapse(setShowDecision, showDecision)}
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
                     <span>
