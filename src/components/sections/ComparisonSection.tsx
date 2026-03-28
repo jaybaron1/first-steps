@@ -9,46 +9,12 @@ const ComparisonSection = () => {
   const [showDecision, setShowDecision] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
   const collapseRafRef = useRef<number | null>(null);
-  const toggleRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
       if (collapseRafRef.current) cancelAnimationFrame(collapseRafRef.current);
-      if (toggleRafRef.current) cancelAnimationFrame(toggleRafRef.current);
     };
   }, []);
-
-  // Anchor-locked toggle for individual panels (does NOT touch collapseAll)
-  const anchoredToggle = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    const anchorStartY = quoteRef.current?.getBoundingClientRect().top ?? null;
-
-    if (toggleRafRef.current) {
-      cancelAnimationFrame(toggleRafRef.current);
-      toggleRafRef.current = null;
-    }
-
-    setter(prev => !prev);
-
-    if (anchorStartY === null) return;
-
-    const startedAt = performance.now();
-
-    const lock = (now: number) => {
-      const anchor = quoteRef.current;
-      if (!anchor) { toggleRafRef.current = null; return; }
-
-      const delta = anchor.getBoundingClientRect().top - anchorStartY;
-      if (Math.abs(delta) > 0.5) window.scrollBy(0, delta);
-
-      if (now - startedAt < COLLAPSE_DURATION + 140) {
-        toggleRafRef.current = requestAnimationFrame(lock);
-      } else {
-        toggleRafRef.current = null;
-      }
-    };
-
-    toggleRafRef.current = requestAnimationFrame(lock);
-  };
 
   const collapseAll = () => {
     if (!showDeliverables && !showDecision) return;
