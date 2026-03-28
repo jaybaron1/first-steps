@@ -227,7 +227,7 @@ const RevealSection = () => {
               ))}
             </div>
 
-            <div className="w-12 h-px bg-gold/20 mx-auto mb-6" />
+            <div className="w-12 h-px bg-gold/20 mb-6" />
 
             <div className="space-y-2" style={{ fontSize: "1rem", color: "#5C554A" }}>
               <p>The goal is not consensus.</p>
