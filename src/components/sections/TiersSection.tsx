@@ -11,9 +11,9 @@ const TiersSection = () => {
       tagline: "Start with clarity.",
       description: "Pose a question. It gets challenged from every angle that matters.",
       detail: "For when you need to think something through properly.",
+      subdetail: "Use this when you're stuck, unclear, or need to make a decision you can stand behind.",
       trial: "3-day free trial",
       cta: "Start Free Trial",
-      
     },
     {
       level: "02",
@@ -21,15 +21,15 @@ const TiersSection = () => {
       tagline: "Your company context.",
       description: "How your organization thinks. What you optimize for. What you never compromise on.",
       detail: "Perspectives that understand your reality.",
-      includes: "\n",
+      subdetail: "Use this when generic thinking isn't enough and your business context matters.",
     },
     {
       level: "03",
       name: "Present Persona",
       tagline: "Your decision style.",
       description: "Your biases. Your defaults. The tradeoffs you make.",
-      detail: "Most people stay here.",
-      includes: "",
+      detail: "This is where decisions start to feel like your own.",
+      subdetail: "For operators making high-stakes decisions regularly.",
       recommended: true,
     },
     {
@@ -38,7 +38,7 @@ const TiersSection = () => {
       tagline: "Who you're becoming.",
       description: "Five years from now. The patterns you're growing into.",
       detail: "Accountability to your future self.",
-      includes: "",
+      subdetail: "Use this when you're making decisions that shape where you're going.",
     },
   ];
 
@@ -61,7 +61,7 @@ const TiersSection = () => {
             </span>
           </h2>
           <p className="text-sm" style={{ color: "#5C554A", lineHeight: 1.7 }}>
-            Each level includes the ones before it. Most people find their fit at Level 3.
+            Go deeper as your decisions get more complex.
           </p>
         </div>
 
@@ -119,8 +119,8 @@ const TiersSection = () => {
                   </p>
                 </div>
 
-                {/* Detail/highlight - fixed height for alignment */}
-                <div style={{ minHeight: "52px" }}>
+                {/* Detail/highlight */}
+                <div className="mb-3">
                   {tier.detail && (
                     <p
                       className="text-sm leading-relaxed"
@@ -130,6 +130,13 @@ const TiersSection = () => {
                     </p>
                   )}
                 </div>
+
+                {/* Subdetail */}
+                {tier.subdetail && (
+                  <p className="text-xs leading-relaxed" style={{ color: "#5C554A", lineHeight: 1.6 }}>
+                    {tier.subdetail}
+                  </p>
+                )}
 
 
                 {/* Spacer to push CTA to bottom */}
@@ -150,7 +157,7 @@ const TiersSection = () => {
                       href="https://calendly.com/jason-galavanteer/discovery_call"
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
                     >
-                      Book Call
+                      See If This Fits
                       <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </a>
                   )}
