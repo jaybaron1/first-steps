@@ -136,6 +136,7 @@ const boardroomDialogue: DialogueEntry[] = [
       'They do not expect perfection. They expect professionalism and honesty.',
       'What destroys trust is not inexperience. It\'s overpromising confidence you don\'t yet have.',
       'If you position this as "we\'re building something together," you reduce the reputational risk dramatically.',
+      'If they reached out to you, they already believe you can deliver something meaningful. The danger is pretending you\'re a large firm when you\'re still founder-led. The smartest partners name that reality upfront.',
     ],
   },
   {
@@ -161,6 +162,7 @@ const boardroomDialogue: DialogueEntry[] = [
     lines: [
       'Do not sell six months. Sell a 90-day Phase One with an expansion option.',
       'This caps downside. Proves delivery. Makes continuation mutual.',
+      'If they won\'t accept that structure, that tells you something important about the risk profile of the client.',
     ],
   },
   {
@@ -170,6 +172,7 @@ const boardroomDialogue: DialogueEntry[] = [
       'Yes. And more than credible — it\'s mature.',
       'Large organizations already think in phases. Pilot, evaluate, scale.',
       'If you present this as intentional design, not hesitation, you gain respect.',
+      'This is not "I\'m not sure I can do this." This is "We want to ensure this delivers real transformation before scaling." That language earns respect.',
     ],
   },
   {
@@ -178,6 +181,7 @@ const boardroomDialogue: DialogueEntry[] = [
     lines: [
       'Do not sign anything where your identity is the bottleneck.',
       'If success depends on how you feel in month five, the system is wrong.',
+      'Your yes must include permission to build leverage, support, or structure as the program evolves. If you lock yourself into a promise frozen in time, you will resent it. That resentment always leaks into delivery.',
     ],
   },
   {
@@ -215,6 +219,11 @@ const executiveOutput = {
     'Client resists phased structure',
     'Founder remains bottleneck',
     'Undervaluing Phase One',
+  ],
+  stakeholders: [
+    { who: 'Fortune 500 sponsor / HR / L&D leader', strategy: 'Position phased structure as intentional transformation design' },
+    { who: 'Senior executive team (participants)', strategy: 'Emphasize behavior change, not inspiration' },
+    { who: 'John Lim (internal)', strategy: 'Protect energy, standards, and long-term brand equity' },
   ],
 };
 
@@ -320,7 +329,7 @@ const DecisionProcess = () => {
           </div>
         </div>
 
-        <div>
+        <div className="pb-5 border-b border-ink/5">
           <div className="flex items-center gap-2 mb-3">
             <span className="text-gold text-sm font-display">04</span>
             <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Risks</span>
@@ -331,13 +340,36 @@ const DecisionProcess = () => {
             ))}
           </div>
         </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">05</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Stakeholder Map</span>
+          </div>
+          <div className="space-y-3">
+            {executiveOutput.stakeholders.map((s, i) => (
+              <div key={i} className="flex flex-col sm:flex-row sm:gap-4">
+                <span className="text-xs font-medium text-ink min-w-[200px]">{s.who}</span>
+                <span className="text-xs text-ink-muted">{s.strategy}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Facilitator closing */}
-      <div className="pt-4 border-t border-ink/5">
+      <div className="pt-4 border-t border-ink/5 space-y-3">
         <div className="pl-0">
           <span className="inline-block text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 mb-1.5 bg-ink text-cream">Facilitator</span>
-          <p className="text-xs text-ink font-medium leading-relaxed">You are moving forward — but on your terms.</p>
+          <p className="text-xs text-ink font-medium leading-relaxed">You are moving forward — but on your terms. You are not shrinking from the opportunity. You are upgrading the way you say yes.</p>
+        </div>
+        <div className="pl-0">
+          <p className="text-xs text-ink-muted leading-relaxed mb-2">If you'd like, we can reconvene to:</p>
+          <div className="text-xs text-ink-muted space-y-1">
+            <p>• Pressure-test your Phase One proposal language</p>
+            <p>• Rehearse the client conversation</p>
+            <p>• Design the internal delivery architecture before you commit</p>
+          </div>
         </div>
       </div>
 
