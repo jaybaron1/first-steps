@@ -136,7 +136,7 @@ import DecisionProcess from './DecisionProcess';
             className="inline-flex items-center gap-2 text-warm-gray hover:text-gold-dark transition-colors text-sm"
           >
             <span className="font-medium">
-              {showDeliverables ? "Hide" : "View"} sample output
+              {showDeliverables ? "Hide" : "See a"} sample output
             </span>
             {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
