@@ -119,8 +119,8 @@ const TiersSection = () => {
                   </p>
                 </div>
 
-                {/* Detail/highlight - fixed height for alignment */}
-                <div style={{ minHeight: "52px" }}>
+                {/* Detail/highlight */}
+                <div className="mb-3">
                   {tier.detail && (
                     <p
                       className="text-sm leading-relaxed"
@@ -130,6 +130,13 @@ const TiersSection = () => {
                     </p>
                   )}
                 </div>
+
+                {/* Subdetail */}
+                {tier.subdetail && (
+                  <p className="text-xs leading-relaxed" style={{ color: "#5C554A", lineHeight: 1.6 }}>
+                    {tier.subdetail}
+                  </p>
+                )}
 
 
                 {/* Spacer to push CTA to bottom */}
