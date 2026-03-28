@@ -180,11 +180,11 @@
 
   /* Section Spacing — Refined, not excessive */
   .section {
-    padding: clamp(3rem, 6vw, 5rem) 0;
+    padding: clamp(2rem, 4vw, 3.5rem) 0;
   }
 
   .section-lg {
-    padding: clamp(4rem, 8vw, 6rem) 0;
+    padding: clamp(2.5rem, 5vw, 4rem) 0;
   }
 
   /* Editorial Label — Refined */
