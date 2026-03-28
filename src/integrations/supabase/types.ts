@@ -120,6 +120,33 @@ export type Database = {
         }
         Relationships: []
       }
+      admin_sessions: {
+        Row: {
+          created_at: string
+          id: string
+          last_activity: string
+          session_token: string
+          terminated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_activity?: string
+          session_token: string
+          terminated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_activity?: string
+          session_token?: string
+          terminated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       attribution_credits: {
         Row: {
           attributed_revenue: number
@@ -223,6 +250,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          created_at: string
+          details: Json | null
+          id: string
+          user_email: string | null
+          user_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_email?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          user_email?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       campaigns: {
         Row: {
