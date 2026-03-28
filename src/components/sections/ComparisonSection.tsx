@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 import DecisionProcess from './DecisionProcess';
 
@@ -7,19 +7,64 @@ const COLLAPSE_DURATION = 1400;
 const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
-  const roundtableRef = useRef<HTMLDivElement>(null);
+  const quoteRef = useRef<HTMLDivElement>(null);
+  const collapseRafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (collapseRafRef.current) {
+        cancelAnimationFrame(collapseRafRef.current);
+      }
+    };
+  }, []);
 
   const collapseAll = () => {
+    if (!showDeliverables && !showDecision) return;
+
+    const anchorStartY = quoteRef.current?.getBoundingClientRect().top ?? null;
+
+    if (collapseRafRef.current) {
+      cancelAnimationFrame(collapseRafRef.current);
+      collapseRafRef.current = null;
+    }
+
     setShowDeliverables(false);
     setShowDecision(false);
-    // After the CSS transition finishes, scroll the Roundtable card into view
-    setTimeout(() => {
-      roundtableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, COLLAPSE_DURATION + 50);
+
+    if (anchorStartY === null) return;
+
+    const startedAt = performance.now();
+
+    const keepAnchorFixed = (now: number) => {
+      const anchor = quoteRef.current;
+      if (!anchor) {
+        collapseRafRef.current = null;
+        return;
+      }
+
+      const currentY = anchor.getBoundingClientRect().top;
+      const delta = currentY - anchorStartY;
+
+      if (Math.abs(delta) > 0.5) {
+        window.scrollBy(0, delta);
+      }
+
+      if (now - startedAt < COLLAPSE_DURATION + 140) {
+        collapseRafRef.current = requestAnimationFrame(keepAnchorFixed);
+      } else {
+        collapseRafRef.current = null;
+      }
+    };
+
+    collapseRafRef.current = requestAnimationFrame(keepAnchorFixed);
   };
  
    return (
-     <section data-section="comparison" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
+     <section
+      data-section="comparison"
+      className="section relative overflow-hidden"
+      style={{ background: '#F9F6F0', overflowAnchor: 'none' }}
+    >
       {/* The Golden Thread continues */}
       <div className="absolute left-8 lg:left-16 top-0 bottom-0 w-px bg-gold/10" />
 
@@ -66,9 +111,9 @@ const ComparisonSection = () => {
 
               <div className="space-y-2">
                 {[
-                  "One voice",
-                  "Long, unstructured output",
-                  "Requires you to figure out what matters",
+                  'One voice',
+                  'Long, unstructured output',
+                  'Requires you to figure out what matters',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-warm-gray">
                     <X className="w-3 h-3 text-warm-gray-light flex-shrink-0" aria-hidden="true" />
@@ -88,7 +133,7 @@ const ComparisonSection = () => {
           </div>
 
           {/* The Roundtable */}
-          <div className="lg:col-span-3" ref={roundtableRef}>
+          <div className="lg:col-span-3">
             <div className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
               <div className="absolute top-0 left-0 w-12 h-px bg-gradient-to-r from-gold to-transparent" />
               <div className="absolute top-0 left-0 w-px h-12 bg-gradient-to-b from-gold to-transparent" />
@@ -128,9 +173,9 @@ const ComparisonSection = () => {
 
               <div className="space-y-2">
                 {[
-                  "Multiple perspectives interacting",
-                  "Structured thinking you can follow",
-                  "Clear direction at the end",
+                  'Multiple perspectives interacting',
+                  'Structured thinking you can follow',
+                  'Clear direction at the end',
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-ink">
                     <Check className="w-3 h-3 text-gold flex-shrink-0" aria-hidden="true" />
@@ -148,7 +193,7 @@ const ComparisonSection = () => {
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
                     <span>
-                      {showDeliverables ? "Hide" : "See a"} sample output
+                      {showDeliverables ? 'Hide' : 'See a'} sample output
                     </span>
                     {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
@@ -160,7 +205,7 @@ const ComparisonSection = () => {
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
                     <span>
-                      {showDecision ? "Hide" : "See"} how it was decided
+                      {showDecision ? 'Hide' : 'See'} how it was decided
                     </span>
                     {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
@@ -173,9 +218,9 @@ const ComparisonSection = () => {
         {/* Expanded content — centered below the grid */}
         <div
           className="grid transition-all ease-in-out mt-8"
-          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
+          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDeliverables ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
@@ -223,9 +268,9 @@ const ComparisonSection = () => {
 
         <div
           className="grid transition-all ease-in-out mt-6"
-          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
+          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDecision ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
@@ -253,7 +298,7 @@ const ComparisonSection = () => {
         <div className="h-8" />
 
         {/* Pull quote */}
-        <div className="max-w-xl mx-auto text-center">
+        <div ref={quoteRef} className="max-w-xl mx-auto text-center">
           <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
