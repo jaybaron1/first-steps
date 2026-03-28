@@ -180,7 +180,7 @@ const ComparisonSection = () => {
 
           {/* The Roundtable */}
           <div className="lg:col-span-3">
-            <div className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
+            <div ref={roundtableRef} className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
               <div className="absolute top-0 left-0 w-12 h-px bg-gradient-to-r from-gold to-transparent" />
               <div className="absolute top-0 left-0 w-px h-12 bg-gradient-to-b from-gold to-transparent" />
 
