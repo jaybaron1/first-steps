@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
+import DecisionProcess from './DecisionProcess';
 
  const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
@@ -208,12 +209,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
                 <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
                   style={{ opacity: showDecision ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
                 >
-                  <h3 className="font-display text-xl text-ink mb-6">
-                    Decision Process
-                  </h3>
-                  <p className="text-sm text-ink-muted leading-relaxed">
-                    Content coming soon — this section will walk through how the advisors arrived at the recommendation.
-                  </p>
+                  <DecisionProcess />
                 </div>
               </div>
             </div>
