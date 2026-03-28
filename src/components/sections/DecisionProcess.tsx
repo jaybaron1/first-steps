@@ -172,6 +172,7 @@ const boardroomDialogue: DialogueEntry[] = [
       'Yes. And more than credible — it\'s mature.',
       'Large organizations already think in phases. Pilot, evaluate, scale.',
       'If you present this as intentional design, not hesitation, you gain respect.',
+      'This is not "I\'m not sure I can do this." This is "We want to ensure this delivers real transformation before scaling." That language earns respect.',
     ],
   },
   {
