@@ -50,10 +50,10 @@ const RevealSection = () => {
           {/* Two-column layout: Text left, Graphic right */}
           <div className="grid lg:grid-cols-2 gap-8 items-center mb-12">
             {/* Left: Text content */}
-            <div className="text-center lg:text-left relative">
+            <div className="text-center lg:text-left relative overflow-hidden">
               {/* Large 60+ in background */}
               <div
-                className="absolute -left-4 lg:-left-4 -top-8 font-display pointer-events-none select-none"
+                className="absolute -left-4 lg:left-0 -top-8 font-display pointer-events-none select-none"
                 style={{
                   fontSize: "clamp(10rem, 20vw, 16rem)",
                   color: "#B8956C",
