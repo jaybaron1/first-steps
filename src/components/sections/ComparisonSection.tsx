@@ -21,51 +21,6 @@ const ComparisonSection = () => {
     };
   }, []);
 
-  const anchoredCollapse = (setter: React.Dispatch<React.SetStateAction<boolean>>, currentValue: boolean) => {
-    if (!currentValue) {
-      // Expanding — just toggle, no anchor logic
-      setter(true);
-      return;
-    }
-
-    // Collapsing — anchor to the Roundtable card so it stays fixed
-    const anchor = roundtableRef.current;
-    const anchorStartY = anchor?.getBoundingClientRect().top ?? null;
-
-    if (collapseRafRef.current) {
-      cancelAnimationFrame(collapseRafRef.current);
-      collapseRafRef.current = null;
-    }
-
-    setter(false);
-
-    if (anchorStartY === null || !anchor) return;
-
-    const startedAt = performance.now();
-
-    const keepAnchorFixed = (now: number) => {
-      if (!anchor) {
-        collapseRafRef.current = null;
-        return;
-      }
-
-      const currentY = anchor.getBoundingClientRect().top;
-      const delta = currentY - anchorStartY;
-
-      if (Math.abs(delta) > 0.5) {
-        window.scrollBy(0, delta);
-      }
-
-      if (now - startedAt < COLLAPSE_DURATION + 140) {
-        collapseRafRef.current = requestAnimationFrame(keepAnchorFixed);
-      } else {
-        collapseRafRef.current = null;
-      }
-    };
-
-    collapseRafRef.current = requestAnimationFrame(keepAnchorFixed);
-  };
-
   const collapseAll = () => {
     if (!showDeliverables && !showDecision) return;
 
