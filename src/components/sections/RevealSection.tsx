@@ -202,7 +202,7 @@ const RevealSection = () => {
           </div>
 
           {/* How the room works */}
-          <div className="max-w-3xl mx-auto mb-12 text-center">
+          <div className="max-w-3xl mb-12">
             <p
               className="font-display mb-8"
               style={{
