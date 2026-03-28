@@ -111,9 +111,9 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
               <div className="space-y-2">
                 {[
-                  "Multiple perspectives",
-                  "Structured thinking",
-                  "Clear direction forward",
+                  "Multiple perspectives in tension",
+                  "Structured thinking, not scattered advice",
+                  "A clear path forward, not more noise",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-ink">
                     <Check className="w-3 h-3 text-gold flex-shrink-0" aria-hidden="true" />
