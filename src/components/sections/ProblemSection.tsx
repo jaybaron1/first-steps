@@ -36,7 +36,7 @@ const ProblemSection = () => {
           </div>
 
           {/* Arrow 1 */}
-          <div className="hidden lg:flex flex-shrink-0 -mx-4 items-center">
+          <div className="hidden lg:flex flex-shrink-0 -mx-4 self-center">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path
                 d="M5 12H19M19 12L13 6M19 12L13 18"
