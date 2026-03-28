@@ -97,7 +97,7 @@ const ComparisonSection = () => {
                 </div>
               </div>
 
-              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed max-h-40 overflow-y-auto" style={{ color: '#5C554A' }}>
+              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed max-h-40 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-warm-gray-light/30 [&::-webkit-scrollbar-track]:bg-transparent" style={{ color: '#5C554A' }}>
                 <p className="italic">
                   "First—pause and breathe. The fact that a Fortune 500 company reached out means you're already operating at the level that attracts enterprise attention. That's not nothing—it's validation of your expertise and reputation.
                 </p>
@@ -152,7 +152,7 @@ const ComparisonSection = () => {
               </div>
 
               {/* Dialogue preview — expanded to show real deliberation */}
-              <div className="bg-cream p-4 mb-4 text-xs space-y-3 max-h-56 overflow-y-auto border-l-2 border-gold/40">
+              <div className="bg-cream p-4 mb-4 text-xs space-y-3 max-h-56 overflow-y-auto border-l-2 border-gold/40 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-gold/20 [&::-webkit-scrollbar-track]:bg-transparent">
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
                   <p style={{ color: '#3D3830' }}>Our objective: Decide whether The Winning Moments should accept a six-month executive leadership engagement with a Fortune 500 company, given the opportunity size, delivery risk, and readiness implications.</p>
