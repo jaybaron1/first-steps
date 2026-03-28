@@ -8,6 +8,7 @@ const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const collapseRafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -26,6 +27,11 @@ const ComparisonSection = () => {
       collapseRafRef.current = null;
     }
 
+    // Disable browser scroll anchoring during collapse so manual compensation works
+    if (sectionRef.current) {
+      sectionRef.current.style.overflowAnchor = 'none';
+    }
+
     setShowDeliverables(false);
     setShowDecision(false);
 
@@ -37,6 +43,7 @@ const ComparisonSection = () => {
       const anchor = quoteRef.current;
       if (!anchor) {
         collapseRafRef.current = null;
+        if (sectionRef.current) sectionRef.current.style.overflowAnchor = '';
         return;
       }
 
@@ -51,6 +58,8 @@ const ComparisonSection = () => {
         collapseRafRef.current = requestAnimationFrame(keepAnchorFixed);
       } else {
         collapseRafRef.current = null;
+        // Re-enable browser scroll anchoring after collapse finishes
+        if (sectionRef.current) sectionRef.current.style.overflowAnchor = '';
       }
     };
 
