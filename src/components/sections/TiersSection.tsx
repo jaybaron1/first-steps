@@ -21,7 +21,7 @@ const TiersSection = () => {
       tagline: "Your company context.",
       description: "How your organization thinks. What you optimize for. What you never compromise on.",
       detail: "Perspectives that understand your reality.",
-      includes: "Includes Level 1",
+      includes: "\n",
     },
     {
       level: "03",
