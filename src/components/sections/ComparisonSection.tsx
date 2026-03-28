@@ -13,7 +13,7 @@ import DecisionProcess from './DecisionProcess';
 
       <div className="container relative z-10">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-px bg-gradient-to-r from-gold to-gold-light" />
             <span className="label">See The Difference</span>
