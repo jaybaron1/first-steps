@@ -217,7 +217,7 @@ const ComparisonSection = () => {
         >
           <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
-              style={{ opacity: showDeliverables ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
+              style={{ opacity: showDeliverables ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
               <h3 className="font-display text-xl text-ink mb-6">
                 Sample Session Deliverables
