@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
  const ComparisonSection = () => {
