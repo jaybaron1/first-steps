@@ -181,6 +181,7 @@ const boardroomDialogue: DialogueEntry[] = [
     lines: [
       'Do not sign anything where your identity is the bottleneck.',
       'If success depends on how you feel in month five, the system is wrong.',
+      'Your yes must include permission to build leverage, support, or structure as the program evolves. If you lock yourself into a promise frozen in time, you will resent it. That resentment always leaks into delivery.',
     ],
   },
   {
