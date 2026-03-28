@@ -234,7 +234,7 @@ const ComparisonSection = () => {
         {(showDeliverables || showDecision) && (
           <div className="flex justify-end mt-4">
             <button
-              onClick={collapseWithFollow}
+              onClick={collapseAll}
               className="group inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider text-warm-gray hover:text-gold-dark transition-all duration-300"
             >
               <span className="font-medium">Collapse</span>
