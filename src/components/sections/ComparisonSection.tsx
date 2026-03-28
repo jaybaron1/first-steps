@@ -13,7 +13,7 @@ import DecisionProcess from './DecisionProcess';
 
       <div className="container relative z-10">
         {/* Header */}
-        <div className="mb-12">
+        <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
             <div className="w-10 h-px bg-gradient-to-r from-gold to-gold-light" />
             <span className="label">See The Difference</span>
@@ -223,7 +223,7 @@ import DecisionProcess from './DecisionProcess';
         </div>
 
         {/* Pull quote */}
-        <div className="mt-4 max-w-xl mx-auto text-center">
+        <div className="mt-8 max-w-xl mx-auto text-center">
           <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
