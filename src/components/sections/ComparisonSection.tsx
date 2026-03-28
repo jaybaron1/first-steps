@@ -28,7 +28,7 @@ import DecisionProcess from './DecisionProcess';
         <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
           {/* Generic AI */}
           <div className="lg:col-span-2">
-            <div className="h-full bg-white p-5 lg:p-6 relative flex flex-col">
+            <div className="bg-white p-5 lg:p-6 relative">
               <div className="absolute top-0 left-0 w-8 h-px bg-warm-gray-light/30" />
 
               <div className="flex items-center gap-2 mb-4 pb-4 border-b border-ink/5">
@@ -65,11 +65,11 @@ import DecisionProcess from './DecisionProcess';
                   </div>
                 ))}
               </div>
+            </div>
 
-              <div className="mt-auto pt-10 pb-4 text-center">
-                <p className="text-xl lg:text-2xl text-ink">You can prompt ChatGPT.</p>
-                <p className="text-lg lg:text-xl text-warm-gray mt-2">It won't challenge your thinking like this.</p>
-              </div>
+            <div className="mt-8 text-center px-4">
+              <p className="text-lg text-ink">You can prompt ChatGPT.</p>
+              <p className="text-base text-warm-gray mt-1">It won't challenge your thinking like this.</p>
             </div>
           </div>
 
@@ -221,12 +221,12 @@ import DecisionProcess from './DecisionProcess';
         </div>
 
         {/* Pull quote */}
-        <div className="mt-16 max-w-3xl mx-auto text-center py-10">
-          <blockquote className="text-2xl lg:text-3xl text-ink italic leading-relaxed">
+        <div className="mt-14 max-w-2xl mx-auto text-center">
+          <blockquote className="text-xl lg:text-2xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
           </blockquote>
-          <p className="mt-5 text-base text-warm-gray">
+          <p className="mt-4 text-sm text-warm-gray">
             From an actual Roundtable session
           </p>
         </div>
