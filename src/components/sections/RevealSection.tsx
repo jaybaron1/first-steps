@@ -85,7 +85,7 @@ const RevealSection = () => {
             {/* Right: Original sophisticated graphic with stronger lines */}
             <div className="relative">
               <svg
-                viewBox="0 0 800 500"
+                viewBox="100 40 600 420"
                 className="w-full h-auto"
                 style={{ filter: "drop-shadow(0 4px 20px rgba(26, 25, 21, 0.08))" }}
               >
@@ -193,11 +193,6 @@ const RevealSection = () => {
                   YOU
                 </text>
               </svg>
-
-              {/* Caption */}
-              <p className="text-center text-xs mt-4 italic" style={{ color: "#5C554A" }}>
-                You stay at the center. The thinking doesn't.
-              </p>
             </div>
           </div>
 
