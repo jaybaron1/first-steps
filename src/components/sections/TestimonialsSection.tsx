@@ -4,7 +4,7 @@ const TestimonialsSection = () => {
   const testimonials = [
     {
       quote:
-        "I\" walk into meetings more prepared and steadier. I can see the next step instead of trying to hold the entire thing in my head.\"",
+        "\"I walk into meetings more prepared and steadier. I can see the next step instead of trying to hold the entire thing in my head.\"",
       name: "Danielle Blanchard",
       title: "Founder, Diabetes Motivational Coaching",
     },
