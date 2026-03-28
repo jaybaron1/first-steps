@@ -181,6 +181,29 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
               </div>
             </div>
           )}
+
+          <div className="mt-6">
+            <button
+              onClick={() => setShowDecision(!showDecision)}
+              className="inline-flex items-center gap-2 text-warm-gray hover:text-gold-dark transition-colors text-sm"
+            >
+              <span className="font-medium">
+                {showDecision ? "Hide" : "See"} how it was decided
+              </span>
+              {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+            </button>
+
+            {showDecision && (
+              <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft">
+                <h3 className="font-display text-xl text-ink mb-6">
+                  Decision Process
+                </h3>
+                <p className="text-sm text-ink-muted leading-relaxed">
+                  Content coming soon — this section will walk through how the advisors arrived at the recommendation.
+                </p>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Pull quote */}
