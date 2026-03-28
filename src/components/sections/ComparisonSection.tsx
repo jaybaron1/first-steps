@@ -96,15 +96,15 @@ import DecisionProcess from './DecisionProcess';
               <div className="bg-cream p-4 mb-4 text-xs space-y-3 max-h-56 overflow-y-auto border-l-2 border-gold/40">
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
-                  <p style={{ color: '#3D3830' }}>Decide whether The Winning Moments should accept a six-month executive leadership engagement with a Fortune 500 company, given the opportunity size, delivery risk, and readiness implications.</p>
+                  <p style={{ color: '#3D3830' }}>Our objective: Decide whether The Winning Moments should accept a six-month executive leadership engagement with a Fortune 500 company, given the opportunity size, delivery risk, and readiness implications.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Monica — Finance</p>
-                  <p style={{ color: '#3D3830' }}>Staying small is not caused by saying no. Staying small is caused by saying yes to the wrong structure. The question is not "am I ready?" The question is "can this be structured so fai…</p>
+                  <p style={{ color: '#3D3830' }}>Staying small is not caused by saying no. Staying small is caused by saying yes to the wrong structure. The question is not "am I ready?" The question is "can this be structured so failure is unlikely?"</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>David — Operator</p>
-                  <p style={{ color: '#3D3830' }}>If the only way that works is you carrying it all, you're not being brave. You're being reckless.</p>
+                  <p style={{ color: '#3D3830' }}>If the only way this works is you carrying it all, you're not being brave. You're being reckless.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
