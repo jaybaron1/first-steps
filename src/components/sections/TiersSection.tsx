@@ -29,7 +29,7 @@ const TiersSection = () => {
       tagline: "Your decision style.",
       description: "Your biases. Your defaults. The tradeoffs you make.",
       detail: "Most people stay here.",
-      includes: "Includes Levels 1 & 2",
+      includes: "",
       recommended: true,
     },
     {
@@ -38,7 +38,7 @@ const TiersSection = () => {
       tagline: "Who you're becoming.",
       description: "Five years from now. The patterns you're growing into.",
       detail: "Accountability to your future self.",
-      includes: "Includes Levels 1, 2 & 3",
+      includes: "",
     },
   ];
 
