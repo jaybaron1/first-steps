@@ -28,7 +28,7 @@ import DecisionProcess from './DecisionProcess';
         <div className="grid lg:grid-cols-5 gap-4 lg:gap-6">
           {/* Generic AI */}
           <div className="lg:col-span-2">
-            <div className="bg-white p-5 lg:p-6 relative">
+            <div className="h-full bg-white p-5 lg:p-6 relative flex flex-col">
               <div className="absolute top-0 left-0 w-8 h-px bg-warm-gray-light/30" />
 
               <div className="flex items-center gap-2 mb-4 pb-4 border-b border-ink/5">
