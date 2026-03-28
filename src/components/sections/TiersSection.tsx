@@ -131,15 +131,6 @@ const TiersSection = () => {
                   )}
                 </div>
 
-                {/* Connectors note */}
-                {tier.hasConnectors && (
-                  <div className="mt-4 pt-4 border-t border-ink/5" style={{ minHeight: "90px" }}>
-                    <p className="text-xs font-medium text-ink mb-2">Available within your private workspace:</p>
-                    <p className="text-[10px] text-warm-gray leading-relaxed">
-                      Microsoft Teams, Outlook, SharePoint, GitHub, Slack, Jira, Notion, HubSpot, Asana, Google Drive
-                    </p>
-                  </div>
-                )}
 
                 {/* Includes note - aligned with connectors */}
                 {tier.includes && (
