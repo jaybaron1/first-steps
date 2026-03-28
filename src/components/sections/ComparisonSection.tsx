@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 import DecisionProcess from './DecisionProcess';
 
-const COLLAPSE_DURATION = 700;
+const COLLAPSE_DURATION = 1400;
 
 const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
