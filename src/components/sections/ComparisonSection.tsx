@@ -139,48 +139,55 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
             {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
-          {showDeliverables && (
-            <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft">
-              <h3 className="font-display text-xl text-ink mb-6">
-                Sample Session Deliverables
-              </h3>
+          <div
+            className="grid transition-all duration-500 ease-in-out"
+            style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
+          >
+            <div className="overflow-hidden">
+              <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
+                style={{ opacity: showDeliverables ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
+              >
+                <h3 className="font-display text-xl text-ink mb-6">
+                  Sample Session Deliverables
+                </h3>
 
-              <div className="space-y-6">
-                <div className="pb-6 border-b border-ink/5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-gold text-sm font-display">01</span>
-                    <span className="label label-gold text-xs">Executive Summary</span>
+                <div className="space-y-6">
+                  <div className="pb-6 border-b border-ink/5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-gold text-sm font-display">01</span>
+                      <span className="label label-gold text-xs">Executive Summary</span>
+                    </div>
+                    <p className="text-sm text-ink-muted leading-relaxed">
+                      A clear recommendation with reasoning. In this case: accept the opportunity, but restructure the terms to protect delivery quality.
+                    </p>
                   </div>
-                  <p className="text-sm text-ink-muted leading-relaxed">
-                    A clear recommendation with reasoning. In this case: accept the opportunity, but restructure the terms to protect delivery quality.
-                  </p>
-                </div>
 
-                <div className="pb-6 border-b border-ink/5">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-gold text-sm font-display">02</span>
-                    <span className="label label-gold text-xs">Action Plan</span>
+                  <div className="pb-6 border-b border-ink/5">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-gold text-sm font-display">02</span>
+                      <span className="label label-gold text-xs">Action Plan</span>
+                    </div>
+                    <div className="text-sm text-ink-muted space-y-2">
+                      <p>• Design Phase One as 90-day pilot (7-10 days)</p>
+                      <p>• Define non-negotiable scope boundaries (with proposal)</p>
+                      <p>• Build expansion language for months 4-6 (in proposal)</p>
+                    </div>
                   </div>
-                  <div className="text-sm text-ink-muted space-y-2">
-                    <p>• Design Phase One as 90-day pilot (7-10 days)</p>
-                    <p>• Define non-negotiable scope boundaries (with proposal)</p>
-                    <p>• Build expansion language for months 4-6 (in proposal)</p>
-                  </div>
-                </div>
 
-                <div>
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-gold text-sm font-display">03</span>
-                    <span className="label label-gold text-xs">Key Insights</span>
+                  <div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-gold text-sm font-display">03</span>
+                      <span className="label label-gold text-xs">Key Insights</span>
+                    </div>
+                    <ul className="text-sm text-ink-muted space-y-2">
+                      <li>• The real risk was irreversible commitment without control</li>
+                      <li>• Enterprise clients value clarity over exaggerated confidence</li>
+                    </ul>
                   </div>
-                  <ul className="text-sm text-ink-muted space-y-2">
-                    <li>• The real risk was irreversible commitment without control</li>
-                    <li>• Enterprise clients value clarity over exaggerated confidence</li>
-                  </ul>
                 </div>
               </div>
             </div>
-          )}
+          </div>
 
           <div className="mt-6">
             <button
