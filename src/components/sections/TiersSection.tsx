@@ -38,7 +38,7 @@ const TiersSection = () => {
       tagline: "Who you're becoming.",
       description: "Five years from now. The patterns you're growing into.",
       detail: "Accountability to your future self.",
-      includes: "Includes Levels 1, 2 & 3",
+      includes: "",
     },
   ];
 
