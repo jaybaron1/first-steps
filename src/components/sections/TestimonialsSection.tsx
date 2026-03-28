@@ -49,8 +49,8 @@ const TestimonialsSection = () => {
                 "
               </div>
 
-              <blockquote className="font-display text-base italic leading-relaxed mb-6 relative z-10 transition-colors duration-300 group-hover:text-gold" style={{ color: '#FDFBF7' }}>
-                "{t.quote}"
+              <blockquote className="font-display text-base italic leading-relaxed mb-6 relative z-10 transition-colors duration-300 group-hover:text-gold whitespace-pre-line" style={{ color: '#FDFBF7' }}>
+                {t.quote}
               </blockquote>
 
               <div className="pt-3 border-t border-white/10">
