@@ -162,6 +162,7 @@ const boardroomDialogue: DialogueEntry[] = [
     lines: [
       'Do not sell six months. Sell a 90-day Phase One with an expansion option.',
       'This caps downside. Proves delivery. Makes continuation mutual.',
+      'If they won\'t accept that structure, that tells you something important about the risk profile of the client.',
     ],
   },
   {
