@@ -9,6 +9,8 @@ const ComparisonSection = () => {
   const [showDecision, setShowDecision] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
   const roundtableRef = useRef<HTMLDivElement>(null);
+  const deliverablesRef = useRef<HTMLDivElement>(null);
+  const decisionRef = useRef<HTMLDivElement>(null);
   const collapseRafRef = useRef<number | null>(null);
 
   useEffect(() => {
