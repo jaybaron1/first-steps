@@ -284,6 +284,63 @@ const DecisionProcess = () => {
         ))}
       </div>
 
+      {/* Executive Output */}
+      <div className="pt-6 border-t border-gold/20 space-y-6">
+        <h4 className="font-display text-lg text-ink">Executive Output</h4>
+
+        <div className="pb-5 border-b border-ink/5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">01</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Executive Decision Summary</span>
+          </div>
+          <p className="text-xs text-ink-muted leading-relaxed">{executiveOutput.summary}</p>
+        </div>
+
+        <div className="pb-5 border-b border-ink/5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">02</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Action Plan</span>
+          </div>
+          <div className="text-xs text-ink-muted space-y-1.5">
+            {executiveOutput.actions.map((a, i) => (
+              <p key={i}>• {a}</p>
+            ))}
+          </div>
+        </div>
+
+        <div className="pb-5 border-b border-ink/5">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">03</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Key Insights</span>
+          </div>
+          <div className="text-xs text-ink-muted space-y-1.5">
+            {executiveOutput.insights.map((ins, i) => (
+              <p key={i}>• {ins}</p>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-gold text-sm font-display">04</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-gold-dark">Risks</span>
+          </div>
+          <div className="text-xs text-ink-muted space-y-1.5">
+            {executiveOutput.risks.map((r, i) => (
+              <p key={i}>• {r}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Facilitator closing */}
+      <div className="pt-4 border-t border-ink/5">
+        <div className="pl-0">
+          <span className="inline-block text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 mb-1.5 bg-ink text-cream">Facilitator</span>
+          <p className="text-xs text-ink font-medium leading-relaxed">You are moving forward — but on your terms.</p>
+        </div>
+      </div>
+
       {/* Closing line */}
       <div className="pt-4 border-t border-ink/5 text-center">
         <p className="text-[10px] text-warm-gray uppercase tracking-wider">
