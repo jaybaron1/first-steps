@@ -10,7 +10,7 @@ const RevealSection = () => {
         {/* Centered layout */}
         <div className="max-w-4xl ml-12 lg:ml-24 text-left">
           {/* Introducing label */}
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center justify-start gap-4 mb-6">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-ink/20" />
             <span className="text-[10px] font-medium tracking-[0.4em] uppercase" style={{ color: "#1A1915" }}>
               Introducing
