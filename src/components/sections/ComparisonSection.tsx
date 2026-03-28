@@ -161,7 +161,7 @@ import DecisionProcess from './DecisionProcess';
 
         {/* Expanded content — centered below the grid */}
         <div
-          className="grid transition-all duration-500 ease-in-out mt-8"
+          className="grid transition-all duration-700 ease-in-out mt-8"
           style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
         >
           <div className="overflow-hidden">
