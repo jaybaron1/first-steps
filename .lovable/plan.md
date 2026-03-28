@@ -1,18 +1,12 @@
 
 
-## Changes
+Looking at the screenshot, the Bravado quote still has a large gap below the white comparison cards. The quote margin is currently `mt-8` but needs to be much tighter.
 
-Three targeted edits to `ComparisonSection.tsx`:
+## Plan
 
-1. **White box behind ChatGPT tagline** (lines 70-73): Wrap the tagline text in a white card (`bg-white p-5 lg:p-6`) and bold the first line (`font-semibold`).
+**File: `src/components/sections/ComparisonSection.tsx`**
 
-2. **Increase Bravado quote font size** (line 225): Change from `text-lg` to `text-2xl lg:text-3xl` to give it proper visual weight.
+1. Change the quote container margin from `mt-8` to `mt-2` to pull it much closer to the cards above.
 
-3. **Bump attribution text** (line 229): Change from `text-xs` to `text-sm`.
-
-### Technical Details
-
-- Lines 70-73: Replace the plain `div` with a white card container, add `font-semibold` to "You can prompt ChatGPT."
-- Line 225: `text-lg` → `text-2xl lg:text-3xl`
-- Line 229: `text-xs` → `text-sm`
+This is a one-line change on the `<div className="mt-8 max-w-xl mx-auto text-center">` wrapping the blockquote.
 
