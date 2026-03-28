@@ -11,9 +11,9 @@ const TiersSection = () => {
       tagline: "Start with clarity.",
       description: "Pose a question. It gets challenged from every angle that matters.",
       detail: "For when you need to think something through properly.",
+      subdetail: "Use this when you're stuck, unclear, or need to make a decision you can stand behind.",
       trial: "3-day free trial",
       cta: "Start Free Trial",
-      
     },
     {
       level: "02",
@@ -21,15 +21,15 @@ const TiersSection = () => {
       tagline: "Your company context.",
       description: "How your organization thinks. What you optimize for. What you never compromise on.",
       detail: "Perspectives that understand your reality.",
-      includes: "\n",
+      subdetail: "Use this when generic thinking isn't enough and your business context matters.",
     },
     {
       level: "03",
       name: "Present Persona",
       tagline: "Your decision style.",
       description: "Your biases. Your defaults. The tradeoffs you make.",
-      detail: "Most people stay here.",
-      includes: "",
+      detail: "This is where decisions start to feel like your own.",
+      subdetail: "For operators making high-stakes decisions regularly.",
       recommended: true,
     },
     {
@@ -38,7 +38,7 @@ const TiersSection = () => {
       tagline: "Who you're becoming.",
       description: "Five years from now. The patterns you're growing into.",
       detail: "Accountability to your future self.",
-      includes: "",
+      subdetail: "Use this when you're making decisions that shape where you're going.",
     },
   ];
 
