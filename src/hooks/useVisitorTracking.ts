@@ -34,7 +34,7 @@ export const useVisitorTracking = (options: UseVisitorTrackingOptions = {}) => {
 
   const location = useLocation();
   const isInitialized = useRef(false);
-  const scrollThrottleRef = useRef<NodeJS.Timeout | null>(null);
+  const scrollThrottleRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Check if current route should be tracked
   const shouldTrack = useCallback(() => {
