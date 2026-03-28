@@ -141,7 +141,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
           {showDeliverables && (
             <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft">
               <h3 className="font-display text-xl text-ink mb-6">
-                Session Deliverables
+                Sample Session Deliverables
               </h3>
 
               <div className="space-y-6">
