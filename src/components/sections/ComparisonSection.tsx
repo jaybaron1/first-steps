@@ -67,7 +67,7 @@ const ComparisonSection = () => {
   const collapseAll = () => {
     if (!showDeliverables && !showDecision) return;
 
-    const anchor = roundtableRef.current;
+    const anchor = quoteRef.current;
     const anchorStartY = anchor?.getBoundingClientRect().top ?? null;
 
     if (collapseRafRef.current) {
