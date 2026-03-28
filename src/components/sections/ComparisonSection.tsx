@@ -97,7 +97,7 @@ const ComparisonSection = () => {
                 </div>
               </div>
 
-              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed max-h-40 overflow-y-auto scrollbar-thin scrollbar-thumb-warm-gray-light/30 scrollbar-track-transparent" style={{ color: '#5C554A' }}>
+              <div className="bg-cream-deep/50 p-3 mb-4 text-xs leading-relaxed max-h-40 overflow-y-auto [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-warm-gray-light/30 [&::-webkit-scrollbar-track]:bg-transparent" style={{ color: '#5C554A' }}>
                 <p className="italic">
                   "First—pause and breathe. The fact that a Fortune 500 company reached out means you're already operating at the level that attracts enterprise attention. That's not nothing—it's validation of your expertise and reputation.
                 </p>
