@@ -34,8 +34,8 @@ const CTASection = () => {
           </div>
 
           <p className="text-sm leading-relaxed mb-8" style={{ color: "#C9C3B8" }}>
-            A 30-minute Clarity Call is where it starts.
-            <span style={{ color: "#FDFBF7" }}> No pitch. No pressure.</span>
+            Start with a Clarity Call. Bring one decision.
+            <span style={{ color: "#FDFBF7" }}> Leave with clarity.</span>
           </p>
 
           {/* CTA Button */}
