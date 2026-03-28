@@ -126,7 +126,7 @@ import DecisionProcess from './DecisionProcess';
                 ))}
               </div>
 
-              {/* Expandable sections inside the card */}
+              {/* Expand buttons inside the card */}
               <div className="mt-6 space-y-3">
                 <button
                   onClick={() => setShowDeliverables(!showDeliverables)}
@@ -138,79 +138,82 @@ import DecisionProcess from './DecisionProcess';
                   {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                 </button>
 
-                <div
-                  className="grid transition-all duration-500 ease-in-out"
-                  style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
-                >
-                  <div className="overflow-hidden">
-                    <div className="mt-4 bg-cream p-5 lg:p-6 text-left"
-                      style={{ opacity: showDeliverables ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
-                    >
-                      <h3 className="font-display text-lg text-ink mb-5">
-                        Sample Session Deliverables
-                      </h3>
-
-                      <div className="space-y-5">
-                        <div className="pb-5 border-b border-ink/5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-gold text-sm font-display">01</span>
-                            <span className="label label-gold text-xs">Executive Summary</span>
-                          </div>
-                          <p className="text-xs text-ink-muted leading-relaxed">
-                            A clear recommendation with reasoning. In this case: accept the opportunity, but restructure the terms to protect delivery quality.
-                          </p>
-                        </div>
-
-                        <div className="pb-5 border-b border-ink/5">
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-gold text-sm font-display">02</span>
-                            <span className="label label-gold text-xs">Action Plan</span>
-                          </div>
-                          <div className="text-xs text-ink-muted space-y-1.5">
-                            <p>• Design Phase One as 90-day pilot (7-10 days)</p>
-                            <p>• Define non-negotiable scope boundaries (with proposal)</p>
-                            <p>• Build expansion language for months 4-6 (in proposal)</p>
-                          </div>
-                        </div>
-
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <span className="text-gold text-sm font-display">03</span>
-                            <span className="label label-gold text-xs">Key Insights</span>
-                          </div>
-                          <ul className="text-xs text-ink-muted space-y-1.5">
-                            <li>• The real risk was irreversible commitment without control</li>
-                            <li>• Enterprise clients value clarity over exaggerated confidence</li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <button
-                  onClick={() => setShowDecision(!showDecision)}
-                  className="inline-flex items-center gap-2 text-warm-gray hover:text-gold-dark transition-colors text-sm"
-                >
-                  <span className="font-medium">
-                    {showDecision ? "Hide" : "See"} how it was decided
-                  </span>
-                  {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                </button>
-
-                <div
-                  className="grid transition-all duration-500 ease-in-out"
-                  style={{ gridTemplateRows: showDecision ? '1fr' : '0fr' }}
-                >
-                  <div className="overflow-hidden">
-                    <div className="mt-4 bg-cream p-5 lg:p-6 text-left"
-                      style={{ opacity: showDecision ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
-                    >
-                      <DecisionProcess />
-                    </div>
-                  </div>
+                <div>
+                  <button
+                    onClick={() => setShowDecision(!showDecision)}
+                    className="inline-flex items-center gap-2 text-warm-gray hover:text-gold-dark transition-colors text-sm"
+                  >
+                    <span className="font-medium">
+                      {showDecision ? "Hide" : "See"} how it was decided
+                    </span>
+                    {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Expanded content — centered below the grid */}
+        <div
+          className="grid transition-all duration-500 ease-in-out mt-8"
+          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
+        >
+          <div className="overflow-hidden">
+            <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
+              style={{ opacity: showDeliverables ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
+            >
+              <h3 className="font-display text-xl text-ink mb-6">
+                Sample Session Deliverables
+              </h3>
+
+              <div className="space-y-6">
+                <div className="pb-6 border-b border-ink/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-gold text-sm font-display">01</span>
+                    <span className="label label-gold text-xs">Executive Summary</span>
+                  </div>
+                  <p className="text-sm text-ink-muted leading-relaxed">
+                    A clear recommendation with reasoning. In this case: accept the opportunity, but restructure the terms to protect delivery quality.
+                  </p>
+                </div>
+
+                <div className="pb-6 border-b border-ink/5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-gold text-sm font-display">02</span>
+                    <span className="label label-gold text-xs">Action Plan</span>
+                  </div>
+                  <div className="text-sm text-ink-muted space-y-2">
+                    <p>• Design Phase One as 90-day pilot (7-10 days)</p>
+                    <p>• Define non-negotiable scope boundaries (with proposal)</p>
+                    <p>• Build expansion language for months 4-6 (in proposal)</p>
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-gold text-sm font-display">03</span>
+                    <span className="label label-gold text-xs">Key Insights</span>
+                  </div>
+                  <ul className="text-sm text-ink-muted space-y-2">
+                    <li>• The real risk was irreversible commitment without control</li>
+                    <li>• Enterprise clients value clarity over exaggerated confidence</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          className="grid transition-all duration-500 ease-in-out mt-6"
+          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr' }}
+        >
+          <div className="overflow-hidden">
+            <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
+              style={{ opacity: showDecision ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
+            >
+              <DecisionProcess />
             </div>
           </div>
         </div>
