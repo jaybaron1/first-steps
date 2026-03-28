@@ -170,8 +170,7 @@ const TiersSection = () => {
         {/* Footnote */}
         <div className="mt-10 text-center space-y-2">
           <p className="text-xs text-warm-gray">
-            Work connectors are enabled once you upgrade to a paid plan. All paid tiers require a ChatGPT Teams plan
-            with one seat reserved for data security.
+            Runs privately inside your ChatGPT workspace. Setup handled for you.
           </p>
           <p className="text-xs text-warm-gray">Pricing based on scope. Every engagement starts with a Clarity Call.</p>
         </div>
