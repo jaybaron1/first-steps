@@ -138,7 +138,7 @@ const FreeTrialModal: React.FC<FreeTrialModalProps> = ({ open, onOpenChange }) =
                 Start Your Free Trial
               </DialogTitle>
               <DialogDescription className="text-sm" style={{ color: "#5C554A" }}>
-                10 days free. 60+ expert personas. No credit card required.
+                3 days free. 60+ expert personas. No credit card required.
               </DialogDescription>
             </DialogHeader>
 
