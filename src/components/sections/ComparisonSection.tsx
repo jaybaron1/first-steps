@@ -5,6 +5,7 @@ import DecisionProcess from './DecisionProcess';
  const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
+  const roundtableRef = useRef<HTMLDivElement>(null);
  
    return (
      <section data-section="comparison" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
