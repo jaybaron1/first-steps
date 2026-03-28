@@ -8,9 +8,9 @@ const RevealSection = () => {
 
       <div className="container relative z-10 py-20 lg:py-28">
         {/* Centered layout */}
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl ml-12 lg:ml-24 text-left">
           {/* Introducing label */}
-          <div className="flex items-center justify-center gap-4 mb-6">
+          <div className="flex items-center justify-start gap-4 mb-6">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-ink/20" />
             <span className="text-[10px] font-medium tracking-[0.4em] uppercase" style={{ color: "#1A1915" }}>
               Introducing
@@ -43,14 +43,14 @@ const RevealSection = () => {
           </h2>
 
           {/* Thin ink line as anchor */}
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-start mb-10">
             <div className="w-32 h-px bg-ink/20" />
           </div>
 
           {/* Two-column layout: Text left, Graphic right */}
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
             {/* Left: Text content */}
-            <div className="text-center lg:text-left relative">
+            <div className="text-left relative">
               {/* Large 60+ in background */}
               <div
                 className="absolute -left-4 lg:-left-12 -top-8 font-display pointer-events-none select-none"
@@ -195,16 +195,16 @@ const RevealSection = () => {
               </svg>
 
               {/* Caption */}
-              <p className="text-center text-xs mt-4 italic" style={{ color: "#5C554A" }}>
+              <p className="text-left text-xs mt-4 italic" style={{ color: "#5C554A" }}>
                 You stay at the center. The thinking doesn't.
               </p>
             </div>
           </div>
 
           {/* How the room works */}
-          <div className="max-w-3xl mx-auto mb-12 text-center">
+          <div className="max-w-3xl mb-12">
             <p
-              className="font-display mb-8"
+              className="font-display mb-8 text-left"
               style={{
                 fontSize: "1.25rem",
                 color: "#1A1915",
@@ -220,14 +220,14 @@ const RevealSection = () => {
                 "Assumptions surface early",
                 "Tradeoffs become clear",
               ].map((item, i) => (
-                <div key={i} className="text-center">
-                  <div className="w-2 h-2 rounded-full mx-auto mb-3" style={{ background: "#B8956C" }} />
+                <div key={i} className="text-left">
+                  <div className="w-2 h-2 rounded-full mb-3" style={{ background: "#B8956C" }} />
                   <p style={{ fontSize: "0.9375rem", color: "#3D3830", lineHeight: 1.6 }}>{item}</p>
                 </div>
               ))}
             </div>
 
-            <div className="w-12 h-px bg-gold/20 mx-auto mb-6" />
+            <div className="w-12 h-px bg-gold/20 mb-6" />
 
             <div className="space-y-2" style={{ fontSize: "1rem", color: "#5C554A" }}>
               <p>The goal is not consensus.</p>
@@ -240,7 +240,7 @@ const RevealSection = () => {
           {/* The process */}
           <div className="pt-10 border-t border-ink/10">
             <p
-              className="font-display text-center mb-8"
+              className="font-display text-left mb-8"
               style={{
                 fontSize: "1.125rem",
                 color: "#1A1915",
@@ -257,7 +257,7 @@ const RevealSection = () => {
                 { num: "03", label: "The challenge is examined" },
                 { num: "04", label: "You move forward deliberately" },
               ].map((step) => (
-                <div key={step.num} className="text-center lg:text-left">
+                <div key={step.num} className="text-left">
                   <span className="font-display text-gold text-sm">{step.num}</span>
                   <p className="text-xs mt-1 text-ink-muted">{step.label}</p>
                 </div>
