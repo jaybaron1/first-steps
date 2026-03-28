@@ -190,7 +190,33 @@ const boardroomDialogue: DialogueEntry[] = [
       'You are not committing to six months. You are committing to earning the right to continue.',
     ],
   },
+  {
+    speaker: 'John',
+    isUser: true,
+    lines: ['Yes. This feels aligned.'],
+  },
 ];
+
+const executiveOutput = {
+  summary: 'You will say yes to the opportunity, but not to an uncontrolled six-month commitment. You will counter with a phased engagement that protects delivery quality, preserves your reputation, and allows you to scale with integrity.',
+  actions: [
+    'Design Phase One as a 90-day pilot (7–10 days)',
+    'Define non-negotiable scope boundaries',
+    'Build expansion language for months 4–6',
+    'Identify where leverage or support may be added',
+  ],
+  insights: [
+    'The real risk was irreversible commitment without control',
+    'Enterprise clients value clarity over exaggerated confidence',
+    'A phased structure increases credibility',
+    'Founder sustainability is a delivery requirement',
+  ],
+  risks: [
+    'Client resists phased structure',
+    'Founder remains bottleneck',
+    'Undervaluing Phase One',
+  ],
+};
 
 const SpeakerBubble = ({ entry }: { entry: DialogueEntry }) => {
   const getBadgeStyle = () => {
