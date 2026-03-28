@@ -26,12 +26,12 @@ const ProblemSection = () => {
 
         {/* Three-column cards with flow */}
         <div className="flex flex-col lg:flex-row gap-8 items-center max-w-5xl">
-          {/* Card 1 - Shortest */}
+          {/* Card 1 */}
           <div className="bg-white p-6 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 flex-1 w-full">
             <div className="absolute top-0 left-0 w-10 h-px bg-gold/30 transition-all duration-500 group-hover:w-16 group-hover:bg-gold/60" />
-            <p className="font-display text-lg text-ink leading-snug mb-3">It's late.</p>
+            <p className="font-display text-lg text-ink leading-snug mb-3">You think alone.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
-              Fire them. Pivot. Take the money.
+              The decision sits with you. No one else carries the weight.
             </p>
           </div>
 
@@ -48,12 +48,12 @@ const ProblemSection = () => {
             </svg>
           </div>
 
-          {/* Card 2 - Medium height */}
+          {/* Card 2 */}
           <div className="bg-white p-7 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 flex-1 w-full">
             <div className="absolute top-0 left-0 w-10 h-px bg-gold/30 transition-all duration-500 group-hover:w-16 group-hover:bg-gold/60" />
-            <p className="font-display text-lg text-ink leading-snug mb-3">You can ask for input.</p>
+            <p className="font-display text-lg text-ink leading-snug mb-3">Input is fragmented.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
-              Most of it comes without full context, real experience, or accountability.
+              Scattered opinions. No full context. No accountability.
             </p>
           </div>
 
@@ -70,14 +70,14 @@ const ProblemSection = () => {
             </svg>
           </div>
 
-          {/* Card 3 - Tallest & Emphasized */}
+          {/* Card 3 */}
           <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">
-              So the decision moves forward under-tested.
+              The decision moves forward under-tested.
             </p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
-              That's how reasonable decisions turn into avoidable problems.
+              And reasonable choices become avoidable problems.
             </p>
           </div>
         </div>

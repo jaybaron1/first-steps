@@ -8,9 +8,9 @@ const TiersSection = () => {
     {
       level: "01",
       name: "The Roundtable",
-      tagline: "60+ experts. Any decision.",
-      description: "Pose a question. They debate it. You get the verdict.",
-      detail: "Start here.",
+      tagline: "Start with clarity.",
+      description: "Pose a question. It gets challenged from every angle that matters.",
+      detail: "For when you need to think something through properly.",
       trial: "10-day free trial",
       cta: "Start Free Trial",
       hasConnectors: true,
@@ -20,7 +20,7 @@ const TiersSection = () => {
       name: "Operating Frame",
       tagline: "Your company context.",
       description: "How your organization thinks. What you optimize for. What you never compromise on.",
-      detail: "Experts who understand your reality.",
+      detail: "Perspectives that understand your reality.",
       includes: "Includes Level 1",
     },
     {
@@ -39,25 +39,6 @@ const TiersSection = () => {
       description: "Five years from now. The patterns you're growing into.",
       detail: "Accountability to your future self.",
       includes: "Includes Levels 1, 2 & 3",
-    },
-  ];
-
-  const connectors = [
-    {
-      name: "Microsoft Teams",
-      description: "Search, summarize, and reference 1:1 chats, group chats, and channel conversations",
-    },
-    {
-      name: "Outlook & Calendar",
-      description: "Search email threads, draft follow-up emails, check availability",
-    },
-    {
-      name: "SharePoint/OneDrive",
-      description: "Index files to query documents, spreadsheets, and presentations",
-    },
-    {
-      name: "Other Tools",
-      description: "GitHub, Slack, Jira, Notion, HubSpot, Asana, Google Drive",
     },
   ];
 
@@ -153,7 +134,7 @@ const TiersSection = () => {
                 {/* Connectors note */}
                 {tier.hasConnectors && (
                   <div className="mt-4 pt-4 border-t border-ink/5" style={{ minHeight: "90px" }}>
-                    <p className="text-xs font-medium text-ink mb-2">Includes work connectors when paid:</p>
+                    <p className="text-xs font-medium text-ink mb-2">Available within your private workspace:</p>
                     <p className="text-[10px] text-warm-gray leading-relaxed">
                       Microsoft Teams, Outlook, SharePoint, GitHub, Slack, Jira, Notion, HubSpot, Asana, Google Drive
                     </p>
