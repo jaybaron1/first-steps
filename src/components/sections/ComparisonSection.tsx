@@ -231,31 +231,31 @@ const ComparisonSection = () => {
                 ))}
               </div>
 
-              {/* Expand buttons inside the card */}
+              {/* Expand buttons inside the card — only open, Collapse button handles closing */}
               <div className="mt-6 space-y-3 text-center">
-                <div>
-                  <button
-                    onClick={() => anchoredCollapse(setShowDeliverables, showDeliverables)}
-                    className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
-                  >
-                    <span>
-                      {showDeliverables ? 'Hide' : 'See a'} sample output
-                    </span>
-                    {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </button>
-                </div>
+                {!showDeliverables && (
+                  <div>
+                    <button
+                      onClick={() => setShowDeliverables(true)}
+                      className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
+                    >
+                      <span>See a sample output</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
 
-                <div>
-                  <button
-                    onClick={() => anchoredCollapse(setShowDecision, showDecision)}
-                    className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
-                  >
-                    <span>
-                      {showDecision ? 'Hide' : 'See'} how it was decided
-                    </span>
-                    {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                  </button>
-                </div>
+                {!showDecision && (
+                  <div>
+                    <button
+                      onClick={() => setShowDecision(true)}
+                      className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
+                    >
+                      <span>See how it was decided</span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
