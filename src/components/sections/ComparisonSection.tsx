@@ -221,12 +221,12 @@ import DecisionProcess from './DecisionProcess';
         </div>
 
         {/* Pull quote */}
-        <div className="mt-14 max-w-2xl mx-auto text-center">
-          <blockquote className="text-xl lg:text-2xl text-ink italic leading-relaxed">
+        <div className="mt-12 max-w-xl mx-auto text-center">
+          <blockquote className="font-display text-lg text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
           </blockquote>
-          <p className="mt-4 text-sm text-warm-gray">
+          <p className="mt-4 text-xs text-warm-gray">
             From an actual Roundtable session
           </p>
         </div>
