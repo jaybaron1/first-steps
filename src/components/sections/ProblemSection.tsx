@@ -25,7 +25,7 @@ const ProblemSection = () => {
         </div>
 
         {/* Three-column cards with flow */}
-        <div className="flex flex-col lg:flex-row gap-8 items-center max-w-5xl">
+        <div className="flex flex-col lg:flex-row gap-8 items-stretch max-w-5xl">
           {/* Card 1 */}
           <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 flex-1 w-full">
             <div className="absolute top-0 left-0 w-10 h-px bg-gold/30 transition-all duration-500 group-hover:w-16 group-hover:bg-gold/60" />
