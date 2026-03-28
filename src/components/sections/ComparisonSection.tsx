@@ -226,7 +226,7 @@ import DecisionProcess from './DecisionProcess';
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
           </blockquote>
-          <p className="mt-4 text-xs text-warm-gray">
+          <p className="mt-4 text-sm text-warm-gray">
             From an actual Roundtable session
           </p>
         </div>
