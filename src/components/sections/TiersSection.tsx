@@ -172,7 +172,7 @@ const TiersSection = () => {
           <p className="text-xs text-warm-gray">
             Runs privately inside your ChatGPT workspace. Setup handled for you.
           </p>
-          <p className="text-xs text-warm-gray">Pricing based on scope. Every engagement starts with a Clarity Call.</p>
+          
         </div>
       </div>
 
