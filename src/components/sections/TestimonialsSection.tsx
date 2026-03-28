@@ -4,17 +4,17 @@ const TestimonialsSection = () => {
   const testimonials = [
     {
       quote:
-        "I walk into meetings more prepared and steadier. I can see the next step instead of trying to hold the entire mountain in my head.",
+        "I\" walk into meetings more prepared and steadier. I can see the next step instead of trying to hold the entire thing in my head.\"",
       name: "Danielle Blanchard",
       title: "Founder, Diabetes Motivational Coaching",
     },
     {
-      quote: "It surfaces the same questions I would ask sitting in the room. It identifies gaps the same way I do.",
+      quote: "“It surfaces the same questions I would ask if I had time to fully think it through.”\n\n",
       name: "Private Equity Partner",
       title: "",
     },
     {
-      quote: "The clarity, speed, and insight it delivers has saved me hours and raised the quality of my work.",
+      quote: "“The clarity and structure changed how I approach decisions entirely.”\n\n",
       name: "Rocky Younger",
       title: "Fortune 100 Account Executive",
     },
