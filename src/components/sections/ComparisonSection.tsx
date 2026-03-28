@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 import DecisionProcess from './DecisionProcess';
 
@@ -7,56 +7,12 @@ const COLLAPSE_DURATION = 1400;
 const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
-  const [isCollapsing, setIsCollapsing] = useState(false);
   const roundtableRef = useRef<HTMLDivElement>(null);
-  const collapseRafRef = useRef<number | null>(null);
 
-  const collapseWithFollow = useCallback(() => {
-    if (isCollapsing) return;
-
-    // Cancel any existing animation
-    if (collapseRafRef.current) {
-      cancelAnimationFrame(collapseRafRef.current);
-    }
-
-    // Measure target position before collapse
-    const roundtableRect = roundtableRef.current?.getBoundingClientRect();
-    if (!roundtableRect) return;
-
-    const targetScrollY = window.scrollY + roundtableRect.top - (window.innerHeight / 2) + (roundtableRect.height / 2);
-    const startScrollY = window.scrollY;
-    const startTime = performance.now();
-
-    setIsCollapsing(true);
+  const collapseAll = () => {
     setShowDeliverables(false);
     setShowDecision(false);
-
-    const animate = (now: number) => {
-      const elapsed = now - startTime;
-      const progress = Math.min(elapsed / COLLAPSE_DURATION, 1);
-      // Ease-in-out cubic
-      const eased = progress < 0.5
-        ? 4 * progress * progress * progress
-        : 1 - Math.pow(-2 * progress + 2, 3) / 2;
-
-      // Recalculate target each frame as layout shifts
-      const currentRect = roundtableRef.current?.getBoundingClientRect();
-      if (currentRect) {
-        const currentTarget = window.scrollY + currentRect.top - (window.innerHeight / 2) + (currentRect.height / 2);
-        const scrollTo = startScrollY + (currentTarget - startScrollY) * eased;
-        window.scrollTo({ top: scrollTo, behavior: 'instant' as ScrollBehavior });
-      }
-
-      if (progress < 1) {
-        collapseRafRef.current = requestAnimationFrame(animate);
-      } else {
-        setIsCollapsing(false);
-        collapseRafRef.current = null;
-      }
-    };
-
-    collapseRafRef.current = requestAnimationFrame(animate);
-  }, [isCollapsing]);
+  };
  
    return (
      <section data-section="comparison" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
@@ -213,9 +169,9 @@ const ComparisonSection = () => {
         {/* Expanded content — centered below the grid */}
         <div
           className="grid transition-all ease-in-out mt-8"
-          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
+          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
         >
-          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
+          <div className="overflow-hidden">
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDeliverables ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
@@ -263,9 +219,9 @@ const ComparisonSection = () => {
 
         <div
           className="grid transition-all ease-in-out mt-6"
-          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
+          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
         >
-          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
+          <div className="overflow-hidden">
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDecision ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
@@ -278,7 +234,7 @@ const ComparisonSection = () => {
         {(showDeliverables || showDecision) && (
           <div className="flex justify-end mt-4">
             <button
-              onClick={collapseWithFollow}
+              onClick={collapseAll}
               className="group inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider text-warm-gray hover:text-gold-dark transition-all duration-300"
             >
               <span className="font-medium">Collapse</span>
