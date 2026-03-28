@@ -211,8 +211,8 @@ const executiveOutput = {
   ],
   stakeholders: [
     { who: 'Fortune 500 sponsor / HR / L&D leader', strategy: 'Position phased structure as intentional transformation design' },
-    { who: 'Senior executive team (participants)', strategy: '    Emphasize behavior change, not inspiration' },
-    { who: 'John Lim (internal)', strategy: '        Protect energy, standards, and long-term brand equity' },
+    { who: 'Senior executive team (participants)', strategy: '    Emphasize behavior change, not inspiration' },
+    { who: 'John Lim (internal)', strategy: '        Protect energy, standards, and long-term brand equity' },
   ],
   insights: [
     'The real risk was not scale, but irreversible commitment without control',
