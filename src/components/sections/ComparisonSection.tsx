@@ -216,9 +216,9 @@ const ComparisonSection = () => {
         {/* Expanded content — centered below the grid */}
         <div
           className="grid transition-all ease-in-out mt-8"
-          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
+          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
         >
-          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
+          <div className="overflow-hidden">
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDeliverables ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
@@ -266,9 +266,9 @@ const ComparisonSection = () => {
 
         <div
           className="grid transition-all ease-in-out mt-6"
-          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
+          style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms` }}
         >
-          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
+          <div className="overflow-hidden">
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDecision ? 1 : 0, transition: `opacity ${COLLAPSE_DURATION * 0.6}ms ease-in-out` }}
             >
