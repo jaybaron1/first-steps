@@ -136,6 +136,7 @@ const boardroomDialogue: DialogueEntry[] = [
       'They do not expect perfection. They expect professionalism and honesty.',
       'What destroys trust is not inexperience. It\'s overpromising confidence you don\'t yet have.',
       'If you position this as "we\'re building something together," you reduce the reputational risk dramatically.',
+      'If they reached out to you, they already believe you can deliver something meaningful. The danger is pretending you\'re a large firm when you\'re still founder-led. The smartest partners name that reality upfront.',
     ],
   },
   {
