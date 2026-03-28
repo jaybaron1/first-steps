@@ -222,8 +222,26 @@ import DecisionProcess from './DecisionProcess';
           </div>
         </div>
 
+        {/* Collapse button — appears when either panel is expanded */}
+        {(showDeliverables || showDecision) && (
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={() => { setShowDeliverables(false); setShowDecision(false); }}
+              className="group inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider text-warm-gray hover:text-gold-dark transition-all duration-300"
+            >
+              <span className="font-medium">Collapse</span>
+              <div className="w-6 h-6 rounded-full border border-gold/30 group-hover:border-gold group-hover:bg-gold/5 flex items-center justify-center transition-all duration-300">
+                <ChevronUp className="w-3 h-3" />
+              </div>
+            </button>
+          </div>
+        )}
+
+        {/* Cream spacer between cards area and quote */}
+        <div className="h-8" />
+
         {/* Pull quote */}
-        <div className="mt-2 max-w-xl mx-auto text-center">
+        <div className="max-w-xl mx-auto text-center">
           <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
