@@ -71,7 +71,7 @@ const ProblemSection = () => {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
+          <div className="bg-white px-8 py-6 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 border-2 border-gold/20 flex-1 w-full">
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">
               The decision moves forward under-tested.
