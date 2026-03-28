@@ -195,7 +195,7 @@ const RevealSection = () => {
               </svg>
 
               {/* Caption */}
-              <p className="text-center text-xs mt-4 italic" style={{ color: "#5C554A" }}>
+              <p className="text-left text-xs mt-4 italic" style={{ color: "#5C554A" }}>
                 You stay at the center. The thinking doesn't.
               </p>
             </div>
