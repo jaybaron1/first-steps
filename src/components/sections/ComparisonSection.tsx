@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
  const ComparisonSection = () => {
-   const [showDeliverables, setShowDeliverables] = useState(false);
+  const [showDeliverables, setShowDeliverables] = useState(false);
+  const [showDecision, setShowDecision] = useState(false);
  
    return (
      <section data-section="comparison" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
