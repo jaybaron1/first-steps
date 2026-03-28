@@ -29,7 +29,7 @@ const TiersSection = () => {
       tagline: "Your decision style.",
       description: "Your biases. Your defaults. The tradeoffs you make.",
       detail: "Most people stay here.",
-      includes: "Includes Levels 1 & 2",
+      includes: "",
       recommended: true,
     },
     {
