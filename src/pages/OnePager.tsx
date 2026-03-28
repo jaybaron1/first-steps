@@ -485,9 +485,6 @@ const OnePager = () => {
                   <p className="text-[15px] font-medium mb-6" style={{ color: "#1A1915" }}>
                     This is where most people land.
                   </p>
-                  <p className="text-xs italic mt-auto" style={{ color: "#7A7368" }}>
-                    Includes Levels 1 & 2
-                  </p>
                 </div>
 
                 {/* Level 4 */}
