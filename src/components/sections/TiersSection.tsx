@@ -157,7 +157,7 @@ const TiersSection = () => {
                       href="https://calendly.com/jason-galavanteer/discovery_call"
                       className="flex items-center justify-center gap-2 w-full py-2.5 text-xs font-medium tracking-wide uppercase transition-all group bg-ink text-cream hover:bg-gold"
                     >
-                      Book Call
+                      See If This Fits
                       <ArrowRight className="w-3 h-3 transition-transform group-hover:translate-x-0.5" />
                     </a>
                   )}
