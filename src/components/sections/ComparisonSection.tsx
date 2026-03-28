@@ -8,9 +8,6 @@ const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
-  const roundtableRef = useRef<HTMLDivElement>(null);
-  const deliverablesRef = useRef<HTMLDivElement>(null);
-  const decisionRef = useRef<HTMLDivElement>(null);
   const collapseRafRef = useRef<number | null>(null);
 
   useEffect(() => {
@@ -24,8 +21,7 @@ const ComparisonSection = () => {
   const collapseAll = () => {
     if (!showDeliverables && !showDecision) return;
 
-    const anchor = quoteRef.current;
-    const anchorStartY = anchor?.getBoundingClientRect().top ?? null;
+    const anchorStartY = quoteRef.current?.getBoundingClientRect().top ?? null;
 
     if (collapseRafRef.current) {
       cancelAnimationFrame(collapseRafRef.current);
@@ -35,11 +31,12 @@ const ComparisonSection = () => {
     setShowDeliverables(false);
     setShowDecision(false);
 
-    if (anchorStartY === null || !anchor) return;
+    if (anchorStartY === null) return;
 
     const startedAt = performance.now();
 
     const keepAnchorFixed = (now: number) => {
+      const anchor = quoteRef.current;
       if (!anchor) {
         collapseRafRef.current = null;
         return;
@@ -137,7 +134,7 @@ const ComparisonSection = () => {
 
           {/* The Roundtable */}
           <div className="lg:col-span-3">
-            <div ref={roundtableRef} className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
+            <div className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
               <div className="absolute top-0 left-0 w-12 h-px bg-gradient-to-r from-gold to-transparent" />
               <div className="absolute top-0 left-0 w-px h-12 bg-gradient-to-b from-gold to-transparent" />
 
@@ -188,42 +185,28 @@ const ComparisonSection = () => {
                 ))}
               </div>
 
-              {/* See/Hide buttons — always visible */}
+              {/* Expand buttons inside the card */}
               <div className="mt-6 space-y-3 text-center">
                 <div>
                   <button
-                    onClick={() => {
-                      if (!showDeliverables) {
-                        setShowDeliverables(true);
-                        setTimeout(() => {
-                          deliverablesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                      } else {
-                        setShowDeliverables(false);
-                      }
-                    }}
+                    onClick={() => setShowDeliverables(!showDeliverables)}
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
-                    <span>{showDeliverables ? 'Hide' : 'See a'} sample output</span>
+                    <span>
+                      {showDeliverables ? 'Hide' : 'See a'} sample output
+                    </span>
                     {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
 
                 <div>
                   <button
-                    onClick={() => {
-                      if (!showDecision) {
-                        setShowDecision(true);
-                        setTimeout(() => {
-                          decisionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                      } else {
-                        setShowDecision(false);
-                      }
-                    }}
+                    onClick={() => setShowDecision(!showDecision)}
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
-                    <span>{showDecision ? 'Hide' : 'See'} how it was decided</span>
+                    <span>
+                      {showDecision ? 'Hide' : 'See'} how it was decided
+                    </span>
                     {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                   </button>
                 </div>
@@ -234,7 +217,6 @@ const ComparisonSection = () => {
 
         {/* Expanded content — centered below the grid */}
         <div
-          ref={deliverablesRef}
           className="grid transition-all ease-in-out mt-8"
           style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
@@ -285,7 +267,6 @@ const ComparisonSection = () => {
         </div>
 
         <div
-          ref={decisionRef}
           className="grid transition-all ease-in-out mt-6"
           style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
