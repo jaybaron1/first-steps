@@ -52,9 +52,9 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
               <div className="space-y-2">
                 {[
-                  "One answer",
-                  "No challenge",
-                  "You still do the thinking",
+                  "One voice",
+                  "Long, unstructured output",
+                  "Requires you to figure out what matters",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-warm-gray">
                     <X className="w-3 h-3 text-warm-gray-light flex-shrink-0" aria-hidden="true" />
