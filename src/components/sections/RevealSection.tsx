@@ -43,7 +43,7 @@ const RevealSection = () => {
           </h2>
 
           {/* Thin ink line as anchor */}
-          <div className="flex justify-center mb-10">
+          <div className="flex justify-start mb-10">
             <div className="w-32 h-px bg-ink/20" />
           </div>
 
