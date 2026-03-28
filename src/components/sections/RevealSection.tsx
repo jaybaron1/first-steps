@@ -50,7 +50,7 @@ const RevealSection = () => {
           {/* Two-column layout: Text left, Graphic right */}
           <div className="grid lg:grid-cols-2 gap-12 items-center mb-12">
             {/* Left: Text content */}
-            <div className="text-center lg:text-left relative">
+            <div className="text-left relative">
               {/* Large 60+ in background */}
               <div
                 className="absolute -left-4 lg:-left-12 -top-8 font-display pointer-events-none select-none"
