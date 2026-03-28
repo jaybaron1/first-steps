@@ -326,6 +326,7 @@ const ComparisonSection = () => {
         </div>
 
         <div
+          ref={decisionRef}
           className="grid transition-all ease-in-out mt-6"
           style={{ gridTemplateRows: showDecision ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
