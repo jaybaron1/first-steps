@@ -63,7 +63,7 @@ const HeroSection = () => {
                 lineHeight: 1.2,
               }}
             >
-              You make decisions that carry <span style={{ color: "#B8956C", fontStyle: "italic" }}>consequences.</span>
+              Stop thinking through important decisions <span style={{ color: "#B8956C", fontStyle: "italic" }}>alone.</span>
             </h1>
           </div>
 
