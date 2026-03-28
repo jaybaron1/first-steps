@@ -257,7 +257,7 @@ const RevealSection = () => {
                 { num: "03", label: "The challenge is examined" },
                 { num: "04", label: "You move forward deliberately" },
               ].map((step) => (
-                <div key={step.num} className="text-center lg:text-left">
+                <div key={step.num} className="text-left">
                   <span className="font-display text-gold text-sm">{step.num}</span>
                   <p className="text-xs mt-1 text-ink-muted">{step.label}</p>
                 </div>
