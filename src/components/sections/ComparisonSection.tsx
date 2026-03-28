@@ -66,7 +66,8 @@ import DecisionProcess from './DecisionProcess';
                 ))}
               </div>
 
-              <div className="mt-6 pt-4 border-t border-ink/5 text-center">
+              <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
                 <p className="text-sm font-semibold text-ink">You can prompt ChatGPT.</p>
                 <p className="text-sm text-warm-gray mt-1">It won't challenge your thinking like this.</p>
               </div>
