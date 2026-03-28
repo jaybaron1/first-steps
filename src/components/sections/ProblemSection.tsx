@@ -49,7 +49,7 @@ const ProblemSection = () => {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white p-7 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 flex-1 w-full">
+          <div className="bg-white p-8 relative group transition-all duration-500 hover:shadow-lg hover:-translate-y-1 flex-1 w-full">
             <div className="absolute top-0 left-0 w-10 h-px bg-gold/30 transition-all duration-500 group-hover:w-16 group-hover:bg-gold/60" />
             <p className="font-display text-lg text-ink leading-snug mb-3">Input is fragmented.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
