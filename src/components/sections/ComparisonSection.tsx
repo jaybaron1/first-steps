@@ -91,23 +91,23 @@ import DecisionProcess from './DecisionProcess';
               <div className="bg-cream p-4 mb-4 text-xs space-y-3 max-h-56 overflow-y-auto border-l-2 border-gold/40">
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
-                  <p style={{ color: '#3D3830' }}>Our objective: Evaluate whether to accept a six-month executive engagement with a Fortune 500. Key tension: growth opportunity vs. capacity risk.</p>
+                  <p style={{ color: '#3D3830' }}>Our objective: Decide whether The Winning Moments should accept a six-month executive leadership engagement with a Fortune 500 company, given the opportunity size, delivery risk, and readiness implications.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Monica — Finance</p>
-                  <p style={{ color: '#3D3830' }}>The math doesn't lie. Six months at this scope puts delivery quality at risk. Staying small isn't caused by saying no. It's caused by saying yes without control.</p>
+                  <p style={{ color: '#3D3830' }}>Staying small is not caused by saying no. Staying small is caused by saying yes to the wrong structure. The question is not "am I ready?" The question is "can this be structured so failure is unlikely?"</p>
                 </div>
                 <div>
-                  <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>David — Operations</p>
-                  <p style={{ color: '#3D3830' }}>I disagree with a flat no. You say yes <em>only if</em> you redesign the offer around sustainability. Counter with a 90-day pilot.</p>
+                  <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>David — Operator</p>
+                  <p style={{ color: '#3D3830' }}>Saying yes does not mean saying yes to everything. It means saying yes to a version you can stand behind. If the only way this works is you carrying it all, you're not being brave. You're being reckless.</p>
                 </div>
                 <div>
-                  <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Elena — Strategy</p>
-                  <p style={{ color: '#3D3830' }}>The real risk isn't the work. It's irreversible commitment. If you phase it, you maintain optionality. Enterprise clients respect clarity over bravado.</p>
+                  <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Sarah — Enterprise</p>
+                  <p style={{ color: '#3D3830' }}>They do not expect perfection. They expect professionalism and honesty. If they reached out to you, they already believe you can deliver something meaningful.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
-                  <p style={{ color: '#3D3830' }}>Emerging consensus: Accept with restructured terms. Phase 1 as 90-day pilot with defined scope boundaries. Building deliverables now...</p>
+                  <p style={{ color: '#3D3830' }}>You say yes to the opportunity, but no to an uncontrolled six-month commitment. You counter with: a phased engagement, clear scope boundaries, and explicit checkpoints.</p>
                 </div>
               </div>
 
