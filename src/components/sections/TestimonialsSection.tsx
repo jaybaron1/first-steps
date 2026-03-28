@@ -16,7 +16,7 @@ const TestimonialsSection = () => {
     {
       quote: "The clarity, speed, and insight it delivers has saved me hours and raised the quality of my work.",
       name: "Rocky Younger",
-      title: "Account Executive",
+      title: "Fortune 100 Account Executive",
     },
   ];
 
