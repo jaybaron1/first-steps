@@ -221,7 +221,7 @@ const RevealSection = () => {
                 "Tradeoffs become clear",
               ].map((item, i) => (
                 <div key={i} className="text-left">
-                  <div className="w-2 h-2 rounded-full mx-auto mb-3" style={{ background: "#B8956C" }} />
+                  <div className="w-2 h-2 rounded-full mb-3" style={{ background: "#B8956C" }} />
                   <p style={{ fontSize: "0.9375rem", color: "#3D3830", lineHeight: 1.6 }}>{item}</p>
                 </div>
               ))}
