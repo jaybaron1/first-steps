@@ -5,66 +5,16 @@ import DecisionProcess from './DecisionProcess';
 const COLLAPSE_DURATION = 1400;
 
 const ComparisonSection = () => {
-  const [showDeliverables, setShowDeliverablesState] = useState(false);
-  const [showDecision, setShowDecisionState] = useState(false);
+  const [showDeliverables, setShowDeliverables] = useState(false);
+  const [showDecision, setShowDecision] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
   const collapseRafRef = useRef<number | null>(null);
-  const toggleRafRef = useRef<number | null>(null);
 
   useEffect(() => {
     return () => {
       if (collapseRafRef.current) cancelAnimationFrame(collapseRafRef.current);
-      if (toggleRafRef.current) cancelAnimationFrame(toggleRafRef.current);
     };
   }, []);
-
-  const startToggleAnchorLock = () => {
-    const anchorStartY = quoteRef.current?.getBoundingClientRect().top ?? null;
-
-    if (toggleRafRef.current) {
-      cancelAnimationFrame(toggleRafRef.current);
-      toggleRafRef.current = null;
-    }
-
-    if (anchorStartY === null) return;
-
-    const startedAt = performance.now();
-
-    const keepAnchorFixed = (now: number) => {
-      const anchor = quoteRef.current;
-      if (!anchor) {
-        toggleRafRef.current = null;
-        return;
-      }
-
-      const currentY = anchor.getBoundingClientRect().top;
-      const delta = currentY - anchorStartY;
-
-      if (Math.abs(delta) > 0.5) {
-        window.scrollBy(0, delta);
-      }
-
-      if (now - startedAt < COLLAPSE_DURATION + 140) {
-        toggleRafRef.current = requestAnimationFrame(keepAnchorFixed);
-      } else {
-        toggleRafRef.current = null;
-      }
-    };
-
-    toggleRafRef.current = requestAnimationFrame(keepAnchorFixed);
-  };
-
-  const setShowDeliverables = (next: boolean) => {
-    if (next === showDeliverables) return;
-    startToggleAnchorLock();
-    setShowDeliverablesState(next);
-  };
-
-  const setShowDecision = (next: boolean) => {
-    if (next === showDecision) return;
-    startToggleAnchorLock();
-    setShowDecisionState(next);
-  };
 
   const collapseAll = () => {
     if (!showDeliverables && !showDecision) return;
@@ -76,8 +26,8 @@ const ComparisonSection = () => {
       collapseRafRef.current = null;
     }
 
-    setShowDeliverablesState(false);
-    setShowDecisionState(false);
+    setShowDeliverables(false);
+    setShowDecision(false);
 
     if (anchorStartY === null) return;
 
