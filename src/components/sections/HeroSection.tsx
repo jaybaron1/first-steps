@@ -81,7 +81,7 @@ const HeroSection = () => {
           >
             Bring a question or decision.
             <br />
-            It gets challenged from every angle that matters.
+            It gets challenged - so you can actually trust what you do next.
           </p>
 
           {/* CTAs — animated */}
