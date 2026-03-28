@@ -211,7 +211,7 @@ import DecisionProcess from './DecisionProcess';
         </div>
 
         <div
-          className="grid transition-all duration-500 ease-in-out mt-6"
+          className="grid transition-all duration-700 ease-in-out mt-6"
           style={{ gridTemplateRows: showDecision ? '1fr' : '0fr' }}
         >
           <div className="overflow-hidden">
