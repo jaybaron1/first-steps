@@ -200,16 +200,23 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
               {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
             </button>
 
-            {showDecision && (
-              <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft">
-                <h3 className="font-display text-xl text-ink mb-6">
-                  Decision Process
-                </h3>
-                <p className="text-sm text-ink-muted leading-relaxed">
-                  Content coming soon — this section will walk through how the advisors arrived at the recommendation.
-                </p>
+            <div
+              className="grid transition-all duration-500 ease-in-out"
+              style={{ gridTemplateRows: showDecision ? '1fr' : '0fr' }}
+            >
+              <div className="overflow-hidden">
+                <div className="mt-8 bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
+                  style={{ opacity: showDecision ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
+                >
+                  <h3 className="font-display text-xl text-ink mb-6">
+                    Decision Process
+                  </h3>
+                  <p className="text-sm text-ink-muted leading-relaxed">
+                    Content coming soon — this section will walk through how the advisors arrived at the recommendation.
+                  </p>
+                </div>
               </div>
-            )}
+            </div>
           </div>
         </div>
 
