@@ -31,7 +31,7 @@ const ProblemSection = () => {
             <div className="absolute top-0 left-0 w-16 h-px bg-gold transition-all duration-500 group-hover:w-24" />
             <p className="font-display text-lg text-ink leading-snug mb-3">You think alone.</p>
             <p className="text-sm" style={{ color: "#5C554A" }}>
-              The decision sits with you. No one else carries the weight.
+              And the weight of the decision sits with you.
             </p>
           </div>
 
