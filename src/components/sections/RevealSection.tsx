@@ -204,7 +204,7 @@ const RevealSection = () => {
           {/* How the room works */}
           <div className="max-w-3xl mb-12">
             <p
-              className="font-display mb-8"
+              className="font-display mb-8 text-left"
               style={{
                 fontSize: "1.25rem",
                 color: "#1A1915",
