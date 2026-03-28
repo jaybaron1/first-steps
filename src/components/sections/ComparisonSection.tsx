@@ -67,8 +67,8 @@ import DecisionProcess from './DecisionProcess';
               </div>
             </div>
 
-            <div className="mt-8 text-center px-4">
-              <p className="text-sm text-ink">You can prompt ChatGPT.</p>
+            <div className="mt-8 bg-white p-5 lg:p-6 text-center">
+              <p className="text-sm font-semibold text-ink">You can prompt ChatGPT.</p>
               <p className="text-sm text-warm-gray mt-1">It won't challenge your thinking like this.</p>
             </div>
           </div>
@@ -222,11 +222,11 @@ import DecisionProcess from './DecisionProcess';
 
         {/* Pull quote */}
         <div className="mt-12 max-w-xl mx-auto text-center">
-          <blockquote className="font-display text-lg text-ink italic leading-relaxed">
+          <blockquote className="font-display text-2xl lg:text-3xl text-ink italic leading-relaxed">
             "Bravado doesn't prove readiness.
             <span className="text-gold-dark"> Design does.</span>"
           </blockquote>
-          <p className="mt-4 text-xs text-warm-gray">
+          <p className="mt-4 text-sm text-warm-gray">
             From an actual Roundtable session
           </p>
         </div>
