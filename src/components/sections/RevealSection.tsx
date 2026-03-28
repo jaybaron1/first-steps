@@ -8,7 +8,7 @@ const RevealSection = () => {
 
       <div className="container relative z-10 py-20 lg:py-28">
         {/* Centered layout */}
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl ml-12 lg:ml-24 text-left">
           {/* Introducing label */}
           <div className="flex items-center justify-center gap-4 mb-6">
             <div className="w-16 h-px bg-gradient-to-r from-transparent to-ink/20" />
