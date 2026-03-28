@@ -358,10 +358,18 @@ const DecisionProcess = () => {
       </div>
 
       {/* Facilitator closing */}
-      <div className="pt-4 border-t border-ink/5">
+      <div className="pt-4 border-t border-ink/5 space-y-3">
         <div className="pl-0">
           <span className="inline-block text-[10px] font-medium uppercase tracking-wider px-2 py-0.5 mb-1.5 bg-ink text-cream">Facilitator</span>
-          <p className="text-xs text-ink font-medium leading-relaxed">You are moving forward — but on your terms.</p>
+          <p className="text-xs text-ink font-medium leading-relaxed">You are moving forward — but on your terms. You are not shrinking from the opportunity. You are upgrading the way you say yes.</p>
+        </div>
+        <div className="pl-0">
+          <p className="text-xs text-ink-muted leading-relaxed mb-2">If you'd like, we can reconvene to:</p>
+          <div className="text-xs text-ink-muted space-y-1">
+            <p>• Pressure-test your Phase One proposal language</p>
+            <p>• Rehearse the client conversation</p>
+            <p>• Design the internal delivery architecture before you commit</p>
+          </div>
         </div>
       </div>
 
