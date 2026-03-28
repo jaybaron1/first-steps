@@ -199,7 +199,7 @@ const ComparisonSection = () => {
 
                 <div>
                   <button
-                    onClick={() => anchoredToggle(setShowDecision)}
+                    onClick={() => setShowDecision(!showDecision)}
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
                     <span>
