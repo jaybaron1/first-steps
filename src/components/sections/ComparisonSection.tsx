@@ -5,6 +5,7 @@ import DecisionProcess from './DecisionProcess';
  const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
   const [showDecision, setShowDecision] = useState(false);
+  const roundtableRef = useRef<HTMLDivElement>(null);
  
    return (
      <section data-section="comparison" className="section relative overflow-hidden" style={{ background: '#F9F6F0' }}>
@@ -76,7 +77,7 @@ import DecisionProcess from './DecisionProcess';
           </div>
 
           {/* The Roundtable */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3" ref={roundtableRef}>
             <div className="h-full bg-white p-5 lg:p-6 relative shadow-soft">
               <div className="absolute top-0 left-0 w-12 h-px bg-gradient-to-r from-gold to-transparent" />
               <div className="absolute top-0 left-0 w-px h-12 bg-gradient-to-b from-gold to-transparent" />
@@ -160,7 +161,7 @@ import DecisionProcess from './DecisionProcess';
 
         {/* Expanded content — centered below the grid */}
         <div
-          className="grid transition-all duration-500 ease-in-out mt-8"
+          className="grid transition-all duration-700 ease-in-out mt-8"
           style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
         >
           <div className="overflow-hidden">
@@ -210,7 +211,7 @@ import DecisionProcess from './DecisionProcess';
         </div>
 
         <div
-          className="grid transition-all duration-500 ease-in-out mt-6"
+          className="grid transition-all duration-700 ease-in-out mt-6"
           style={{ gridTemplateRows: showDecision ? '1fr' : '0fr' }}
         >
           <div className="overflow-hidden">
@@ -226,7 +227,13 @@ import DecisionProcess from './DecisionProcess';
         {(showDeliverables || showDecision) && (
           <div className="flex justify-end mt-4">
             <button
-              onClick={() => { setShowDeliverables(false); setShowDecision(false); }}
+              onClick={() => {
+                setShowDeliverables(false);
+                setShowDecision(false);
+                setTimeout(() => {
+                  roundtableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+              }}
               className="group inline-flex items-center gap-2 px-4 py-2 text-xs uppercase tracking-wider text-warm-gray hover:text-gold-dark transition-all duration-300"
             >
               <span className="font-medium">Collapse</span>
