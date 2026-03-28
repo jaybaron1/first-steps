@@ -212,10 +212,10 @@ const ComparisonSection = () => {
 
         {/* Expanded content — centered below the grid */}
         <div
-          className="grid transition-all duration-700 ease-in-out mt-8"
-          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr' }}
+          className="grid transition-all ease-in-out mt-8"
+          style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
-          <div className="overflow-hidden">
+          <div className="overflow-hidden" style={{ overflowAnchor: 'none' }}>
             <div className="bg-white p-6 lg:p-8 max-w-3xl mx-auto text-left shadow-soft"
               style={{ opacity: showDeliverables ? 1 : 0, transition: 'opacity 0.4s ease-in-out' }}
             >
