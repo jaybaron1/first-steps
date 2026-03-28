@@ -221,7 +221,7 @@ const ComparisonSection = () => {
               <div className="mt-6 space-y-3 text-center">
                 <div>
                   <button
-                    onClick={() => setShowDeliverables(!showDeliverables)}
+                    onClick={() => anchoredToggle(setShowDeliverables)}
                     className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
                   >
                     <span>
