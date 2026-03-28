@@ -275,6 +275,7 @@ const ComparisonSection = () => {
 
         {/* Expanded content — centered below the grid */}
         <div
+          ref={deliverablesRef}
           className="grid transition-all ease-in-out mt-8"
           style={{ gridTemplateRows: showDeliverables ? '1fr' : '0fr', transitionDuration: `${COLLAPSE_DURATION}ms`, overflowAnchor: 'none' }}
         >
