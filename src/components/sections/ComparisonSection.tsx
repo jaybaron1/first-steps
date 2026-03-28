@@ -12,6 +12,10 @@ const ComparisonSection = () => {
   const collapseAll = () => {
     setShowDeliverables(false);
     setShowDecision(false);
+    // After the CSS transition finishes, scroll the Roundtable card into view
+    setTimeout(() => {
+      roundtableRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, COLLAPSE_DURATION + 50);
   };
  
    return (
