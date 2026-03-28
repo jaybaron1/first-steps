@@ -61,7 +61,7 @@ const TiersSection = () => {
             </span>
           </h2>
           <p className="text-sm" style={{ color: "#5C554A", lineHeight: 1.7 }}>
-            Each level includes the ones before it. Most people find their fit at Level 3.
+            Go deeper as your decisions get more complex.
           </p>
         </div>
 
