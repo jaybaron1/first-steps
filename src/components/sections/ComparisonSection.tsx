@@ -188,41 +188,45 @@ const ComparisonSection = () => {
                 ))}
               </div>
 
-              {/* See buttons — expand only, push content down, scroll top of panel into view */}
+              {/* See/Hide buttons — always visible */}
               <div className="mt-6 space-y-3 text-center">
-                {!showDeliverables && (
-                  <div>
-                    <button
-                      onClick={() => {
+                <div>
+                  <button
+                    onClick={() => {
+                      if (!showDeliverables) {
                         setShowDeliverables(true);
                         setTimeout(() => {
                           deliverablesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }, 100);
-                      }}
-                      className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
-                    >
-                      <span>See a sample output</span>
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+                      } else {
+                        setShowDeliverables(false);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
+                  >
+                    <span>{showDeliverables ? 'Hide' : 'See a'} sample output</span>
+                    {showDeliverables ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                </div>
 
-                {!showDecision && (
-                  <div>
-                    <button
-                      onClick={() => {
+                <div>
+                  <button
+                    onClick={() => {
+                      if (!showDecision) {
                         setShowDecision(true);
                         setTimeout(() => {
                           decisionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }, 100);
-                      }}
-                      className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
-                    >
-                      <span>See how it was decided</span>
-                      <ChevronDown className="w-4 h-4" />
-                    </button>
-                  </div>
-                )}
+                      } else {
+                        setShowDecision(false);
+                      }
+                    }}
+                    className="inline-flex items-center gap-1.5 text-warm-gray hover:text-gold-dark transition-colors text-base"
+                  >
+                    <span>{showDecision ? 'Hide' : 'See'} how it was decided</span>
+                    {showDecision ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
