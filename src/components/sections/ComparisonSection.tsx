@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
+import DecisionProcess from './DecisionProcess';
 
  const ComparisonSection = () => {
   const [showDeliverables, setShowDeliverables] = useState(false);
