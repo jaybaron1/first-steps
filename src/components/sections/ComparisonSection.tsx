@@ -52,9 +52,9 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
               <div className="space-y-2">
                 {[
-                  "One voice, one perspective",
-                  "Wall of text to parse",
-                  "No structured output",
+                  "One answer",
+                  "No challenge",
+                  "You still do the thinking",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-warm-gray">
                     <X className="w-3 h-3 text-warm-gray-light flex-shrink-0" aria-hidden="true" />
@@ -93,7 +93,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Monica — Finance</p>
-                  <p style={{ color: '#3D3830' }}>The math doesn't lie. Six months at this scope puts delivery quality at risk. Staying small isn't caused by saying no — it's caused by saying yes without control.</p>
+                  <p style={{ color: '#3D3830' }}>The math doesn't lie. Six months at this scope puts delivery quality at risk. Staying small isn't caused by saying no. It's caused by saying yes without control.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>David — Operations</p>
@@ -101,7 +101,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Elena — Strategy</p>
-                  <p style={{ color: '#3D3830' }}>The real risk isn't the work — it's irreversible commitment. If you phase it, you maintain optionality. Enterprise clients respect clarity over bravado.</p>
+                  <p style={{ color: '#3D3830' }}>The real risk isn't the work. It's irreversible commitment. If you phase it, you maintain optionality. Enterprise clients respect clarity over bravado.</p>
                 </div>
                 <div>
                   <p className="font-medium text-[10px] mb-0.5 uppercase tracking-wider" style={{ color: '#5C554A' }}>Facilitator</p>
@@ -111,9 +111,9 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
 
               <div className="space-y-2">
                 {[
-                  "Multiple expert perspectives",
-                  "Structured phases with checkpoints",
-                  "Actionable deliverables included",
+                  "Multiple perspectives",
+                  "Structured thinking",
+                  "Clear direction forward",
                 ].map((item) => (
                   <div key={item} className="flex items-center gap-2 text-xs text-ink">
                     <Check className="w-3 h-3 text-gold flex-shrink-0" aria-hidden="true" />
@@ -151,8 +151,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
                     <span className="label label-gold text-xs">Executive Summary</span>
                   </div>
                   <p className="text-sm text-ink-muted leading-relaxed">
-                    You will say yes to the opportunity, but not to an uncontrolled six-month commitment.
-                    Counter with a phased engagement that preserves delivery quality and protects your reputation.
+                    A clear recommendation with reasoning. In this case: accept the opportunity, but restructure the terms to protect delivery quality.
                   </p>
                 </div>
 
@@ -190,7 +189,7 @@ import { Check, X, ChevronDown, ChevronUp } from 'lucide-react';
             <span className="text-gold-dark"> Design does.</span>"
           </blockquote>
           <p className="mt-4 text-xs text-warm-gray">
-            — From an actual Roundtable session
+            From an actual Roundtable session
           </p>
         </div>
       </div>

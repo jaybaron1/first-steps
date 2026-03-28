@@ -77,7 +77,7 @@ const RevealSection = () => {
                   <span style={{ color: "#B8956C", fontStyle: "italic" }}>Multiple perspectives.</span>
                 </h3>
                 <p style={{ fontSize: "1rem", color: "#5C554A", lineHeight: 1.7 }}>
-                  Examined from every angle that matters.
+                  You stay at the center.<br />The thinking doesn't.
                 </p>
               </div>
             </div>
@@ -196,7 +196,7 @@ const RevealSection = () => {
 
               {/* Caption */}
               <p className="text-center text-xs mt-4 italic" style={{ color: "#5C554A" }}>
-                Your judgment at the center. Strategic counsel all around.
+                You stay at the center. The thinking doesn't.
               </p>
             </div>
           </div>
@@ -216,9 +216,9 @@ const RevealSection = () => {
 
             <div className="grid md:grid-cols-3 gap-8 mb-10">
               {[
-                "Perspectives challenge each other",
-                "Assumptions are surfaced early",
-                "Tradeoffs are made explicit",
+                "Perspectives challenge your thinking",
+                "Assumptions surface early",
+                "Tradeoffs become clear",
               ].map((item, i) => (
                 <div key={i} className="text-center">
                   <div className="w-2 h-2 rounded-full mx-auto mb-3" style={{ background: "#B8956C" }} />
