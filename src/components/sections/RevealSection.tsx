@@ -74,7 +74,7 @@ const RevealSection = () => {
                 >
                   One decision.
                   <br />
-                  <span style={{ color: "#B8956C", fontStyle: "italic" }}>Multiple perspectives.</span>
+                  <span style={{ color: "#B8956C", fontStyle: "italic" }}>Seen from every angle.</span>
                 </h3>
                 <p style={{ fontSize: "1rem", color: "#5C554A", lineHeight: 1.7 }}>
                   You stay at the center.<br />The thinking doesn't.
