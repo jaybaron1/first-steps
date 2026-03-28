@@ -13,7 +13,7 @@ const TiersSection = () => {
       detail: "For when you need to think something through properly.",
       trial: "3-day free trial",
       cta: "Start Free Trial",
-      hasConnectors: true,
+      
     },
     {
       level: "02",
