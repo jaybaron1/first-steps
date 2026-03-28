@@ -398,7 +398,7 @@ const OnePager = () => {
                 {/* Level 1 */}
                 <div className="level-card bg-white p-8 border border-gold/15 relative">
                   <div className="absolute -top-3 left-6 bg-gold text-cream text-[10px] font-medium px-3 py-1.5 uppercase tracking-wider">
-                    10-day trial
+                    3-day trial
                   </div>
                   <div
                     className="text-5xl font-display font-light mb-6"
