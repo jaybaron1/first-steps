@@ -11,7 +11,7 @@ const TiersSection = () => {
       tagline: "Start with clarity.",
       description: "Pose a question. It gets challenged from every angle that matters.",
       detail: "For when you need to think something through properly.",
-      trial: "10-day free trial",
+      trial: "3-day free trial",
       cta: "Start Free Trial",
       hasConnectors: true,
     },

@@ -713,7 +713,7 @@ const OnePager = () => {
                     },
                     {
                       num: "2",
-                      title: "Try the 10-day trial",
+                      title: "Try the 3-day trial",
                       desc: "Test it with real challenges. See if it changes how you think.",
                     },
                     {
