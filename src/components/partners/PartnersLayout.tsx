@@ -61,7 +61,7 @@ const PartnersLayout: React.FC = () => {
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-0.5">
-            {navItems.map((item) => (
+            {navItems.filter((item) => !item.adminOnly || isAdmin).map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
