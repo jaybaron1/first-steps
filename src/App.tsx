@@ -21,6 +21,16 @@ import SystemPage from "./pages/admin/SystemPage";
 import SecurityPage from "./pages/admin/SecurityPage";
 import SEOPage from "./pages/admin/SEOPage";
 import RevenuePage from "./pages/admin/RevenuePage";
+import PartnersRoute from "./components/partners/PartnersRoute";
+import PartnersLayout from "./components/partners/PartnersLayout";
+import PartnersLoginPage from "./pages/partners/PartnersLoginPage";
+import PartnersDashboardPage from "./pages/partners/PartnersDashboardPage";
+import PartnersClientsPage from "./pages/partners/PartnersClientsPage";
+import PartnersClientProfilePage from "./pages/partners/PartnersClientProfilePage";
+import PartnersNewReferralPage from "./pages/partners/PartnersNewReferralPage";
+import PartnersDirectoryPage from "./pages/partners/PartnersDirectoryPage";
+import PartnersCommissionLogPage from "./pages/partners/PartnersCommissionLogPage";
+import PartnersActivityPage from "./pages/partners/PartnersActivityPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -82,7 +92,23 @@ const App = () => (
               <Route path="security" element={<SecurityPage />} />
               <Route path="seo" element={<SEOPage />} />
             </Route>
-            
+
+            {/* Partners CRM */}
+            <Route path="/partners/login" element={<PartnersLoginPage />} />
+            <Route path="/partners" element={
+              <PartnersRoute>
+                <PartnersLayout />
+              </PartnersRoute>
+            }>
+              <Route index element={<PartnersDashboardPage />} />
+              <Route path="clients" element={<PartnersClientsPage />} />
+              <Route path="clients/:id" element={<PartnersClientProfilePage />} />
+              <Route path="new" element={<PartnersNewReferralPage />} />
+              <Route path="directory" element={<PartnersDirectoryPage />} />
+              <Route path="commissions" element={<PartnersCommissionLogPage />} />
+              <Route path="activity" element={<PartnersActivityPage />} />
+            </Route>
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
