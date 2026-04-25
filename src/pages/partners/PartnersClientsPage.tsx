@@ -222,18 +222,21 @@ const PartnersClientsPage: React.FC = () => {
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Attribution</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Logged</th>
+                {isAdmin && (
+                  <th className="text-right px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider w-12"></th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={isAdmin ? 7 : 6} className="px-4 py-12 text-center text-slate-400 text-sm">
                     Loading…
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={isAdmin ? 7 : 6} className="px-4 py-12 text-center text-slate-400 text-sm">
                     No clients match your filters.
                   </td>
                 </tr>
