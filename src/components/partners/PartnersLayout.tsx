@@ -12,6 +12,7 @@ import {
   Activity,
   LogOut,
   ShieldCheck,
+  Calendar,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const navItems = [
   { path: "/partners/clients", label: "Clients", icon: Users, adminOnly: false },
   { path: "/partners/new", label: "Add Referral", icon: Plus, adminOnly: false },
   { path: "/partners/directory", label: "Partners", icon: Briefcase, adminOnly: false },
+  { path: "/partners/appointments", label: "Appointments", icon: Calendar, adminOnly: false },
   { path: "/partners/commissions", label: "Commissions", icon: Receipt, adminOnly: false },
   { path: "/partners/activity", label: "Activity", icon: Activity, adminOnly: false },
   { path: "/partners/users", label: "Team users", icon: ShieldCheck, adminOnly: true },
