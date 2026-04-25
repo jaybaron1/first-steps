@@ -294,6 +294,22 @@ const PartnersClientsPage: React.FC = () => {
                     <td className="px-4 py-3 text-slate-500 text-xs tabular-nums">
                       {formatDate(c.date_logged)}
                     </td>
+                    {isAdmin && (
+                      <td className="px-4 py-3 text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDeleteTarget({ id: c.id, name: c.client_name });
+                          }}
+                          className="h-7 w-7 p-0 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                          aria-label={`Delete ${c.client_name}`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
@@ -301,6 +317,35 @@ const PartnersClientsPage: React.FC = () => {
           </table>
         </div>
       </Card>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && !deleting && setDeleteTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete client?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes <span className="font-medium text-slate-900">{deleteTarget?.name}</span>{" "}
+              along with all commercial events, commission history, and notes for this client. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Delete client
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
