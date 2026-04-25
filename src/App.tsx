@@ -108,6 +108,7 @@ const App = () => (
               <Route path="directory" element={<PartnersDirectoryPage />} />
               <Route path="commissions" element={<PartnersCommissionLogPage />} />
               <Route path="activity" element={<PartnersActivityPage />} />
+              <Route path="users" element={<PartnersUsersPage />} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
