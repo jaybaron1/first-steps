@@ -41,6 +41,7 @@ const PartnersCommissionLogPage: React.FC = () => {
       id: string;
       payment_status: PaymentStatus;
       payment_date?: string | null;
+      previous_status?: PaymentStatus;
     }) => {
       const patch: Record<string, unknown> = {
         payment_status: input.payment_status,
@@ -56,10 +57,38 @@ const PartnersCommissionLogPage: React.FC = () => {
         .update(patch)
         .eq("id", input.id);
       if (error) throw error;
+
+      // Notify partner only on transition INTO paid
+      if (
+        input.payment_status === "paid" &&
+        input.previous_status !== "paid"
+      ) {
+        const { data: notifyData, error: notifyErr } =
+          await supabase.functions.invoke("notify-commission-paid", {
+            body: { event_id: input.id },
+          });
+        if (notifyErr) {
+          return { notified: false, notifyError: notifyErr.message };
+        }
+        return { notified: !notifyData?.skipped, skipReason: notifyData?.reason };
+      }
+      return { notified: false };
     },
-    onSuccess: () => {
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: ["partners-crm", "events"] });
-      toast({ title: "Commission updated" });
+      if (result?.notified) {
+        toast({ title: "Marked paid", description: "Partner notified by email." });
+      } else if (result?.notifyError) {
+        toast({
+          title: "Marked paid",
+          description: `Saved, but email failed: ${result.notifyError}`,
+          variant: "destructive",
+        });
+      } else if (result?.skipReason) {
+        toast({ title: "Marked paid", description: result.skipReason });
+      } else {
+        toast({ title: "Commission updated" });
+      }
     },
     onError: (e: Error) => {
       toast({ title: "Update failed", description: e.message, variant: "destructive" });
@@ -117,20 +146,24 @@ const PartnersCommissionLogPage: React.FC = () => {
   };
 
   const handleMarkPaid = (id: string) => {
+    const prev = events.find((e) => e.id === id)?.payment_status as PaymentStatus | undefined;
     setPendingId(id);
     updateEvent.mutate({
       id,
       payment_status: "paid",
       payment_date: dateDraft[id] || new Date().toISOString().slice(0, 10),
+      previous_status: prev,
     });
   };
 
   const handleStatusChange = (id: string, status: PaymentStatus) => {
+    const prev = events.find((e) => e.id === id)?.payment_status as PaymentStatus | undefined;
     setPendingId(id);
     updateEvent.mutate({
       id,
       payment_status: status,
       payment_date: status === "paid" ? dateDraft[id] || undefined : null,
+      previous_status: prev,
     });
   };
 
