@@ -11,16 +11,18 @@ import {
   Receipt,
   Activity,
   LogOut,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { path: "/partners", label: "Dashboard", icon: LayoutDashboard, end: true },
-  { path: "/partners/clients", label: "Clients", icon: Users },
-  { path: "/partners/new", label: "Add Referral", icon: Plus },
-  { path: "/partners/directory", label: "Partners", icon: Briefcase },
-  { path: "/partners/commissions", label: "Commissions", icon: Receipt },
-  { path: "/partners/activity", label: "Activity", icon: Activity },
+  { path: "/partners", label: "Dashboard", icon: LayoutDashboard, end: true, adminOnly: false },
+  { path: "/partners/clients", label: "Clients", icon: Users, adminOnly: false },
+  { path: "/partners/new", label: "Add Referral", icon: Plus, adminOnly: false },
+  { path: "/partners/directory", label: "Partners", icon: Briefcase, adminOnly: false },
+  { path: "/partners/commissions", label: "Commissions", icon: Receipt, adminOnly: false },
+  { path: "/partners/activity", label: "Activity", icon: Activity, adminOnly: false },
+  { path: "/partners/users", label: "Team users", icon: ShieldCheck, adminOnly: true },
 ];
 
 const PartnersLayout: React.FC = () => {
@@ -59,7 +61,7 @@ const PartnersLayout: React.FC = () => {
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-0.5">
-            {navItems.map((item) => (
+            {navItems.filter((item) => !item.adminOnly || isAdmin).map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
