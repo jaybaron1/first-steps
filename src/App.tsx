@@ -31,6 +31,7 @@ import PartnersNewReferralPage from "./pages/partners/PartnersNewReferralPage";
 import PartnersDirectoryPage from "./pages/partners/PartnersDirectoryPage";
 import PartnersCommissionLogPage from "./pages/partners/PartnersCommissionLogPage";
 import PartnersActivityPage from "./pages/partners/PartnersActivityPage";
+import PartnersUsersPage from "./pages/partners/PartnersUsersPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
