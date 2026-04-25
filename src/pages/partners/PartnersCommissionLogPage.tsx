@@ -146,20 +146,24 @@ const PartnersCommissionLogPage: React.FC = () => {
   };
 
   const handleMarkPaid = (id: string) => {
+    const prev = events.find((e) => e.id === id)?.payment_status as PaymentStatus | undefined;
     setPendingId(id);
     updateEvent.mutate({
       id,
       payment_status: "paid",
       payment_date: dateDraft[id] || new Date().toISOString().slice(0, 10),
+      previous_status: prev,
     });
   };
 
   const handleStatusChange = (id: string, status: PaymentStatus) => {
+    const prev = events.find((e) => e.id === id)?.payment_status as PaymentStatus | undefined;
     setPendingId(id);
     updateEvent.mutate({
       id,
       payment_status: status,
       payment_date: status === "paid" ? dateDraft[id] || undefined : null,
+      previous_status: prev,
     });
   };
 
