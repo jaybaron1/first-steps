@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useClients } from "@/hooks/usePartnersCRM";
+import { partnersSupabase as supabase } from "@/lib/partnersBackend";
+import { usePartnersAuth } from "@/components/partners/PartnersRoute";
+import { useToast } from "@/hooks/use-toast";
 import {
   attributionStatusLabels,
   clientLifecycleLabels,
@@ -17,8 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Card } from "@/components/ui/card";
-import { Search, Download, Plus, AlertTriangle } from "lucide-react";
+import { Search, Download, Plus, AlertTriangle, Trash2, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const StatusBadge: React.FC<{ status: string; tone: "neutral" | "warn" | "ok" | "muted" }> = ({
