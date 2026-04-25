@@ -56,10 +56,38 @@ const StatusBadge: React.FC<{ status: string; tone: "neutral" | "warn" | "ok" | 
 
 const PartnersClientsPage: React.FC = () => {
   const { data: clients = [], isLoading } = useClients();
+  const { isAdmin } = usePartnersAuth();
+  const { toast } = useToast();
+  const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [attributionFilter, setAttributionFilter] = useState<string>("all");
   const [productFilter, setProductFilter] = useState<string>("all");
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("partner_clients")
+        .delete()
+        .eq("id", deleteTarget.id);
+      if (error) throw error;
+      qc.invalidateQueries({ queryKey: ["partners-crm"] });
+      toast({ title: "Client deleted", description: deleteTarget.name });
+      setDeleteTarget(null);
+    } catch (err) {
+      toast({
+        title: "Could not delete",
+        description: err instanceof Error ? err.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
