@@ -25,6 +25,8 @@ import CohortRetentionChart from '@/components/admin/CohortRetentionChart';
 import ChurnAnalysisPanel from '@/components/admin/ChurnAnalysisPanel';
 import DealEntryModal from '@/components/admin/DealEntryModal';
 import RevenueEntryModal from '@/components/admin/RevenueEntryModal';
+import MRRCard from '@/components/admin/MRRCard';
+import PartnersRevenuePanel from '@/components/admin/PartnersRevenuePanel';
 
 const RevenuePage: React.FC = () => {
   const [dealModalOpen, setDealModalOpen] = useState(false);
@@ -60,6 +62,12 @@ const RevenuePage: React.FC = () => {
           </Button>
         </div>
       </div>
+
+      {/* MRR Headline */}
+      <MRRCard />
+
+      {/* Partner-Sourced Revenue */}
+      <PartnersRevenuePanel />
 
       {/* Unit Economics */}
       <div className="mb-8">
