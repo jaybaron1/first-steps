@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { useClients } from "@/hooks/usePartnersCRM";
+import { partnersSupabase as supabase } from "@/lib/partnersBackend";
+import { usePartnersAuth } from "@/components/partners/PartnersRoute";
+import { useToast } from "@/hooks/use-toast";
 import {
   attributionStatusLabels,
   clientLifecycleLabels,
@@ -17,8 +21,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { Card } from "@/components/ui/card";
-import { Search, Download, Plus, AlertTriangle } from "lucide-react";
+import { Search, Download, Plus, AlertTriangle, Trash2, Loader2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 const StatusBadge: React.FC<{ status: string; tone: "neutral" | "warn" | "ok" | "muted" }> = ({
@@ -42,10 +56,38 @@ const StatusBadge: React.FC<{ status: string; tone: "neutral" | "warn" | "ok" | 
 
 const PartnersClientsPage: React.FC = () => {
   const { data: clients = [], isLoading } = useClients();
+  const { isAdmin } = usePartnersAuth();
+  const { toast } = useToast();
+  const qc = useQueryClient();
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [attributionFilter, setAttributionFilter] = useState<string>("all");
   const [productFilter, setProductFilter] = useState<string>("all");
+  const [deleteTarget, setDeleteTarget] = useState<{ id: string; name: string } | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      const { error } = await supabase
+        .from("partner_clients")
+        .delete()
+        .eq("id", deleteTarget.id);
+      if (error) throw error;
+      qc.invalidateQueries({ queryKey: ["partners-crm"] });
+      toast({ title: "Client deleted", description: deleteTarget.name });
+      setDeleteTarget(null);
+    } catch (err) {
+      toast({
+        title: "Could not delete",
+        description: err instanceof Error ? err.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   const filtered = useMemo(() => {
     return clients.filter((c) => {
@@ -180,18 +222,21 @@ const PartnersClientsPage: React.FC = () => {
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Attribution</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Logged</th>
+                {isAdmin && (
+                  <th className="text-right px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider w-12"></th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={isAdmin ? 7 : 6} className="px-4 py-12 text-center text-slate-400 text-sm">
                     Loading…
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-12 text-center text-slate-400 text-sm">
+                  <td colSpan={isAdmin ? 7 : 6} className="px-4 py-12 text-center text-slate-400 text-sm">
                     No clients match your filters.
                   </td>
                 </tr>
@@ -249,6 +294,22 @@ const PartnersClientsPage: React.FC = () => {
                     <td className="px-4 py-3 text-slate-500 text-xs tabular-nums">
                       {formatDate(c.date_logged)}
                     </td>
+                    {isAdmin && (
+                      <td className="px-4 py-3 text-right">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDeleteTarget({ id: c.id, name: c.client_name });
+                          }}
+                          className="h-7 w-7 p-0 text-slate-400 hover:text-red-600 hover:bg-red-50"
+                          aria-label={`Delete ${c.client_name}`}
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                        </Button>
+                      </td>
+                    )}
                   </tr>
                 ))
               )}
@@ -256,6 +317,35 @@ const PartnersClientsPage: React.FC = () => {
           </table>
         </div>
       </Card>
+
+      <AlertDialog
+        open={!!deleteTarget}
+        onOpenChange={(open) => !open && !deleting && setDeleteTarget(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete client?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This permanently removes <span className="font-medium text-slate-900">{deleteTarget?.name}</span>{" "}
+              along with all commercial events, commission history, and notes for this client. This cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={(e) => {
+                e.preventDefault();
+                handleDelete();
+              }}
+              disabled={deleting}
+              className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            >
+              {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
+              Delete client
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
