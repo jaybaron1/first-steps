@@ -62,16 +62,19 @@ class VisitorTracker {
     if (window.location.pathname.startsWith('/admin')) return true;
     if (window.location.pathname.startsWith('/partners')) return true;
 
-    // Skip Lovable preview / editor / project hosts (internal traffic)
+    // Skip Lovable preview / editor hosts (internal traffic during build)
+    // NOTE: galavanteer.lovable.app IS the published site — keep tracking it.
     const host = window.location.hostname;
-    const lovableHostPatterns = [
-      'lovable.dev',
-      'lovableproject.com',
-      'lovable.app',          // also covers id-preview--*.lovable.app
-    ];
-    if (lovableHostPatterns.some((p) => host === p || host.endsWith(`.${p}`))) {
-      return true;
-    }
+    const isLovablePreview =
+      host.endsWith('.lovable.dev') ||
+      host === 'lovable.dev' ||
+      host.endsWith('.lovableproject.com') ||
+      host === 'lovableproject.com' ||
+      // Preview subdomains use the id-preview-- or sandbox-- prefix on lovable.app
+      host.startsWith('id-preview--') ||
+      host.startsWith('sandbox--') ||
+      host.includes('--') && host.endsWith('.lovable.app');
+    if (isLovablePreview) return true;
 
     // Skip if loaded inside the Lovable editor iframe
     try {
