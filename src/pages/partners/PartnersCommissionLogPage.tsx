@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useCommercialEvents } from "@/hooks/usePartnersCRM";
+import { partnersSupabase as supabase } from "@/lib/partnersBackend";
+import { usePartnersAuth } from "@/components/partners/PartnersRoute";
 import {
   downloadCSV,
   eventTypeLabels,
@@ -10,6 +13,8 @@ import {
 } from "@/lib/partnersFormat";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { toast } from "@/hooks/use-toast";
 import {
   Select,
   SelectContent,
@@ -17,12 +22,50 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Download } from "lucide-react";
+import { Download, Check, Loader2 } from "lucide-react";
+import type { Database } from "@/integrations/supabase/types";
+
+type PaymentStatus = Database["public"]["Enums"]["payment_status"];
 
 const PartnersCommissionLogPage: React.FC = () => {
   const { data: events = [], isLoading } = useCommercialEvents();
+  const { isAdmin } = usePartnersAuth();
+  const queryClient = useQueryClient();
   const [paymentFilter, setPaymentFilter] = useState<string>("all");
   const [partnerFilter, setPartnerFilter] = useState<string>("all");
+  const [pendingId, setPendingId] = useState<string | null>(null);
+  const [dateDraft, setDateDraft] = useState<Record<string, string>>({});
+
+  const updateEvent = useMutation({
+    mutationFn: async (input: {
+      id: string;
+      payment_status: PaymentStatus;
+      payment_date?: string | null;
+    }) => {
+      const patch: Record<string, unknown> = {
+        payment_status: input.payment_status,
+      };
+      if (input.payment_status === "paid") {
+        patch.payment_date =
+          input.payment_date || new Date().toISOString().slice(0, 10);
+      } else if (input.payment_date !== undefined) {
+        patch.payment_date = input.payment_date;
+      }
+      const { error } = await supabase
+        .from("commercial_events")
+        .update(patch)
+        .eq("id", input.id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["partners-crm", "events"] });
+      toast({ title: "Commission updated" });
+    },
+    onError: (e: Error) => {
+      toast({ title: "Update failed", description: e.message, variant: "destructive" });
+    },
+    onSettled: () => setPendingId(null),
+  });
 
   const partners = useMemo(() => {
     const m = new Map<string, string>();
@@ -73,6 +116,24 @@ const PartnersCommissionLogPage: React.FC = () => {
     );
   };
 
+  const handleMarkPaid = (id: string) => {
+    setPendingId(id);
+    updateEvent.mutate({
+      id,
+      payment_status: "paid",
+      payment_date: dateDraft[id] || new Date().toISOString().slice(0, 10),
+    });
+  };
+
+  const handleStatusChange = (id: string, status: PaymentStatus) => {
+    setPendingId(id);
+    updateEvent.mutate({
+      id,
+      payment_status: status,
+      payment_date: status === "paid" ? dateDraft[id] || undefined : null,
+    });
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-end justify-between">
@@ -82,6 +143,7 @@ const PartnersCommissionLogPage: React.FC = () => {
           </h1>
           <p className="text-sm text-slate-500 mt-1">
             All commercial events and commission payments.
+            {isAdmin && " Click status or use Mark paid to update."}
           </p>
         </div>
         <Button variant="outline" onClick={handleExport} className="border-slate-200">
@@ -145,13 +207,16 @@ const PartnersCommissionLogPage: React.FC = () => {
                 <th className="text-right px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Commission</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Status</th>
                 <th className="text-left px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Due / Paid</th>
+                {isAdmin && (
+                  <th className="text-right px-4 py-2.5 text-[11px] font-medium text-slate-500 uppercase tracking-wider">Action</th>
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
               {isLoading ? (
-                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400 text-sm">Loading…</td></tr>
+                <tr><td colSpan={isAdmin ? 9 : 8} className="px-4 py-12 text-center text-slate-400 text-sm">Loading…</td></tr>
               ) : filtered.length === 0 ? (
-                <tr><td colSpan={8} className="px-4 py-12 text-center text-slate-400 text-sm">No events match.</td></tr>
+                <tr><td colSpan={isAdmin ? 9 : 8} className="px-4 py-12 text-center text-slate-400 text-sm">No events match.</td></tr>
               ) : (
                 filtered.map((e) => {
                   const tone =
@@ -162,6 +227,7 @@ const PartnersCommissionLogPage: React.FC = () => {
                         : e.payment_status === "due"
                           ? "bg-amber-50 text-amber-800 border-amber-200"
                           : "bg-slate-50 text-slate-500 border-slate-200";
+                  const isPending = pendingId === e.id && updateEvent.isPending;
                   return (
                     <tr key={e.id} className="hover:bg-slate-50">
                       <td className="px-4 py-3 text-slate-700 text-xs tabular-nums">{formatDate(e.event_date)}</td>
@@ -178,15 +244,73 @@ const PartnersCommissionLogPage: React.FC = () => {
                       <td className="px-4 py-3 text-right tabular-nums text-slate-700">{formatCurrency(e.amount_charged)}</td>
                       <td className="px-4 py-3 text-right tabular-nums font-medium text-slate-900">{formatCurrency(e.commission_amount)}</td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-medium border ${tone}`}>
-                          {paymentStatusLabels[e.payment_status]}
-                        </span>
+                        {isAdmin ? (
+                          <Select
+                            value={e.payment_status}
+                            onValueChange={(v) => handleStatusChange(e.id, v as PaymentStatus)}
+                            disabled={isPending}
+                          >
+                            <SelectTrigger className={`h-7 px-2 py-0 text-[10px] uppercase tracking-wider font-medium border w-[110px] ${tone}`}>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {Object.entries(paymentStatusLabels).map(([k, v]) => (
+                                <SelectItem key={k} value={k} className="text-xs">{v}</SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] uppercase tracking-wider font-medium border ${tone}`}>
+                            {paymentStatusLabels[e.payment_status]}
+                          </span>
+                        )}
                       </td>
                       <td className="px-4 py-3 text-xs text-slate-500 tabular-nums">
                         {e.payment_status === "paid"
                           ? formatDate(e.payment_date)
                           : formatDate(e.payment_due_date)}
                       </td>
+                      {isAdmin && (
+                        <td className="px-4 py-3">
+                          {e.payment_status !== "paid" ? (
+                            <div className="flex items-center justify-end gap-2">
+                              <Input
+                                type="date"
+                                value={dateDraft[e.id] ?? new Date().toISOString().slice(0, 10)}
+                                onChange={(ev) =>
+                                  setDateDraft((d) => ({ ...d, [e.id]: ev.target.value }))
+                                }
+                                className="h-7 w-[130px] text-xs border-slate-200"
+                              />
+                              <Button
+                                size="sm"
+                                onClick={() => handleMarkPaid(e.id)}
+                                disabled={isPending}
+                                className="h-7 px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs"
+                              >
+                                {isPending ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  <Check className="w-3 h-3" />
+                                )}
+                                Mark paid
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="flex justify-end">
+                              <Button
+                                size="sm"
+                                variant="ghost"
+                                onClick={() => handleStatusChange(e.id, "due")}
+                                disabled={isPending}
+                                className="h-7 px-2.5 text-xs text-slate-500 hover:text-slate-900"
+                              >
+                                Undo
+                              </Button>
+                            </div>
+                          )}
+                        </td>
+                      )}
                     </tr>
                   );
                 })
