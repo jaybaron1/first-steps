@@ -20,3 +20,9 @@ verify_jwt = false
 
 [functions.notify-free-trial]
 verify_jwt = false
+
+[functions.notify-appointment]
+verify_jwt = false
+
+[functions.ics-feed]
+verify_jwt = false

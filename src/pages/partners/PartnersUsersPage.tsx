@@ -32,8 +32,9 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Plus, Loader2, Trash2, ShieldCheck, User as UserIcon, Eye, EyeOff } from "lucide-react";
+import { Plus, Loader2, Trash2, ShieldCheck, User as UserIcon, Eye, EyeOff, Percent } from "lucide-react";
 import { formatDate } from "@/lib/partnersFormat";
+import SDRRateCardModal from "@/components/partners/SDRRateCardModal";
 
 type TeamUser = {
   id: string;
@@ -82,6 +83,7 @@ const PartnersUsersPage: React.FC = () => {
     role: "sdr" as "admin" | "sdr",
   });
   const [deleteUser, setDeleteUser] = useState<TeamUser | null>(null);
+  const [ratesUser, setRatesUser] = useState<TeamUser | null>(null);
   const [createdCreds, setCreatedCreds] = useState<{
     email: string;
     password: string;
@@ -267,6 +269,15 @@ const PartnersUsersPage: React.FC = () => {
                               − SDR
                             </button>
                           )}
+                          {hasSdr && (
+                            <button
+                              onClick={() => setRatesUser(u)}
+                              className="text-[11px] px-2 py-1 rounded border border-slate-200 text-slate-700 hover:bg-slate-100 inline-flex items-center gap-1"
+                              title="Edit commission rates"
+                            >
+                              <Percent className="w-3 h-3" /> Rates
+                            </button>
+                          )}
                           {!isSelf && (
                             <button
                               onClick={() => setDeleteUser(u)}
@@ -441,6 +452,11 @@ const PartnersUsersPage: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <SDRRateCardModal
+        user={ratesUser ? { id: ratesUser.id, email: ratesUser.email } : null}
+        onClose={() => setRatesUser(null)}
+      />
     </div>
   );
 };

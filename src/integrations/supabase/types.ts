@@ -147,6 +147,72 @@ export type Database = {
         }
         Relationships: []
       }
+      appointments: {
+        Row: {
+          client_id: string | null
+          created_at: string
+          duration_minutes: number
+          ics_uid: string
+          id: string
+          location: string | null
+          meeting_link: string | null
+          notes: string | null
+          owner_id: string
+          partner_id: string | null
+          scheduled_at: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          ics_uid?: string
+          id?: string
+          location?: string | null
+          meeting_link?: string | null
+          notes?: string | null
+          owner_id: string
+          partner_id?: string | null
+          scheduled_at: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          ics_uid?: string
+          id?: string
+          location?: string | null
+          meeting_link?: string | null
+          notes?: string | null
+          owner_id?: string
+          partner_id?: string | null
+          scheduled_at?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointments_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "partner_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointments_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       attribution_credits: {
         Row: {
           attributed_revenue: number
@@ -711,6 +777,30 @@ export type Database = {
           },
         ]
       }
+      ics_feed_tokens: {
+        Row: {
+          created_at: string
+          id: string
+          rotated_at: string | null
+          token: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          rotated_at?: string | null
+          token?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          rotated_at?: string | null
+          token?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       keep_alive_logs: {
         Row: {
           executed_at: string
@@ -1018,6 +1108,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      sdr_commission_rates: {
+        Row: {
+          created_at: string
+          id: string
+          mrr_commissionable: boolean
+          notes: string | null
+          pricing_floor: number
+          rate_build: number
+          rate_light_reactivation: number
+          rate_mrr: number
+          rate_persona_addition: number
+          rate_rebuild: number
+          rate_refresh: number
+          rate_upgrade: number
+          updated_at: string
+          user_email: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mrr_commissionable?: boolean
+          notes?: string | null
+          pricing_floor?: number
+          rate_build?: number
+          rate_light_reactivation?: number
+          rate_mrr?: number
+          rate_persona_addition?: number
+          rate_rebuild?: number
+          rate_refresh?: number
+          rate_upgrade?: number
+          updated_at?: string
+          user_email?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mrr_commissionable?: boolean
+          notes?: string | null
+          pricing_floor?: number
+          rate_build?: number
+          rate_light_reactivation?: number
+          rate_mrr?: number
+          rate_persona_addition?: number
+          rate_rebuild?: number
+          rate_refresh?: number
+          rate_upgrade?: number
+          updated_at?: string
+          user_email?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       section_engagement: {
         Row: {
