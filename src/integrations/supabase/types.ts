@@ -320,6 +320,103 @@ export type Database = {
         }
         Relationships: []
       }
+      client_notes: {
+        Row: {
+          author_email: string | null
+          author_id: string
+          body: string
+          client_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          author_email?: string | null
+          author_id: string
+          body: string
+          client_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          author_email?: string | null
+          author_id?: string
+          body?: string
+          client_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_notes_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "partner_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commercial_events: {
+        Row: {
+          amount_charged: number
+          client_id: string
+          commission_amount: number
+          commission_rate: number
+          created_at: string
+          event_date: string
+          event_type: Database["public"]["Enums"]["commercial_event_type"]
+          id: string
+          net_revenue: number
+          notes: string | null
+          payment_date: string | null
+          payment_due_date: string | null
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          processing_fee: number
+          updated_at: string
+        }
+        Insert: {
+          amount_charged?: number
+          client_id: string
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          event_date?: string
+          event_type: Database["public"]["Enums"]["commercial_event_type"]
+          id?: string
+          net_revenue?: number
+          notes?: string | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          processing_fee?: number
+          updated_at?: string
+        }
+        Update: {
+          amount_charged?: number
+          client_id?: string
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string
+          event_date?: string
+          event_type?: Database["public"]["Enums"]["commercial_event_type"]
+          id?: string
+          net_revenue?: number
+          notes?: string | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          processing_fee?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commercial_events_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "partner_clients"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversion_goals: {
         Row: {
           created_at: string
@@ -669,6 +766,122 @@ export type Database = {
           },
         ]
       }
+      partner_clients: {
+        Row: {
+          attribution_status: Database["public"]["Enums"]["attribution_status"]
+          client_name: string
+          client_status: Database["public"]["Enums"]["client_lifecycle_status"]
+          company: string | null
+          configuration: Database["public"]["Enums"]["client_configuration"]
+          contact_name: string | null
+          created_at: string
+          date_logged: string
+          email: string | null
+          first_paid_engagement_date: string | null
+          id: string
+          notes: string | null
+          owner_id: string
+          partner_id: string
+          partner_persona_included: boolean
+          phone: string | null
+          product_level: Database["public"]["Enums"]["product_level"] | null
+          referral_type: Database["public"]["Enums"]["referral_type"]
+          updated_at: string
+        }
+        Insert: {
+          attribution_status?: Database["public"]["Enums"]["attribution_status"]
+          client_name: string
+          client_status?: Database["public"]["Enums"]["client_lifecycle_status"]
+          company?: string | null
+          configuration?: Database["public"]["Enums"]["client_configuration"]
+          contact_name?: string | null
+          created_at?: string
+          date_logged?: string
+          email?: string | null
+          first_paid_engagement_date?: string | null
+          id?: string
+          notes?: string | null
+          owner_id: string
+          partner_id: string
+          partner_persona_included?: boolean
+          phone?: string | null
+          product_level?: Database["public"]["Enums"]["product_level"] | null
+          referral_type?: Database["public"]["Enums"]["referral_type"]
+          updated_at?: string
+        }
+        Update: {
+          attribution_status?: Database["public"]["Enums"]["attribution_status"]
+          client_name?: string
+          client_status?: Database["public"]["Enums"]["client_lifecycle_status"]
+          company?: string | null
+          configuration?: Database["public"]["Enums"]["client_configuration"]
+          contact_name?: string | null
+          created_at?: string
+          date_logged?: string
+          email?: string | null
+          first_paid_engagement_date?: string | null
+          id?: string
+          notes?: string | null
+          owner_id?: string
+          partner_id?: string
+          partner_persona_included?: boolean
+          phone?: string | null
+          product_level?: Database["public"]["Enums"]["product_level"] | null
+          referral_type?: Database["public"]["Enums"]["referral_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_clients_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partners: {
+        Row: {
+          agreement_date: string | null
+          created_at: string
+          email: string | null
+          id: string
+          last_promotional_activity_date: string | null
+          name: string
+          notes: string | null
+          owner_id: string
+          phone: string | null
+          status: Database["public"]["Enums"]["partner_status"]
+          updated_at: string
+        }
+        Insert: {
+          agreement_date?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_promotional_activity_date?: string | null
+          name: string
+          notes?: string | null
+          owner_id: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+        }
+        Update: {
+          agreement_date?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          last_promotional_activity_date?: string | null
+          name?: string
+          notes?: string | null
+          owner_id?: string
+          phone?: string | null
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       revenue_events: {
         Row: {
           amount: number
@@ -936,6 +1149,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      is_partners_user: { Args: { _user_id: string }; Returns: boolean }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user" | "sdr"
@@ -945,6 +1159,21 @@ export type Database = {
         | "linear"
         | "time_decay"
         | "position_based"
+      attribution_status: "pending" | "approved" | "disputed" | "rejected"
+      client_configuration: "standard" | "co_branded"
+      client_lifecycle_status:
+        | "prospect"
+        | "active"
+        | "inactive"
+        | "reactivated"
+        | "churned"
+      commercial_event_type:
+        | "build_fee"
+        | "upgrade"
+        | "persona_addition"
+        | "light_reactivation"
+        | "refresh"
+        | "rebuild"
       deal_stage:
         | "lead"
         | "qualified"
@@ -952,6 +1181,14 @@ export type Database = {
         | "negotiation"
         | "closed_won"
         | "closed_lost"
+      partner_status: "active" | "inactive" | "expired" | "terminated"
+      payment_status: "not_due" | "due" | "paid" | "disputed"
+      product_level:
+        | "level_1_base_boardroom"
+        | "level_2_integrated_company_knowledge"
+        | "level_3_present_persona"
+        | "level_4_future_persona"
+      referral_type: "direct_introduction" | "self_identified"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -1087,6 +1324,23 @@ export const Constants = {
         "time_decay",
         "position_based",
       ],
+      attribution_status: ["pending", "approved", "disputed", "rejected"],
+      client_configuration: ["standard", "co_branded"],
+      client_lifecycle_status: [
+        "prospect",
+        "active",
+        "inactive",
+        "reactivated",
+        "churned",
+      ],
+      commercial_event_type: [
+        "build_fee",
+        "upgrade",
+        "persona_addition",
+        "light_reactivation",
+        "refresh",
+        "rebuild",
+      ],
       deal_stage: [
         "lead",
         "qualified",
@@ -1095,6 +1349,15 @@ export const Constants = {
         "closed_won",
         "closed_lost",
       ],
+      partner_status: ["active", "inactive", "expired", "terminated"],
+      payment_status: ["not_due", "due", "paid", "disputed"],
+      product_level: [
+        "level_1_base_boardroom",
+        "level_2_integrated_company_knowledge",
+        "level_3_present_persona",
+        "level_4_future_persona",
+      ],
+      referral_type: ["direct_introduction", "self_identified"],
     },
   },
 } as const
