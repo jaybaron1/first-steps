@@ -57,14 +57,53 @@ class VisitorTracker {
     }
   }
 
+  private shouldSkipTracking(): boolean {
+    // Skip admin and partners routes
+    if (window.location.pathname.startsWith('/admin')) return true;
+    if (window.location.pathname.startsWith('/partners')) return true;
+
+    // Skip Lovable preview / editor / project hosts (internal traffic)
+    const host = window.location.hostname;
+    const lovableHostPatterns = [
+      'lovable.dev',
+      'lovableproject.com',
+      'lovable.app',          // also covers id-preview--*.lovable.app
+    ];
+    if (lovableHostPatterns.some((p) => host === p || host.endsWith(`.${p}`))) {
+      return true;
+    }
+
+    // Skip if loaded inside the Lovable editor iframe
+    try {
+      if (window.self !== window.top) return true;
+    } catch {
+      // Cross-origin iframe access throws — treat as embedded and skip
+      return true;
+    }
+
+    // Skip if referred from Lovable
+    const ref = document.referrer || '';
+    if (ref && lovableHostPatterns.some((p) => ref.includes(p))) {
+      return true;
+    }
+
+    // Manual opt-out flag (?notrack=1 sets it permanently for this browser)
+    try {
+      if (new URLSearchParams(window.location.search).get('notrack') === '1') {
+        localStorage.setItem('galavanteer_no_track', '1');
+      }
+      if (localStorage.getItem('galavanteer_no_track') === '1') return true;
+    } catch {
+      // localStorage may be unavailable — ignore
+    }
+
+    return false;
+  }
+
   private async init() {
     if (this.isTracking) return;
-    
-    // Skip admin routes
-    if (window.location.pathname.startsWith('/admin')) {
-      return;
-    }
-    
+    if (this.shouldSkipTracking()) return;
+
     this.isTracking = true;
 
     await this.initSession();
