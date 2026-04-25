@@ -21,6 +21,7 @@ import SystemPage from "./pages/admin/SystemPage";
 import SecurityPage from "./pages/admin/SecurityPage";
 import SEOPage from "./pages/admin/SEOPage";
 import RevenuePage from "./pages/admin/RevenuePage";
+import MyBusinessPage from "./pages/admin/MyBusinessPage";
 import PartnersRoute from "./components/partners/PartnersRoute";
 import PartnersLayout from "./components/partners/PartnersLayout";
 import PartnersLoginPage from "./pages/partners/PartnersLoginPage";
@@ -89,6 +90,7 @@ const App = () => (
               <Route path="campaigns" element={<CampaignsPage />} />
               <Route path="content" element={<ContentPage />} />
               <Route path="revenue" element={<RevenuePage />} />
+              <Route path="my-business" element={<MyBusinessPage />} />
               <Route path="system" element={<SystemPage />} />
               <Route path="security" element={<SecurityPage />} />
               <Route path="seo" element={<SEOPage />} />

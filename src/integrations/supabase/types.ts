@@ -355,6 +355,66 @@ export type Database = {
           },
         ]
       }
+      client_subscriptions: {
+        Row: {
+          client_id: string | null
+          client_name: string
+          created_at: string
+          end_date: string | null
+          id: string
+          is_partner_sourced: boolean
+          monthly_amount: number
+          notes: string | null
+          partner_id: string | null
+          start_date: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          client_id?: string | null
+          client_name: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_partner_sourced?: boolean
+          monthly_amount?: number
+          notes?: string | null
+          partner_id?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          client_id?: string | null
+          client_name?: string
+          created_at?: string
+          end_date?: string | null
+          id?: string
+          is_partner_sourced?: boolean
+          monthly_amount?: number
+          notes?: string | null
+          partner_id?: string | null
+          start_date?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "client_subscriptions_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "partner_clients"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "client_subscriptions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commercial_events: {
         Row: {
           amount_charged: number
@@ -885,43 +945,76 @@ export type Database = {
       revenue_events: {
         Row: {
           amount: number
+          commercial_event_id: string | null
           created_at: string
           currency: string | null
-          deal_id: string
+          deal_id: string | null
           description: string | null
           event_date: string
           event_type: string
           id: string
           metadata: Json | null
+          partner_id: string | null
+          source: string
+          subscription_id: string | null
         }
         Insert: {
           amount: number
+          commercial_event_id?: string | null
           created_at?: string
           currency?: string | null
-          deal_id: string
+          deal_id?: string | null
           description?: string | null
           event_date?: string
           event_type: string
           id?: string
           metadata?: Json | null
+          partner_id?: string | null
+          source?: string
+          subscription_id?: string | null
         }
         Update: {
           amount?: number
+          commercial_event_id?: string | null
           created_at?: string
           currency?: string | null
-          deal_id?: string
+          deal_id?: string | null
           description?: string | null
           event_date?: string
           event_type?: string
           id?: string
           metadata?: Json | null
+          partner_id?: string | null
+          source?: string
+          subscription_id?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "revenue_events_commercial_event_id_fkey"
+            columns: ["commercial_event_id"]
+            isOneToOne: false
+            referencedRelation: "commercial_events"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "revenue_events_deal_id_fkey"
             columns: ["deal_id"]
             isOneToOne: false
             referencedRelation: "deals"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revenue_events_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "revenue_events_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "client_subscriptions"
             referencedColumns: ["id"]
           },
         ]
@@ -1142,6 +1235,10 @@ export type Database = {
         }[]
       }
       calculate_lead_score: { Args: { p_session_id: string }; Returns: number }
+      generate_subscription_revenue: {
+        Args: { p_month?: string }
+        Returns: number
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
