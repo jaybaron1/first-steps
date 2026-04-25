@@ -84,9 +84,9 @@ class VisitorTracker {
       return true;
     }
 
-    // Skip if referred from Lovable
+    // Skip if referred from Lovable editor/preview
     const ref = document.referrer || '';
-    if (ref && lovableHostPatterns.some((p) => ref.includes(p))) {
+    if (ref && (ref.includes('lovable.dev') || ref.includes('lovableproject.com'))) {
       return true;
     }
 
