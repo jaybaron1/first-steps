@@ -180,7 +180,7 @@ const PartnerLandingPage: React.FC<PartnerLandingProps> = ({ partner }) => {
             Tell {partner.name.split(" ")[0]} a bit about what you're working on.
           </p>
           <Button
-            onClick={() => setChatOpen(true)}
+            onClick={openChat}
             className="mt-6 h-12 px-6 text-white text-sm font-medium"
             style={{ backgroundColor: accent }}
           >
@@ -204,12 +204,8 @@ const PartnerLandingPage: React.FC<PartnerLandingProps> = ({ partner }) => {
           </div>
         </footer>
 
-        {/* ChatDiscovery is mounted hidden by default; trigger via state */}
-        {chatOpen && (
-          <div className="fixed inset-0 z-50">
-            <ChatDiscovery />
-          </div>
-        )}
+        {/* Always-mounted floating chat (already attribution-aware via cookie) */}
+        <ChatDiscovery />
       </div>
     </>
   );
