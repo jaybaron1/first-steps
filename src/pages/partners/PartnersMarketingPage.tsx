@@ -88,6 +88,8 @@ const PartnersMarketingPage: React.FC = () => {
   const [level2Price, setLevel2Price] = useState<string>("");
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
+  const [level5Price, setLevel5Price] = useState<string>("");
+  const [level6Price, setLevel6Price] = useState<string>("");
   const [showMargarita, setShowMargarita] = useState<boolean>(true);
   const [margaritaNote, setMargaritaNote] = useState<string>(DEFAULT_MARGARITA_NOTE);
   const [downloading, setDownloading] = useState(false);
@@ -151,6 +153,8 @@ const PartnersMarketingPage: React.FC = () => {
       l2: Number(level2Price) || undefined,
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
+      l5: Number(level5Price) || undefined,
+      l6: Number(level6Price) || undefined,
     },
     showMargarita,
     margaritaNote,
