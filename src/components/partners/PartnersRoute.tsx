@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import type { Session, User } from "@supabase/supabase-js";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { Loader2 } from "lucide-react";
+import { getGhostPartnerId } from "@/lib/partnerGhost";
 
 interface PartnersRouteProps {
   children: React.ReactNode;
