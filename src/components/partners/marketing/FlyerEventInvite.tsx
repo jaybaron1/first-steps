@@ -1,16 +1,15 @@
 import React from "react";
 import FlyerFrame from "./FlyerFrame";
+import FlyerBrandImage from "./FlyerBrandImage";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
 const EventInvite: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
   <FlyerFrame ref={innerRef}>
     <div style={{ height: "100%", padding: "88px 80px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
       {data.photoUrl && (
-        <img
-          src={data.photoUrl}
-          crossOrigin="anonymous"
-          style={{ width: 80, height: 80, borderRadius: "50%", objectFit: "cover", marginBottom: 32 }}
-        />
+        <div style={{ marginBottom: 32 }}>
+          <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={80} />
+        </div>
       )}
       <p style={{ fontSize: 11, letterSpacing: "0.28em", textTransform: "uppercase", color: data.accentColor, margin: 0, fontWeight: 600 }}>
         {data.partnerName} invites you

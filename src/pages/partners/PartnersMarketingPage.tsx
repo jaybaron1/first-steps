@@ -58,10 +58,10 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
   {
     key: "sales",
     label: "Sales Sheet",
-    description: "What it is, how it works, what it costs. The full pitch on one page.",
+    description: "What The Roundtable is, what it does, what it costs.",
     defaults: {
-      headline: "The Roundtable, built for you.",
-      tagline: "A private ChatGPT workspace, calibrated to how you actually think and decide. No prompts to memorize. No agents to babysit. Quiet leverage that compounds, conversation by conversation.",
+      headline: "The Roundtable",
+      tagline: "A private executive boardroom that lives inside your own ChatGPT. Three to five senior personas — calibrated to your business — show up to think through real decisions with you. Every session ends with a structured deliverable.",
       bullets: [],
     },
   },
@@ -81,6 +81,7 @@ const PartnersMarketingPage: React.FC = () => {
   const [bulletsText, setBulletsText] = useState(TEMPLATES[0].defaults.bullets.join("\n"));
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [setupPrice, setSetupPrice] = useState<number>(6000);
+  const [imageStyle, setImageStyle] = useState<"photo" | "logo">("photo");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -137,6 +138,7 @@ const PartnersMarketingPage: React.FC = () => {
     referralUrl,
     qrDataUrl,
     setupPrice,
+    imageStyle,
   };
 
   const handleDownload = async () => {
@@ -219,6 +221,25 @@ const PartnersMarketingPage: React.FC = () => {
               placeholder="https://…"
               className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
             />
+          </Field>
+
+          <Field label="Image style" hint="Photo crops to a circle. Logo preserves aspect ratio for wide marks.">
+            <div className="grid grid-cols-2 gap-2">
+              {(["photo", "logo"] as const).map((style) => (
+                <button
+                  key={style}
+                  type="button"
+                  onClick={() => setImageStyle(style)}
+                  className={`px-3 py-2 rounded-md border text-sm capitalize transition-colors ${
+                    imageStyle === style
+                      ? "border-slate-900 bg-slate-900 text-white"
+                      : "border-slate-200 hover:border-slate-300 text-slate-700"
+                  }`}
+                >
+                  {style}
+                </button>
+              ))}
+            </div>
           </Field>
 
           <Field label="Headline">

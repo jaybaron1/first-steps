@@ -1,5 +1,6 @@
 import React from "react";
 import FlyerFrame from "./FlyerFrame";
+import FlyerBrandImage from "./FlyerBrandImage";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
 const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
@@ -12,7 +13,7 @@ const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivEleme
             Founder offer · By invitation
           </p>
           {data.photoUrl && (
-            <img src={data.photoUrl} crossOrigin="anonymous" style={{ width: 56, height: 56, borderRadius: "50%", objectFit: "cover" }} />
+            <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} />
           )}
         </div>
         <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 64, lineHeight: 1, fontWeight: 500, margin: 0 }}>
