@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { usePartnersAuth } from "@/components/partners/PartnersRoute";
+import { clearGhostPartnerId } from "@/lib/partnerGhost";
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +15,7 @@ import {
   ShieldCheck,
   Calendar,
   Sparkles,
+  Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -43,11 +45,16 @@ const navItems: NavItem[] = [
 
 const PartnersLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel } = usePartnersAuth();
+  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, partnerName } = usePartnersAuth();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/partners/login", { replace: true });
+  };
+
+  const exitGhost = () => {
+    clearGhostPartnerId();
+    navigate("/partners/directory", { replace: true });
   };
 
   const visible = navItems.filter((i) => i.show({ isStaff, isAdmin, isPartner, isWhiteLabel }));
@@ -123,6 +130,22 @@ const PartnersLayout: React.FC = () => {
 
         {/* Main */}
         <main className="flex-1 overflow-x-hidden">
+          {isGhosting && (
+            <div className="bg-amber-100 border-b border-amber-300 px-6 py-2.5 flex items-center justify-between gap-4">
+              <div className="flex items-center gap-2 text-amber-900 text-sm">
+                <Eye className="w-4 h-4" />
+                <span>
+                  Viewing as <span className="font-semibold">{partnerName}</span>. This is what they see in their portal.
+                </span>
+              </div>
+              <button
+                onClick={exitGhost}
+                className="text-xs font-medium text-amber-900 hover:text-amber-950 underline underline-offset-2"
+              >
+                Exit ghost mode
+              </button>
+            </div>
+          )}
           <div className="max-w-[1400px] mx-auto px-8 py-8">
             <Outlet />
           </div>

@@ -3,6 +3,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import type { Session, User } from "@supabase/supabase-js";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { Loader2 } from "lucide-react";
+import { getGhostPartnerId } from "@/lib/partnerGhost";
 
 interface PartnersRouteProps {
   children: React.ReactNode;
@@ -17,11 +18,14 @@ export interface PartnersAuthContext {
   isAdmin: boolean;
   isStaff: boolean; // admin or sdr
   isPartner: boolean;
-  // Populated when role === 'partner'
+  // Populated when role === 'partner' (or when an admin is ghosting a partner)
   partnerId: string | null;
   partnerName: string | null;
   partnerSlug: string | null;
   isWhiteLabel: boolean;
+  // Ghost-mode flags (admin viewing as partner)
+  isGhosting: boolean;
+  realRole: PartnersRole;
 }
 
 const PartnersAuthContextRC = React.createContext<PartnersAuthContext | null>(null);
@@ -46,7 +50,40 @@ const PartnersRoute: React.FC<PartnersRouteProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<PartnersRole | null>(null);
   const [partner, setPartner] = useState<PartnerRow | null>(null);
+  const [ghostId, setGhostId] = useState<string | null>(() => getGhostPartnerId());
+  const [ghostPartner, setGhostPartner] = useState<PartnerRow | null>(null);
 
+  // React to ghost-id changes from anywhere in the app
+  useEffect(() => {
+    const onChange = () => setGhostId(getGhostPartnerId());
+    window.addEventListener("partners-ghost-change", onChange);
+    window.addEventListener("storage", onChange);
+    return () => {
+      window.removeEventListener("partners-ghost-change", onChange);
+      window.removeEventListener("storage", onChange);
+    };
+  }, []);
+
+  // Load the ghosted partner row whenever an admin sets a ghost id
+  useEffect(() => {
+    let active = true;
+    const isAdmin = role === "admin";
+    if (!isAdmin || !ghostId) {
+      setGhostPartner(null);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("partners")
+        .select("id, name, slug, is_white_label")
+        .eq("id", ghostId)
+        .maybeSingle();
+      if (active) setGhostPartner(data ?? null);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [ghostId, role]);
   useEffect(() => {
     let mounted = true;
 
@@ -181,19 +218,26 @@ const PartnersRoute: React.FC<PartnersRouteProps> = ({ children }) => {
     );
   }
 
+  // Apply ghost override: only valid when real role is admin AND ghost partner loaded
+  const ghosting = role === "admin" && !!ghostId && !!ghostPartner;
+  const effectiveRole: PartnersRole = ghosting ? "partner" : role;
+  const effectivePartner: PartnerRow | null = ghosting ? ghostPartner : partner;
+
   return (
     <PartnersAuthContextRC.Provider
       value={{
         user,
         session,
-        role,
-        isAdmin: role === "admin",
-        isStaff: role === "admin" || role === "sdr",
-        isPartner: role === "partner",
-        partnerId: partner?.id ?? null,
-        partnerName: partner?.name ?? null,
-        partnerSlug: partner?.slug ?? null,
-        isWhiteLabel: !!partner?.is_white_label,
+        role: effectiveRole,
+        realRole: role,
+        isGhosting: ghosting,
+        isAdmin: effectiveRole === "admin",
+        isStaff: effectiveRole === "admin" || effectiveRole === "sdr",
+        isPartner: effectiveRole === "partner",
+        partnerId: effectivePartner?.id ?? null,
+        partnerName: effectivePartner?.name ?? null,
+        partnerSlug: effectivePartner?.slug ?? null,
+        isWhiteLabel: !!effectivePartner?.is_white_label,
       }}
     >
       {children}

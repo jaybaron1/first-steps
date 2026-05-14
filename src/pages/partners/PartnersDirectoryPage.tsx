@@ -35,8 +35,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Loader2, Pencil, Trash2, Link2, Mail } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Link2, Mail, Eye } from "lucide-react";
 import PartnerShareablesModal from "@/components/admin/PartnerShareablesModal";
+import { setGhostPartnerId } from "@/lib/partnerGhost";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Required").max(200),
@@ -73,6 +75,12 @@ const PartnersDirectoryPage: React.FC = () => {
   const { user, isAdmin } = usePartnersAuth();
   const { toast } = useToast();
   const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  const ghostInto = (p: Partner) => {
+    setGhostPartnerId(p.id);
+    navigate("/partners/me");
+  };
 
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -271,6 +279,16 @@ const PartnersDirectoryPage: React.FC = () => {
                         >
                           <Link2 className="w-3.5 h-3.5" />
                         </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => ghostInto(p)}
+                            className="p-1.5 rounded hover:bg-purple-50 text-slate-500 hover:text-purple-700"
+                            aria-label="View as partner"
+                            title="View portal as this partner"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+                        )}
                         {isAdmin && (
                           <button
                             onClick={() => sendInvite(p)}
