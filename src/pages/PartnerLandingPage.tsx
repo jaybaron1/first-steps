@@ -10,6 +10,18 @@ const openChat = () => {
   else window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
 };
 
+const appendRef = (url: string, slug: string | null | undefined): string => {
+  if (!slug) return url;
+  try {
+    const u = new URL(url, window.location.origin);
+    if (!u.searchParams.has("ref")) u.searchParams.set("ref", slug);
+    return u.toString();
+  } catch {
+    const sep = url.includes("?") ? "&" : "?";
+    return `${url}${sep}ref=${encodeURIComponent(slug)}`;
+  }
+};
+
 export interface PartnerLandingProps {
   partner: {
     id: string;
@@ -195,7 +207,7 @@ const PartnerLandingPage: React.FC<PartnerLandingProps> = ({ partner }) => {
             <p className="text-[11px] text-stone-400 tracking-wide">
               Powered by{" "}
               <a
-                href="https://galavanteer.com"
+                href={appendRef("https://galavanteer.com", partner.slug)}
                 className="text-stone-500 hover:text-stone-700 underline-offset-4 hover:underline"
               >
                 Galavanteer
