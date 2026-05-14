@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
       // Generate a magic-link invite (creates the user and sends email)
       const { data: invited, error: invErr } = await admin.auth.admin.inviteUserByEmail(
         cleanEmail,
-        { redirectTo: `${new URL(req.url).origin.replace(/\/.*/, "")}/portal/login` },
+        { redirectTo: `${new URL(req.url).origin.replace(/\/.*/, "")}/partners/login` },
       );
       if (invErr) return json({ error: invErr.message }, 400);
       userId = invited.user!.id;
