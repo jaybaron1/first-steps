@@ -282,15 +282,14 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontSize: 40,
                 fontWeight: 700,
-                margin: "6px 0 0",
-                lineHeight: 1,
+                margin: "8px 0 0",
+                lineHeight: 1.15,
                 color: ink,
-                letterSpacing: "-0.01em",
               }}
             >
               {fmt(setup)}
             </p>
-            <p style={{ fontSize: 9.5, color: muted, margin: "8px 0 0", lineHeight: 1.4 }}>
+            <p style={{ fontSize: 9.5, color: muted, margin: "10px 0 0", lineHeight: 1.4 }}>
               One-time setup. Tier 1 subscription required. Upgrades priced individually.
             </p>
           </div>
