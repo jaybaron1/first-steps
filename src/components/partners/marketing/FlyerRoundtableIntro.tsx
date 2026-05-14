@@ -10,6 +10,7 @@ export interface FlyerData {
   accentColor: string;
   referralUrl: string;
   qrDataUrl: string | null;
+  setupPrice?: number;
 }
 
 const Editorial: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (

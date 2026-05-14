@@ -5,10 +5,12 @@ import { buildReferralUrl, buildReferralCaptureUrl, exportFlyerToPdf, generateQr
 import FlyerRoundtableIntro, { type FlyerData } from "@/components/partners/marketing/FlyerRoundtableIntro";
 import FlyerFounderOffer from "@/components/partners/marketing/FlyerFounderOffer";
 import FlyerEventInvite from "@/components/partners/marketing/FlyerEventInvite";
+import FlyerSalesSheet from "@/components/partners/marketing/FlyerSalesSheet";
+import SalesMaterialReference from "@/components/partners/marketing/SalesMaterialReference";
 import { Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 
-type TemplateKey = "intro" | "founder" | "event";
+type TemplateKey = "intro" | "founder" | "event" | "sales";
 
 const TEMPLATES: { key: TemplateKey; label: string; description: string; defaults: { headline: string; tagline: string; bullets: string[] } }[] = [
   {
@@ -53,6 +55,16 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
       ],
     },
   },
+  {
+    key: "sales",
+    label: "Sales Sheet",
+    description: "What it is, how it works, what it costs. The full pitch on one page.",
+    defaults: {
+      headline: "The Roundtable, built for you.",
+      tagline: "A private ChatGPT workspace, calibrated to how you actually think and decide. No prompts to memorize. No agents to babysit. Quiet leverage that compounds, conversation by conversation.",
+      bullets: [],
+    },
+  },
 ];
 
 const DEFAULT_ACCENT = "#B8956C";
@@ -68,6 +80,7 @@ const PartnersMarketingPage: React.FC = () => {
   const [tagline, setTagline] = useState(TEMPLATES[0].defaults.tagline);
   const [bulletsText, setBulletsText] = useState(TEMPLATES[0].defaults.bullets.join("\n"));
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [setupPrice, setSetupPrice] = useState<number>(6000);
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -123,6 +136,7 @@ const PartnersMarketingPage: React.FC = () => {
     accentColor,
     referralUrl,
     qrDataUrl,
+    setupPrice,
   };
 
   const handleDownload = async () => {
@@ -142,6 +156,7 @@ const PartnersMarketingPage: React.FC = () => {
   const renderFlyer = (innerRef: React.Ref<HTMLDivElement>) => {
     if (template === "intro") return <FlyerRoundtableIntro data={data} innerRef={innerRef} />;
     if (template === "founder") return <FlyerFounderOffer data={data} innerRef={innerRef} />;
+    if (template === "sales") return <FlyerSalesSheet data={data} innerRef={innerRef} />;
     return <FlyerEventInvite data={data} innerRef={innerRef} />;
   };
 
@@ -161,6 +176,8 @@ const PartnersMarketingPage: React.FC = () => {
           Personalize a one-pager and download a print-ready PDF to share with your circle.
         </p>
       </header>
+
+      <SalesMaterialReference />
 
       <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8">
         {/* Left: form */}
@@ -229,6 +246,19 @@ const PartnersMarketingPage: React.FC = () => {
               className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
             />
           </Field>
+
+          {template === "sales" && (
+            <Field label="Setup price (USD)" hint="Editable per partner. Add-ons stay fixed.">
+              <input
+                type="number"
+                min={0}
+                step={100}
+                value={setupPrice}
+                onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+              />
+            </Field>
+          )}
 
           <Field label="Accent color">
             <div className="flex items-center gap-3">
