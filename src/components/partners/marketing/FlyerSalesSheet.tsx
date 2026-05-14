@@ -204,60 +204,41 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                   const price = isBase ? "Included" : priceLabel(lp[lvl.priceKey!]);
                   return (
                     <div key={lvl.n} style={{ display: "flex", alignItems: "flex-start", gap: 10, position: "relative" }}>
-                      <div
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: 999,
-                          background: paper,
-                          border: `1.5px solid ${accent}`,
-                          position: "relative",
-                          flexShrink: 0,
-                          zIndex: 1,
-                          boxShadow: `0 0 0 4px ${paper}`,
-                        }}
-                      >
-                        <span
-                          style={{
-                            position: "absolute",
-                            inset: 0,
-                            display: "block",
-                            textAlign: "center",
-                            lineHeight: "31px",
-                            fontFamily: "Georgia, 'Times New Roman', serif",
-                            fontSize: 15,
-                            fontWeight: 600,
-                            color: accent,
-                          }}
+                      <svg width="32" height="32" viewBox="0 0 32 32" style={{ display: "block", flexShrink: 0, zIndex: 1, overflow: "visible" }}>
+                        <circle cx="16" cy="16" r="15" fill={paper} stroke={accent} strokeWidth="1.5" />
+                        <text
+                          x="16"
+                          y="16"
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fontFamily="Georgia, 'Times New Roman', serif"
+                          fontSize="15"
+                          fontWeight="600"
+                          fill={accent}
                         >
                           {lvl.n}
-                        </span>
-                      </div>
+                        </text>
+                      </svg>
                       <div style={{ flex: 1, minWidth: 0, paddingTop: 1 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
                           <p style={{ fontSize: 11, fontWeight: 700, color: ink, margin: 0 }}>{lvl.name}</p>
                           {isBase ? (
-                            <span
-                              style={{
-                                display: "inline-flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                height: 18,
-                                minWidth: 70,
-                                fontSize: 7.5,
-                                fontWeight: 700,
-                                letterSpacing: "0.18em",
-                                textTransform: "uppercase",
-                                color: accent,
-                                border: `1px solid ${accent}`,
-                                padding: "0 8px",
-                                borderRadius: 999,
-                                whiteSpace: "nowrap",
-                                lineHeight: "18px",
-                              }}
-                            >
-                              <span style={{ display: "block", lineHeight: "18px" }}>Included</span>
-                            </span>
+                            <svg width="72" height="18" viewBox="0 0 72 18" style={{ display: "block", flexShrink: 0 }}>
+                              <rect x="0.5" y="0.5" width="71" height="17" rx="8.5" fill="none" stroke={accent} strokeWidth="1" />
+                              <text
+                                x="36"
+                                y="9"
+                                textAnchor="middle"
+                                dominantBaseline="central"
+                                fontFamily="Inter, Arial, sans-serif"
+                                fontSize="7.5"
+                                fontWeight="700"
+                                letterSpacing="1.35"
+                                fill={accent}
+                              >
+                                INCLUDED
+                              </text>
+                            </svg>
                           ) : (
                             <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap", lineHeight: 1.2 }}>{price}</span>
                           )}
