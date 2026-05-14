@@ -11,16 +11,15 @@ const PILLARS = [
   { title: "Private and yours", body: "Lives in your own ChatGPT. No new tools. No shared logins." },
 ];
 
-type LevelKey = "l2" | "l3" | "l4" | "l5" | "l6";
+type LevelKey = "l2" | "l3" | "l4" | "l5";
 type Level = { n: number; name: string; body: string; priceKey: LevelKey | null };
 
 const LEVELS: Level[] = [
-  { n: 1, name: "The Roundtable",      body: "The room itself. Sixty advisors, one owner.",                priceKey: null },
-  { n: 2, name: "The Operating Frame", body: "Your company, in their hands.",                              priceKey: "l2" },
-  { n: 3, name: "Take A Seat",         body: "You, in the room when you're not.",                          priceKey: "l3" },
-  { n: 4, name: "Future Me",           body: "Tested against who you're becoming.",                        priceKey: "l4" },
-  { n: 5, name: "Add a Voice",         body: "A teammate's voice in the room when they're not.",           priceKey: "l5" },
-  { n: 6, name: "Pull Up a Chair",     body: "A login for a teammate to join the room live.",              priceKey: "l6" },
+  { n: 1, name: "The Roundtable",      body: "The room itself. Three to five of sixty-plus senior advisors.", priceKey: null },
+  { n: 2, name: "The Operating Frame", body: "Your company, in their hands.",                                  priceKey: "l2" },
+  { n: 3, name: "Take A Seat",         body: "You, in the room when you're not.",                              priceKey: "l3" },
+  { n: 4, name: "Future Me",           body: "Tested against who you're becoming.",                            priceKey: "l4" },
+  { n: 5, name: "Add a Voice",         body: "A teammate's voice in the room when they're not.",               priceKey: "l5" },
 ];
 
 const DEFAULT_MARGARITA_NOTE =
@@ -95,16 +94,11 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               A private executive boardroom inside your own ChatGPT.
             </p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ background: paper, padding: 6, borderRadius: 4 }}>
-              <GalavanteerMark color={ink} size={26} showWordmark={false} />
+          {data.photoUrl && (
+            <div style={{ background: paper, padding: 4, borderRadius: 999 }}>
+              <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} borderColor={accent} />
             </div>
-            {data.photoUrl && (
-              <div style={{ background: paper, padding: 4, borderRadius: 999 }}>
-                <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} borderColor={accent} />
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
         {/* === Lead === */}
@@ -207,7 +201,7 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
                 {LEVELS.map((lvl) => {
                   const isBase = lvl.priceKey === null;
-                  const price = isBase ? "Required" : priceLabel(lp[lvl.priceKey!]);
+                  const price = isBase ? "Included" : priceLabel(lp[lvl.priceKey!]);
                   return (
                     <div key={lvl.n} style={{ display: "flex", alignItems: "flex-start", gap: 10, position: "relative" }}>
                       <div
@@ -248,7 +242,7 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                                 whiteSpace: "nowrap",
                               }}
                             >
-                              Required
+                              Included
                             </span>
                           ) : (
                             <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap" }}>{price}</span>

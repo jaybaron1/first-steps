@@ -1,72 +1,87 @@
 ## Goal
 
-Restore the Sales Sheet to the **previous visual format** (the one before this turn), but render the ladder as **6 tiers** instead of 4, and fix the dark "$6,000" block so it's readable on print.
+Make the Sales Sheet feel like it knows the product: persist pricing per partner, show Tier 1 as Included, drop the "Pull Up a Chair" tier, move the Galavanteer mark to the footer only, and ship a tagline that actually says what The Roundtable is.
 
-Keep the other improvements from this turn that you've approved: Galavanteer logo on all flyers, Margarita toggle + editable note, updated tagline, and hiding the Bullets field on the Sales Sheet.
+## 1. Persist pricing per partner (auto-save)
 
-## What changes
-
-### 1. Sales Sheet — revert layout to the prior format
-Restore the structure that was already working:
-
-- **Masthead** — dark ink bar with accent stripe, "Presented by [partner]", "The Roundtable" wordmark, partner photo on the right. Add the Galavanteer logo lockup next to the photo.
-- **Lead** — `What it is` label + tagline.
-- **Two columns** — left: 4 pillars with accent rules. Right: the **numbered medallion ladder** with the vertical accent rail.
-- **Margarita callout** — back inside the left column under the pillars (toggle-controlled, editable note).
-- **Investment block** — two-column band:
-  - Left: "Investment · Workspace build" + `$6,000` price.
-  - Right: "Not included — billed separately" list (ChatGPT Teams, additional users, maintenance).
-- **Footer** — "Request access" + referral URL + Galavanteer mark on the left, QR on the right.
-
-### 2. Ladder — expand to 6 tiers, same visual format
-Same numbered medallion + rail + name/description + right-aligned price, but rendered for 6 tiers. Numbers `1`–`6` (not Roman numerals — keeps the prior visual). Defaults:
+Add five new columns to `public.partners`. Auto-save fires on edit (debounced ~600ms), scoped to the logged-in partner's row. No Save button.
 
 ```text
-1  The Roundtable        — Required
-2  The Operating Frame   — price (override or "Quoted on request")
-3  Take A Seat           — price
-4  Future Me             — price
-5  Add a Voice           — price
-6  Pull Up a Chair       — price
+flyer_setup_price    integer  default 6000
+flyer_tier_prices    jsonb    default '{}'::jsonb     -- { l2:1500, l3:2500, l4:300, l5:500 }
+flyer_show_margarita boolean  default true
+flyer_margarita_note text     nullable
+flyer_tagline        text     nullable
 ```
 
-The `Required` pill replaces the old "Included" pill on tier 1, since under the AB schema the room is a subscription, not "included."
+- Existing RLS already covers it: SDRs update their own partner row, portal partners see their own row, admins manage all. No new policies needed.
+- On `PartnersMarketingPage` mount, load these alongside `name`/`landing_*` fields and hydrate state.
+- Save: debounced `update partners set ... where id = partnerId`. Toast only on error.
+- Field reverts to default if the partner clears the input.
 
-### 3. Investment block — fix readability
-The previous dark `$6,000` panel was unreadable on print. Keep the panel but:
+## 2. Tier ladder — 5 tiers, Tier 1 "Included"
 
-- Lighten the background from near-black to the ink color at reduced weight (or invert: light cream background, ink-color price, accent stripe on the left).
-- Bump the price to a bolder serif weight at the same size.
-- Keep the accent stripe and the "Investment · Workspace build" eyebrow.
+Drop "Pull Up a Chair." The Sales Sheet describes the workspace build; the per-chair monthly access fee belongs in a separate conversation, not on this one-pager.
 
-Result: the $6,000 still anchors the eye, but prints cleanly.
+```text
+1  The Roundtable        — Included      (badge, no $)
+2  The Operating Frame   — partner price or "Quoted on request"
+3  Take A Seat           — partner price or "Quoted on request"
+4  Future Me             — partner price or "Quoted on request"
+5  Add a Voice           — partner price or "Quoted on request"
+```
 
-### 4. Form controls (left rail)
-Update the price-override inputs to match the 6-tier ladder. Replace the current Level 2/3/4 inputs with:
+Tier 1 row keeps the medallion + name + body, with an `Included` pill in the same slot the price would sit. Reads as: "the room itself comes with the build."
 
-- Tier 2 — The Operating Frame
-- Tier 3 — Take A Seat
-- Tier 4 — Future Me
-- Tier 5 — Add a Voice
-- Tier 6 — Pull Up a Chair
+Mirror the same five-row ladder in `SalesMaterialReference.tsx` so the on-page talk-track and the printed flyer agree.
 
-Each input is optional; blank shows "Quoted on request" exactly like before. Keep the Margarita toggle + note fields and the workspace setup price input.
+## 3. Galavanteer logo — footer only
 
-### 5. Keep from this turn
-- Galavanteer logo on all four flyer footers (and Sales Sheet masthead).
-- Margarita toggle + editable note.
-- Updated default tagline.
-- Bullets field hidden when Sales Sheet is selected.
+- Remove the `GalavanteerMark` from the dark masthead. The masthead becomes: partner accent stripe → `Presented by [partner]` → "The Roundtable" wordmark → partner photo on the right. Top of the sheet is the partner's space.
+- Keep the `GalavanteerMark` lockup in the footer left column under the referral URL.
+- Other three flyers (Intro / Founder / Event) already have the mark only in the footer — no change.
 
-### 6. Out of scope (for this plan)
-- The 6-tier AB pricing copy itself ($79/mo, +$1,500, etc.) — those values stay as **partner-overridable inputs**, not hardcoded into the template. You can put real numbers in for one partner and leave them blank for another.
-- No edits to Intro / Founder / Event flyers beyond what's already shipped.
+## 4. Tagline — stronger default
+
+Replace the current default with copy that names what's actually happening, drawn from the deck and landing page:
+
+> **A private boardroom inside your own ChatGPT. Bring a real decision and the room assembles three to five of sixty-plus senior advisors — chosen for the problem in front of you — to think it through and hand back a written brief you can defend.**
+
+Why this is the default:
+- "private boardroom inside your own ChatGPT" — placement and ownership.
+- "three to five of sixty-plus senior advisors" — the scale point you flagged.
+- "chosen for the problem in front of you" — specialization, not generic chat.
+- "written brief you can defend" — the deliverable, mirrors the deck.
+
+Margarita can still rewrite it inline; her edits persist via `flyer_tagline`. If she clears the field, it falls back to this default.
+
+## 5. Form layout (left rail)
+
+After this change, the Sales Sheet form panel shows, in order:
+
+1. Template chooser
+2. Your name / photo / image style
+3. Headline
+4. Tagline (auto-saved)
+5. Margarita callout toggle + note (auto-saved)
+6. Workspace build price (auto-saved)
+7. Tier prices: Operating Frame, Take A Seat, Future Me, Add a Voice — four inputs, blank → "Quoted on request" (auto-saved)
+8. Accent color
+9. Referral link (read-only)
+10. Download PDF
+
+The Tier 6 / Pull Up a Chair input is removed.
+
+## 6. Out of scope
+
+- No changes to the Intro / Founder / Event flyer templates.
+- No changes to authentication, RLS, or other partner pages.
+- No subscription/MRR pricing surfaced on this sheet — that's a different document.
 
 ## Files touched
 
-- `src/components/partners/marketing/FlyerSalesSheet.tsx` — restore prior layout, ladder grows to 6 rows, lighten the Investment panel.
-- `src/pages/partners/PartnersMarketingPage.tsx` — extend the price-override form from 3 inputs to 5 inputs (tiers 2–6), keep Margarita toggle/note, keep setup price input.
-- `src/components/partners/marketing/FlyerRoundtableIntro.tsx` — extend `FlyerData.levelPrices` shape to `{ l2?, l3?, l4?, l5?, l6? }`.
-- `src/components/partners/marketing/SalesMaterialReference.tsx` — mirror the 6-tier ladder in the on-page reference so the talk-track matches the flyer.
-
-No changes to backend, routing, auth, or the other flyer templates.
+- **Migration**: add five `flyer_*` columns to `public.partners`.
+- `src/components/partners/marketing/FlyerSalesSheet.tsx` — drop logo from masthead, change ladder to 5 rows, render Tier 1 as `Included`.
+- `src/components/partners/marketing/FlyerRoundtableIntro.tsx` — narrow `FlyerData.levelPrices` to `{ l2?, l3?, l4?, l5? }`.
+- `src/components/partners/marketing/SalesMaterialReference.tsx` — mirror the 5-tier ladder.
+- `src/pages/partners/PartnersMarketingPage.tsx` — load + hydrate the five new fields, debounced auto-save, drop the Tier 6 input, swap in the new default tagline.

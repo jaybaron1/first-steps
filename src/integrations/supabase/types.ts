@@ -1073,6 +1073,11 @@ export type Database = {
           agreement_date: string | null
           created_at: string
           email: string | null
+          flyer_margarita_note: string | null
+          flyer_setup_price: number
+          flyer_show_margarita: boolean
+          flyer_tagline: string | null
+          flyer_tier_prices: Json
           id: string
           is_white_label: boolean
           landing_accent_color: string | null
@@ -1099,6 +1104,11 @@ export type Database = {
           agreement_date?: string | null
           created_at?: string
           email?: string | null
+          flyer_margarita_note?: string | null
+          flyer_setup_price?: number
+          flyer_show_margarita?: boolean
+          flyer_tagline?: string | null
+          flyer_tier_prices?: Json
           id?: string
           is_white_label?: boolean
           landing_accent_color?: string | null
@@ -1125,6 +1135,11 @@ export type Database = {
           agreement_date?: string | null
           created_at?: string
           email?: string | null
+          flyer_margarita_note?: string | null
+          flyer_setup_price?: number
+          flyer_show_margarita?: boolean
+          flyer_tagline?: string | null
+          flyer_tier_prices?: Json
           id?: string
           is_white_label?: boolean
           landing_accent_color?: string | null

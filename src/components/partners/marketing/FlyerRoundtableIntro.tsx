@@ -14,7 +14,7 @@ export interface FlyerData {
   qrDataUrl: string | null;
   setupPrice?: number;
   imageStyle?: "photo" | "logo";
-  levelPrices?: { l2?: number; l3?: number; l4?: number; l5?: number; l6?: number };
+  levelPrices?: { l2?: number; l3?: number; l4?: number; l5?: number };
   showMargarita?: boolean;
   margaritaNote?: string;
 }
