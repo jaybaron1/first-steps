@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const PROD_BASE = "https://galavanteer.com";
+const PROD_BASE = "https://galavanteer.lovable.app";
 
 const PartnersMyPage: React.FC = () => {
   const { partnerId, partnerName, partnerSlug } = usePartnersAuth();
