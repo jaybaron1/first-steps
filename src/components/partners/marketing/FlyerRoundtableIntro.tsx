@@ -26,10 +26,11 @@ const Editorial: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement>
           <p style={{ fontSize: 22, fontWeight: 600, marginTop: 8, color: "#0f172a" }}>{data.partnerName}</p>
         </div>
         {data.photoUrl && (
-          <img
+          <FlyerBrandImage
             src={data.photoUrl}
-            crossOrigin="anonymous"
-            style={{ width: 96, height: 96, borderRadius: "50%", objectFit: "cover", border: `2px solid ${data.accentColor}` }}
+            imageStyle={data.imageStyle}
+            size={96}
+            borderColor={data.accentColor}
           />
         )}
       </div>
