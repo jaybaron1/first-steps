@@ -84,7 +84,7 @@ const PartnersRoute: React.FC<PartnersRouteProps> = ({ children }) => {
       active = false;
     };
   }, [ghostId, role]);
-
+  useEffect(() => {
     let mounted = true;
 
     const resolveRole = async (uid: string): Promise<PartnersRole | null> => {
