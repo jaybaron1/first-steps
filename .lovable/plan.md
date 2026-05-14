@@ -1,126 +1,111 @@
-# Partner Referral Links, QR Codes & Partner Portal
+&nbsp;
 
-Give Margarita (and every future partner) a clean URL like `galavanteer.com/r/margarita`, a downloadable QR code, sticky attribution that survives across sessions, and a private dashboard where she can see her own clicks → leads → clients.
+&nbsp;
 
----
+# White-Label Partner Landing Pages
 
-## 1. Database changes (one migration)
+## The problem you spotted
 
-**Extend `partners` table:**
-- `slug` (text, unique, lowercase, url-safe) — e.g. `margarita`
-- `qr_logo_url` (text, nullable) — optional logo to embed in QR center
-- `portal_user_id` (uuid, nullable) — links to an auth.users row when partner has login
-- `website` (text, nullable) — e.g. `https://margaritaxistris.com`
-- `is_white_label` (bool) — true for Margarita; flags her as a "personality in her own boardroom"
+Today `/r/margarita` sets the attribution cookie, then **redirects to your homepage**. Margarita's referrals land on a page that's 100% your offer, with zero signal that she's the reason they're there — or that she's part of what they get.
 
-**New table `partner_referral_clicks`:**
-- `partner_id`, `slug_used`, `session_id`, `landing_url`, `referrer`, `ip_hash`, `user_agent`, `created_at`
-- RLS: admins all; partners can SELECT only `WHERE partner_id = (SELECT id FROM partners WHERE portal_user_id = auth.uid())`
+## The fix
 
-**New `app_role` enum value: `'partner'`** (read-only role, separate from `sdr`)
+Stop redirecting white-label partners. Instead, `/r/margarita` **renders a co-branded landing page** that frames the offer as *hers*, with you as the engine behind it. Attribution still gets set silently in the background.
 
-**New table `pending_referrals`** (optional review queue not used here since you chose auto-create, but kept as a `referral_source` column on `leads` and `partner_clients`):
-- Add `referred_by_partner_id` (uuid) and `referral_session_id` (text) to: `leads`, `partner_clients`
+Non-white-label partners (regular SDRs / affiliates) keep the silent redirect behavior — they're just earning commission, not selling their persona.
 
-**Trigger `auto_create_partner_client_from_lead`:** when a row is inserted into `leads` with `referred_by_partner_id IS NOT NULL`, automatically insert a matching `partner_clients` row (`attribution_status = 'pending'`, `owner_id = partner.owner_id`) and pgnotify for the email function.
+## What Margarita's page looks like
 
----
+```text
+┌─────────────────────────────────────────────┐
+│  [Margarita's logo / photo]                 │
+│                                             │
+│  Work with Margarita Xistris               │
+│  + your own private boardroom of advisors   │
+│                                             │
+│  [Her positioning copy — editable]          │
+│                                             │
+│  ┌──────────────────────────────────────┐   │
+│  │  What you get when you work with me: │   │
+│  │  • A seat at my table                │   │
+│  │  • Your own AI Roundtable, built     │   │
+│  │    on the Galavanteer engine         │   │
+│  │  • [her custom bullets]              │   │
+│  └──────────────────────────────────────┘   │
+│                                             │
+│  [Start a conversation] ──► ChatDiscovery   │
+│                              (pre-tagged)   │
+│                                             │
+│  Powered by Galavanteer  ·  small footer    │
+└─────────────────────────────────────────────┘
+```
 
-## 2. Routing & attribution capture
+Key points:
 
-**New route `/r/:slug`** (`src/pages/ReferralRedirect.tsx`):
-1. Look up partner by slug.
-2. Insert a row into `partner_referral_clicks`.
-3. Write **first-party cookie** `gv_ref={partner_id}` with `max-age=10 years` (your "forever until overwritten" choice — a new `/r/:slug` click overwrites it).
-4. Also stash in `localStorage` as a belt-and-suspenders backup.
-5. Append `?ref=<slug>` and redirect to `/` (or to `?to=/pricing` if a destination param is passed — useful for campaign links).
+- **Her name, her face, her copy** above the fold
+- **One CTA** → opens ChatDiscovery (the lead is auto-tagged to her)
+- **"Powered by Galavanteer"** — small, honest, doesn't compete with her brand
+- **No top nav** to your other pages — this is *her* funnel, not a tour of your site
 
-**Global attribution hook** (extend `src/lib/visitorTracking.ts`):
-- On every page load, read `gv_ref` cookie → attach `referred_by_partner_id` to the current visitor session.
-- When `ChatDiscovery`, lead form, free trial, or Calendly submission fires, include that partner_id in the payload.
+## How the toggle works
 
-**Edge function changes:**
-- `notify-lead`: if `referred_by_partner_id` present, also email the partner (template: "A new lead came in from your link — we'll keep you posted.").
-- `notify-lead`: BCC you on the partner email so you have a record.
+In the admin Partners directory, each partner has `is_white_label`:
 
----
+- `**is_white_label = true**` (Margarita): `/r/:slug` renders the landing page
+- `**is_white_label = false**` (SDRs like John): `/r/:slug` does the silent redirect → homepage, just like today
 
-## 3. QR codes
+## What Margarita can edit herself
 
-- Add `qrcode` npm package.
-- Admin → Partners → click partner → **"Shareables" tab** with:
-  - Full URL (copy button)
-  - QR preview (PNG)
-  - Download as PNG (1024px) and SVG (vector for print)
-  - "Email these to partner" button (Resend, uses your existing `notify-*` pattern)
+In her **partner portal** (`/portal`), add a "My Landing Page" tab where she controls:
 
-QR encodes the canonical published URL (`https://galavanteer.com/r/<slug>`), not the preview.
+- Headline + subheadline
+- Her photo / logo URL
+- Her bio paragraph
+- Her custom bullet list ("what working with me means")
+- Optional testimonial quote
+- Optional accent color
 
----
+You see a live preview + can override anything from `/admin/partners/:id`.
 
-## 4. Partner login portal
+## Technical changes
 
-**New role:** `partner` (added to `app_role` enum). Partners can log in with email + Google but only see `/portal/*`.
+**Database (one migration):**
 
-**New routes (`src/pages/portal/`):**
-- `/portal/login` — same auth pattern as `/partners/login`, but redirects to `/portal`
-- `/portal` — dashboard:
-  - Headline: clicks (last 30 / all-time), leads, clients won, MRR they're attributed to
-  - Their referral link + QR (downloadable)
-  - Recent activity feed (anonymized: "New lead — Acme Corp · 2 days ago", no contact details)
-  - Commission summary (uses existing `commercial_events`, filtered by their partner_id)
+- Add to `partners`: `landing_headline`, `landing_subheadline`, `landing_bio`, `landing_bullets jsonb`, `landing_photo_url`, `landing_logo_url`, `landing_testimonial`, `landing_accent_color`, `landing_published bool default false`
 
-**Privacy guardrails:**
-- Partners never see lead email/phone, only company + first name.
-- RLS: every portal query is scoped to `partners.portal_user_id = auth.uid()`.
+**Routing:**
 
-**Margarita's "white-label personality" flag:**
-- `is_white_label = true` shows an extra panel: "Your Boardroom Persona" — placeholder for now, with a note that you'll wire it up when her persona is built. This keeps the data model ready without scope creep.
+- Modify `src/pages/ReferralRedirect.tsx`: after looking up the partner, branch on `is_white_label && landing_published`:
+  - `true` → render new `<PartnerLandingPage partner={partner} />` (still sets cookie + logs click)
+  - `false` → existing redirect behavior
 
----
+**New components:**
 
-## 5. Admin additions
-
-- Partners list gets a **slug column** + "Generate slug" button (auto-slugifies the name).
-- Each partner card gets: live click count, conversion rate, "Send portal invite" button (creates auth user, assigns `partner` role, links `portal_user_id`, emails magic link via Resend).
-- New `/admin/partners/:id/shareables` page (link, QR PNG/SVG, embed snippet for partner's own site: `<a href="https://galavanteer.com/r/margarita">Book with Galavanteer</a>`).
-
----
-
-## 6. For Margarita specifically (one-time setup after build)
-
-1. Open Partners → Margarita Xistris → set slug `margarita`, website `https://margaritaxistris.com`, toggle `is_white_label`.
-2. Click **Send portal invite** → she gets a magic-link email.
-3. Click **Email shareables** → she gets her link + QR (PNG for digital, SVG for print).
-4. She can drop the link on her site, in her email signature, in printed materials.
-
----
-
-## Technical notes
-
-- Cookie is first-party (`Domain=.galavanteer.com`, `SameSite=Lax`) so it survives subdomain hops and form posts. Not a third-party tracker — no consent banner change needed.
-- "Forever until overwritten" = last-touch attribution at the click level. If a visitor clicks Margarita's link in 2026 then John's link in 2027, John gets credit going forward. This matches your existing `detect_attribution_dispute` trigger on manual referrals.
-- Partner role is read-only by RLS, not by UI guard — even if they hit the API directly, they can't see other partners' data.
-- All new tables get the standard `touch_updated_at` trigger and admin RLS.
-
----
-
-## Files to create / modify
-
-**New:**
-- `src/pages/ReferralRedirect.tsx`
-- `src/pages/portal/PortalLayout.tsx`, `PortalLoginPage.tsx`, `PortalDashboardPage.tsx`
-- `src/components/admin/PartnerShareables.tsx`
-- `src/hooks/usePartnerPortal.ts`
-- `supabase/functions/send-partner-invite/index.ts`
-- `supabase/functions/email-shareables/index.ts`
-- One migration
+- `src/pages/PartnerLandingPage.tsx` — the co-branded page
+- `src/components/portal/LandingPageEditor.tsx` — Margarita's editor in `/portal`
+- `src/components/admin/PartnerLandingEditor.tsx` — admin override view
 
 **Modified:**
-- `src/App.tsx` (new routes)
-- `src/lib/visitorTracking.ts` (read `gv_ref` cookie)
-- `src/components/ChatDiscovery.tsx`, `SessionRequestForm.tsx`, `FreeTrialModal.tsx` (attach partner_id)
-- `supabase/functions/notify-lead/index.ts` (email partner too)
-- `src/pages/partners/PartnersDirectoryPage.tsx` (slug column, shareables button)
 
-Approve and I'll build it in one pass.
+- `src/pages/ReferralRedirect.tsx` — branch logic
+- `src/pages/portal/PortalDashboardPage.tsx` — add "My Landing Page" tab
+- `src/components/ChatDiscovery.tsx` — when opened from a partner landing page, prepend "Hi, I was referred by {partner.name}" to give the lead context
+
+**No changes** to attribution, cookie logic, click logging, auto-create-client trigger, or commission flow — all of that already works.
+
+## What this gives you
+
+- Margarita can sell her site as **her** site, not "a referral link to Doug"
+- Her conversion rate goes up because the page matches what she pitched
+- You stay in control: the editor is bounded (no arbitrary HTML), the engine + checkout + chatbot are all yours
+- One toggle (`is_white_label`) cleanly separates "personality partners" from "commission-only SDRs"
+
+## Out of scope (ask if you want them)
+
+- Custom subdomain (`margarita.galavanteer.com`) — still works as `/r/margarita` for now
+- Multiple landing-page templates per partner
+- A/B testing partner landing pages
+
+Extra:
+
+Add a “Send portal invite” button in the partner directory so I can emailc Margarita and other partners their portal login link.

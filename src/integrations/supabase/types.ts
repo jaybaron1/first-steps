@@ -1075,6 +1075,15 @@ export type Database = {
           email: string | null
           id: string
           is_white_label: boolean
+          landing_accent_color: string | null
+          landing_bio: string | null
+          landing_bullets: Json | null
+          landing_headline: string | null
+          landing_logo_url: string | null
+          landing_photo_url: string | null
+          landing_published: boolean
+          landing_subheadline: string | null
+          landing_testimonial: string | null
           last_promotional_activity_date: string | null
           name: string
           notes: string | null
@@ -1092,6 +1101,15 @@ export type Database = {
           email?: string | null
           id?: string
           is_white_label?: boolean
+          landing_accent_color?: string | null
+          landing_bio?: string | null
+          landing_bullets?: Json | null
+          landing_headline?: string | null
+          landing_logo_url?: string | null
+          landing_photo_url?: string | null
+          landing_published?: boolean
+          landing_subheadline?: string | null
+          landing_testimonial?: string | null
           last_promotional_activity_date?: string | null
           name: string
           notes?: string | null
@@ -1109,6 +1127,15 @@ export type Database = {
           email?: string | null
           id?: string
           is_white_label?: boolean
+          landing_accent_color?: string | null
+          landing_bio?: string | null
+          landing_bullets?: Json | null
+          landing_headline?: string | null
+          landing_logo_url?: string | null
+          landing_photo_url?: string | null
+          landing_published?: boolean
+          landing_subheadline?: string | null
+          landing_testimonial?: string | null
           last_promotional_activity_date?: string | null
           name?: string
           notes?: string | null
