@@ -5,10 +5,12 @@ import { buildReferralUrl, buildReferralCaptureUrl, exportFlyerToPdf, generateQr
 import FlyerRoundtableIntro, { type FlyerData } from "@/components/partners/marketing/FlyerRoundtableIntro";
 import FlyerFounderOffer from "@/components/partners/marketing/FlyerFounderOffer";
 import FlyerEventInvite from "@/components/partners/marketing/FlyerEventInvite";
+import FlyerSalesSheet from "@/components/partners/marketing/FlyerSalesSheet";
+import SalesMaterialReference from "@/components/partners/marketing/SalesMaterialReference";
 import { Loader2, Download } from "lucide-react";
 import { toast } from "sonner";
 
-type TemplateKey = "intro" | "founder" | "event";
+type TemplateKey = "intro" | "founder" | "event" | "sales";
 
 const TEMPLATES: { key: TemplateKey; label: string; description: string; defaults: { headline: string; tagline: string; bullets: string[] } }[] = [
   {
