@@ -285,39 +285,39 @@ const PartnersMarketingPage: React.FC = () => {
 
           {template === "sales" && (
             <>
-              <Field label="Setup price — Level 1 (USD)" hint="One-time workspace build. Editable per partner.">
-                <input
-                  type="number"
-                  min={0}
-                  step={100}
-                  value={setupPrice}
-                  onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
-                  className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
-                />
-              </Field>
-
-              <Field label="Upgrade prices (USD)" hint="Leave blank to show 'Quoted on request'.">
-                <div className="space-y-2">
-                  {[
-                    { label: "Level 2 — Company Context", value: level2Price, set: setLevel2Price },
-                    { label: "Level 3 — You, in the Room", value: level3Price, set: setLevel3Price },
-                    { label: "Level 4 — Future You", value: level4Price, set: setLevel4Price },
-                  ].map((row) => (
-                    <div key={row.label} className="flex items-center gap-2">
-                      <span className="text-xs text-slate-600 flex-1 truncate">{row.label}</span>
-                      <input
-                        type="number"
-                        min={0}
-                        step={100}
-                        value={row.value}
-                        onChange={(e) => row.set(e.target.value)}
-                        placeholder="—"
-                        className="w-28 px-2 py-1.5 border border-slate-200 rounded-md text-sm text-right"
-                      />
-                    </div>
-                  ))}
+              <Field label="Margarita callout" hint="Every partner gets a 'Margarita sits in your room' line. Toggle off if not relevant.">
+                <div className="flex items-center justify-between gap-3 px-3 py-2 border border-slate-200 rounded-md">
+                  <span className="text-sm text-slate-700">
+                    {showMargarita ? "Showing on flyer" : "Hidden"}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setShowMargarita((v) => !v)}
+                    role="switch"
+                    aria-checked={showMargarita}
+                    className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
+                      showMargarita ? "bg-slate-900" : "bg-slate-300"
+                    }`}
+                  >
+                    <span
+                      className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                        showMargarita ? "translate-x-4" : "translate-x-0.5"
+                      }`}
+                    />
+                  </button>
                 </div>
               </Field>
+
+              {showMargarita && (
+                <Field label="Margarita's note" hint="Prepopulated. Edit to your voice — Margarita can rewrite this for her own circles.">
+                  <textarea
+                    value={margaritaNote}
+                    onChange={(e) => setMargaritaNote(e.target.value)}
+                    rows={3}
+                    className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+                  />
+                </Field>
+              )}
             </>
           )}
 
