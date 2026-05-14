@@ -16,6 +16,7 @@ import {
   Calendar,
   Sparkles,
   Eye,
+  FileDown,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import GhostPartnerPicker from "@/components/partners/GhostPartnerPicker";
@@ -42,6 +43,7 @@ const navItems: NavItem[] = [
   // Partner-only items
   { path: "/partners/me", label: "Dashboard", icon: LayoutDashboard, end: true, show: (c) => c.isPartner },
   { path: "/partners/landing", label: "My Landing Page", icon: Sparkles, show: (c) => c.isPartner && c.isWhiteLabel },
+  { path: "/partners/marketing", label: "Marketing assets", icon: FileDown, show: (c) => c.isPartner },
 ];
 
 const PartnersLayout: React.FC = () => {

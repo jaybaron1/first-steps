@@ -1,92 +1,75 @@
-# Collapse `/portal` into `/partners`
+## Marketing assets for partners
 
-## Why
+A new page in the partners sidebar where partners (and admins ghosting in) can pick from 3 flyer templates, personalize them with their name, photo/logo, headline, tagline, accent color, and personal referral link/QR code, then download a print-ready PDF one-pager.
 
-`/partners` already has auth, layout, sidebar, and a sign-in page. Running a second auth surface at `/portal` for one user (Margarita) doubles the maintenance and confuses anyone who has to support either. One door, role-aware behind it.
+### What gets built
 
-## How it works after this change
+**1. New route + sidebar entry**
+- Route: `/partners/marketing` (component: `PartnersMarketingPage.tsx`)
+- Add "Marketing assets" item to `PartnersLayout` sidebar with a `FileDown` icon, visible to both `partner` and `admin` effective roles.
+- Works in admin ghost mode automatically (uses the same `usePartnersAuth` context).
 
-**One login URL: `/partners/login**` — used by admins, SDRs, *and* external partners (Margarita and future white-labels).
-
-After sign-in, `PartnersRoute` checks roles in this order and routes accordingly:
+**2. Three flyer templates**
+Each template is a React component that renders an A4 one-pager (210 × 297 mm) in a hidden div, then exported to PDF. Templates share the same brandable fields but differ visually:
 
 ```text
-admin   → full CRM (everything you have today)
-sdr     → full CRM minus admin-only items
-partner → restricted view: their own dashboard only
+┌─ Roundtable Intro ────┐  ┌─ Founder Offer ───────┐  ┌─ Event Invite ────────┐
+│  Editorial / serif    │  │  Bold / dark hero     │  │  Minimal / lots of    │
+│  Photo top-right      │  │  Big stat callout     │  │  whitespace, QR-led   │
+│  3 bullets + quote    │  │  Single CTA + bullets │  │  Date placeholder     │
+│  QR + URL bottom      │  │  QR right-aligned     │  │  QR centered hero     │
+└───────────────────────┘  └───────────────────────┘  └───────────────────────┘
 ```
 
-A user with the `partner` role lands on `/partners` and sees a stripped-down sidebar:
+**3. Personalization panel (left side of page)**
+Form bound to local state, pre-filled from the partner's `partners` row:
+- Name (from `partners.name`)
+- Photo/logo (uses `landing_photo_url` or `landing_logo_url`; partner can override with a fresh upload to a new `partner-marketing` storage bucket)
+- Headline (default: "An invitation to The Roundtable")
+- Tagline / sub-copy (default per template)
+- Accent color (color picker, default `#B8956C` Roundtable gold or partner's `landing_accent_color`)
+- Referral URL is auto-built from `partners.slug` → `https://galavanteer.lovable.app/r/{slug}`. QR code generated from this URL.
 
-- **Dashboard** — clicks, clients, commission earned (their data only)
-- **My Landing Page** — the editor (only if `is_white_label = true`)
-- **My Referral Link** — link + QR + downloads
-- *Sign out*
+**4. Live preview (right side of page)**
+- Tabs to switch between the 3 templates.
+- Renders the selected template at scaled-down size (e.g. 60%) with the current personalization applied in real time.
+- "Download PDF" button on each template.
 
-They cannot see: other partners, the directory, team users, add-referral, appointments, activity feed, or anyone else's commissions. RLS already enforces this server-side; the UI just hides the irrelevant nav.
+**5. PDF generation**
+- Client-side using `html2canvas` + `jsPDF` (no server cost, no edge function needed).
+- QR code generated with `qrcode` library.
+- Filename: `roundtable-{template}-{partner-slug}.pdf`.
 
-## What gets deleted vs. moved
+### Technical details
 
-**Deleted:**
+**Files to create**
+- `src/pages/partners/PartnersMarketingPage.tsx` — page shell, form, preview tabs, download trigger
+- `src/components/partners/marketing/FlyerRoundtableIntro.tsx`
+- `src/components/partners/marketing/FlyerFounderOffer.tsx`
+- `src/components/partners/marketing/FlyerEventInvite.tsx`
+- `src/components/partners/marketing/FlyerFrame.tsx` — shared A4 wrapper with print-safe sizing
+- `src/lib/partnerFlyer.ts` — `exportFlyerToPdf(elementId, filename)` helper using html2canvas + jsPDF
 
-- `src/pages/portal/PortalLoginPage.tsx`
-- `src/pages/portal/PortalDashboardPage.tsx`
-- `src/components/portal/PortalRoute.tsx`
-- `/portal/*` routes from `App.tsx`
+**Files to edit**
+- `src/App.tsx` — register `/partners/marketing` route inside the `PartnersRoute` guard
+- `src/components/partners/PartnersLayout.tsx` — add sidebar nav item
+- A new memory file `mem://features/partners-marketing` summarizing this feature
 
-**Moved into `/partners`:**
+**Dependencies to add**
+- `html2canvas`
+- `jspdf`
+- `qrcode` (+ `@types/qrcode`)
 
-- The dashboard content (stats + clients + commission ledger + referral link + QR) → new `src/pages/partners/PartnersMyPage.tsx`, mounted at `/partners/me`
-- The landing-page editor → new page at `/partners/landing` (white-label partners only)
-- Existing `LandingPageEditor.tsx` component stays as-is (just imported from the new page)
+**Storage (optional, for custom uploads)**
+- New public `partner-marketing` bucket with RLS:
+  - Partners can upload to their own folder (`{partner_id}/...`)
+  - Public read so the image can be embedded in the PDF render
+- If we want to ship faster, v1 can skip uploads and only use the existing `landing_photo_url` / `landing_logo_url`. Recommended: ship v1 without uploads, add later.
 
-**Keep:**
+**No new tables.** All personalization is ephemeral (per-download). Defaults come from `partners` row. If we later want to remember tweaked headlines, we can add a `partner_marketing_overrides` table.
 
-- `/r/:slug` (referral redirect + landing page) — unchanged
-- The `partner-portal-invite` edge function — still creates auth users, just redirects to `/partners/login` instead of `/portal/login`
-
-## Routing rules inside `/partners`
-
-`PartnersRoute` extends to recognize three roles instead of two. Behavior:
-
-
-| Role    | Default landing | Sidebar items                                         |
-| ------- | --------------- | ----------------------------------------------------- |
-| admin   | `/partners`     | All current items + Team users                        |
-| sdr     | `/partners`     | All current items except Team users                   |
-| partner | `/partners/me`  | Dashboard, My Landing Page (if white-label), Sign out |
-
-
-If a `partner`-role user navigates to `/partners/clients`, `/partners/directory`, etc., they get redirected to `/partners/me`. This is belt-and-suspenders — RLS would already return empty data — but it keeps the experience clean.
-
-## What the partner sees on `/partners/me`
-
-Same content as the current `/portal` dashboard, just rendered inside the existing `PartnersLayout` sidebar:
-
-- 4 stat cards (clicks 30d, clicks all, clients, commission)
-- Their referral link + QR + copy button
-- Downloadable branded assets
-- Recent clients table (their data only)
-- Commission ledger (their data only)
-- "My Landing Page" link (white-label only) → `/partners/landing`
-
-## Migration touchpoints
-
-1. `**PartnersRoute.tsx**` — `resolveRole()` adds a third branch checking the `partner` role; context type widens to `"admin" | "sdr" | "partner"`; also resolves `partnerId / partnerSlug / isWhiteLabel` when role is `partner`.
-2. `**PartnersLayout.tsx**` — nav items get a `partnerOnly` / `partnerHidden` flag; whole sidebar filters by role.
-3. `**App.tsx**` — remove `/portal/*` routes and `import PortalRoute…`; add `/partners/me` and `/partners/landing` inside the existing `<PartnersRoute>` block.
-4. `**partner-portal-invite/index.ts**` — change the magic-link redirect from `/portal` to `/partners/me`.
-5. **Email copy** in the invite — point to `/partners/login`.
-6. `**PortalRoute` consumers** — none outside `/portal`, so safe to delete.
-
-## What stays the same for you
-
-- Margarita's `/r/margarita` URL, QR code, and cookie attribution: unchanged
-- Auto-create-client trigger, commission rules, RLS policies: unchanged
-- Your day-to-day at `/partners`: visually identical (same sidebar, same pages)
-
-## Out of scope
-
-- Renaming "Partners CRM" in the sidebar header for partner-role users (low priority cosmetic)
-- Custom subdomains
-- Multi-user partner accounts (one auth user per partner row, as today)
+### Out of scope (for now)
+- Saving custom headline/tagline back to the partner profile
+- PNG/social-image variants
+- Email-template downloads, decks, etc. (sidebar section is named generically so we can add later)
+- White-label mode (no Roundtable branding) — can be added by checking `partners.is_white_label`
