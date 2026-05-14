@@ -100,7 +100,7 @@ const PartnerLandingPage: React.FC<PartnerLandingProps> = ({ partner }) => {
 
               <div className="mt-8 flex items-center gap-3">
                 <Button
-                  onClick={() => setChatOpen(true)}
+                  onClick={openChat}
                   className="h-12 px-6 text-white text-sm font-medium"
                   style={{ backgroundColor: accent }}
                 >
