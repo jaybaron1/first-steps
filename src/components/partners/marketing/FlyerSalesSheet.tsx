@@ -94,16 +94,11 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               A private executive boardroom inside your own ChatGPT.
             </p>
           </div>
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <div style={{ background: paper, padding: 6, borderRadius: 4 }}>
-              <GalavanteerMark color={ink} size={26} showWordmark={false} />
+          {data.photoUrl && (
+            <div style={{ background: paper, padding: 4, borderRadius: 999 }}>
+              <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} borderColor={accent} />
             </div>
-            {data.photoUrl && (
-              <div style={{ background: paper, padding: 4, borderRadius: 999 }}>
-                <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} borderColor={accent} />
-              </div>
-            )}
-          </div>
+          )}
         </div>
 
         {/* === Lead === */}
@@ -206,7 +201,7 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               <div style={{ display: "flex", flexDirection: "column", gap: 9 }}>
                 {LEVELS.map((lvl) => {
                   const isBase = lvl.priceKey === null;
-                  const price = isBase ? "Required" : priceLabel(lp[lvl.priceKey!]);
+                  const price = isBase ? "Included" : priceLabel(lp[lvl.priceKey!]);
                   return (
                     <div key={lvl.n} style={{ display: "flex", alignItems: "flex-start", gap: 10, position: "relative" }}>
                       <div
@@ -247,7 +242,7 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                                 whiteSpace: "nowrap",
                               }}
                             >
-                              Required
+                              Included
                             </span>
                           ) : (
                             <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap" }}>{price}</span>
