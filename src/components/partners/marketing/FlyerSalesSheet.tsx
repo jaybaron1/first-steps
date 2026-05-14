@@ -191,9 +191,9 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               <div
                 style={{
                   position: "absolute",
-                  left: 15,
-                  top: 6,
-                  bottom: 6,
+                  left: 15.5,
+                  top: 16,
+                  bottom: 16,
                   width: 1,
                   background: `${accent}40`,
                 }}
@@ -204,48 +204,41 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                   const price = isBase ? "Included" : priceLabel(lp[lvl.priceKey!]);
                   return (
                     <div key={lvl.n} style={{ display: "flex", alignItems: "flex-start", gap: 10, position: "relative" }}>
-                      <div
-                        style={{
-                          width: 32,
-                          height: 32,
-                          borderRadius: 999,
-                          background: paper,
-                          border: `1.5px solid ${accent}`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                          fontFamily: "'Playfair Display', Georgia, serif",
-                          fontSize: 15,
-                          fontWeight: 600,
-                          color: accent,
-                          zIndex: 1,
-                          boxShadow: `0 0 0 4px ${paper}`,
-                        }}
-                      >
-                        {lvl.n}
-                      </div>
+                      <svg width="32" height="32" viewBox="0 0 32 32" style={{ display: "block", flexShrink: 0, zIndex: 1, overflow: "visible" }}>
+                        <circle cx="16" cy="16" r="15" fill={paper} stroke={accent} strokeWidth="1.5" />
+                        <text
+                          x="16"
+                          y="16"
+                          textAnchor="middle"
+                          dominantBaseline="central"
+                          fontFamily="Georgia, 'Times New Roman', serif"
+                          fontSize="15"
+                          fontWeight="600"
+                          fill={accent}
+                        >
+                          {lvl.n}
+                        </text>
+                      </svg>
                       <div style={{ flex: 1, minWidth: 0, paddingTop: 1 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
                           <p style={{ fontSize: 11, fontWeight: 700, color: ink, margin: 0 }}>{lvl.name}</p>
                           {isBase ? (
-                            <span
-                              style={{
-                                display: "inline-block",
-                                fontSize: 7.5,
-                                fontWeight: 700,
-                                letterSpacing: "0.18em",
-                                textTransform: "uppercase",
-                                color: accent,
-                                border: `1px solid ${accent}`,
-                                padding: "2px 7px 1px",
-                                borderRadius: 999,
-                                whiteSpace: "nowrap",
-                                lineHeight: 1.2,
-                              }}
-                            >
-                              Included
-                            </span>
+                            <svg width="72" height="18" viewBox="0 0 72 18" style={{ display: "block", flexShrink: 0 }}>
+                              <rect x="0.5" y="0.5" width="71" height="17" rx="8.5" fill="none" stroke={accent} strokeWidth="1" />
+                              <text
+                                x="36"
+                                y="9"
+                                textAnchor="middle"
+                                dominantBaseline="central"
+                                fontFamily="Inter, Arial, sans-serif"
+                                fontSize="7.5"
+                                fontWeight="700"
+                                letterSpacing="1.35"
+                                fill={accent}
+                              >
+                                INCLUDED
+                              </text>
+                            </svg>
                           ) : (
                             <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap", lineHeight: 1.2 }}>{price}</span>
                           )}
@@ -277,18 +270,19 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
             <p style={{ fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase", color: accent, margin: 0, fontWeight: 700 }}>
               Investment · Workspace build
             </p>
-            <p
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: 40,
-                fontWeight: 700,
-                margin: "8px 0 0",
-                lineHeight: 1.15,
-                color: ink,
-              }}
-            >
-              {fmt(setup)}
-            </p>
+            <svg width="210" height="48" viewBox="0 0 210 48" style={{ display: "block", marginTop: 8, overflow: "visible" }}>
+              <text
+                x="0"
+                y="25"
+                dominantBaseline="central"
+                fontFamily="Georgia, 'Times New Roman', serif"
+                fontSize="40"
+                fontWeight="700"
+                fill={ink}
+              >
+                {fmt(setup)}
+              </text>
+            </svg>
             <p style={{ fontSize: 9.5, color: muted, margin: "10px 0 0", lineHeight: 1.4 }}>
               One-time setup. Tier 1 subscription required. Upgrades priced individually.
             </p>
