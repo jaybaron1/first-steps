@@ -281,6 +281,16 @@ const PartnersDirectoryPage: React.FC = () => {
                         </button>
                         {isAdmin && (
                           <button
+                            onClick={() => ghostInto(p)}
+                            className="p-1.5 rounded hover:bg-purple-50 text-slate-500 hover:text-purple-700"
+                            aria-label="View as partner"
+                            title="View portal as this partner"
+                          >
+                            <Eye className="w-3.5 h-3.5" />
+                          </button>
+                        )}
+                        {isAdmin && (
+                          <button
                             onClick={() => sendInvite(p)}
                             disabled={invitingId === p.id}
                             className="p-1.5 rounded hover:bg-blue-50 text-slate-500 hover:text-blue-700 disabled:opacity-50"
