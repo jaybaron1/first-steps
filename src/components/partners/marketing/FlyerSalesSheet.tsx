@@ -11,16 +11,15 @@ const PILLARS = [
   { title: "Private and yours", body: "Lives in your own ChatGPT. No new tools. No shared logins." },
 ];
 
-type LevelKey = "l2" | "l3" | "l4" | "l5" | "l6";
+type LevelKey = "l2" | "l3" | "l4" | "l5";
 type Level = { n: number; name: string; body: string; priceKey: LevelKey | null };
 
 const LEVELS: Level[] = [
-  { n: 1, name: "The Roundtable",      body: "The room itself. Sixty advisors, one owner.",                priceKey: null },
-  { n: 2, name: "The Operating Frame", body: "Your company, in their hands.",                              priceKey: "l2" },
-  { n: 3, name: "Take A Seat",         body: "You, in the room when you're not.",                          priceKey: "l3" },
-  { n: 4, name: "Future Me",           body: "Tested against who you're becoming.",                        priceKey: "l4" },
-  { n: 5, name: "Add a Voice",         body: "A teammate's voice in the room when they're not.",           priceKey: "l5" },
-  { n: 6, name: "Pull Up a Chair",     body: "A login for a teammate to join the room live.",              priceKey: "l6" },
+  { n: 1, name: "The Roundtable",      body: "The room itself. Three to five of sixty-plus senior advisors.", priceKey: null },
+  { n: 2, name: "The Operating Frame", body: "Your company, in their hands.",                                  priceKey: "l2" },
+  { n: 3, name: "Take A Seat",         body: "You, in the room when you're not.",                              priceKey: "l3" },
+  { n: 4, name: "Future Me",           body: "Tested against who you're becoming.",                            priceKey: "l4" },
+  { n: 5, name: "Add a Voice",         body: "A teammate's voice in the room when they're not.",               priceKey: "l5" },
 ];
 
 const DEFAULT_MARGARITA_NOTE =
