@@ -218,19 +218,26 @@ const PartnersRoute: React.FC<PartnersRouteProps> = ({ children }) => {
     );
   }
 
+  // Apply ghost override: only valid when real role is admin AND ghost partner loaded
+  const ghosting = role === "admin" && !!ghostId && !!ghostPartner;
+  const effectiveRole: PartnersRole = ghosting ? "partner" : role;
+  const effectivePartner: PartnerRow | null = ghosting ? ghostPartner : partner;
+
   return (
     <PartnersAuthContextRC.Provider
       value={{
         user,
         session,
-        role,
-        isAdmin: role === "admin",
-        isStaff: role === "admin" || role === "sdr",
-        isPartner: role === "partner",
-        partnerId: partner?.id ?? null,
-        partnerName: partner?.name ?? null,
-        partnerSlug: partner?.slug ?? null,
-        isWhiteLabel: !!partner?.is_white_label,
+        role: effectiveRole,
+        realRole: role,
+        isGhosting: ghosting,
+        isAdmin: effectiveRole === "admin",
+        isStaff: effectiveRole === "admin" || effectiveRole === "sdr",
+        isPartner: effectiveRole === "partner",
+        partnerId: effectivePartner?.id ?? null,
+        partnerName: effectivePartner?.name ?? null,
+        partnerSlug: effectivePartner?.slug ?? null,
+        isWhiteLabel: !!effectivePartner?.is_white_label,
       }}
     >
       {children}
