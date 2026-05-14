@@ -84,6 +84,7 @@ const App = () => (
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/one-pager" element={<OnePager />} />
+            <Route path="/r/:slug/connect" element={<PartnerReferralCapture />} />
             <Route path="/r/:slug" element={<ReferralRedirect />} />
 
             {/* Admin - Tab-based layout with nested routes */}
