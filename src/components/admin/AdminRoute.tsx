@@ -256,18 +256,24 @@ const AdminRoute: React.FC<AdminRouteProps> = ({ children, requireRole }) => {
       });
 
       if (signupError) {
-        setError(signupError.message.includes('already registered') 
-          ? 'This email is already registered. Please sign in.' 
-          : signupError.message);
-        return;
-      }
-
-      if (data.user) {
-        toast({ title: 'Account created', description: 'Check your email to verify your account.' });
+        // Generic message — do not reveal whether the email is already registered (account enumeration)
+        toast({
+          title: 'Check your email',
+          description: 'If the account is eligible, a verification link has been sent.',
+        });
         setView('login');
         setPassword('');
         setConfirmPassword('');
+        return;
       }
+
+      toast({
+        title: 'Check your email',
+        description: 'If the account is eligible, a verification link has been sent.',
+      });
+      setView('login');
+      setPassword('');
+      setConfirmPassword('');
     } catch {
       setError('An unexpected error occurred.');
     } finally {
