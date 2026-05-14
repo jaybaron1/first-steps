@@ -82,6 +82,9 @@ const PartnersMarketingPage: React.FC = () => {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [setupPrice, setSetupPrice] = useState<number>(6000);
   const [imageStyle, setImageStyle] = useState<"photo" | "logo">("photo");
+  const [level2Price, setLevel2Price] = useState<string>("");
+  const [level3Price, setLevel3Price] = useState<string>("");
+  const [level4Price, setLevel4Price] = useState<string>("");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -139,6 +142,11 @@ const PartnersMarketingPage: React.FC = () => {
     qrDataUrl,
     setupPrice,
     imageStyle,
+    levelPrices: {
+      l2: Number(level2Price) || undefined,
+      l3: Number(level3Price) || undefined,
+      l4: Number(level4Price) || undefined,
+    },
   };
 
   const handleDownload = async () => {
@@ -269,16 +277,41 @@ const PartnersMarketingPage: React.FC = () => {
           </Field>
 
           {template === "sales" && (
-            <Field label="Setup price (USD)" hint="Editable per partner. Add-ons stay fixed.">
-              <input
-                type="number"
-                min={0}
-                step={100}
-                value={setupPrice}
-                onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
-                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
-              />
-            </Field>
+            <>
+              <Field label="Setup price — Level 1 (USD)" hint="One-time workspace build. Editable per partner.">
+                <input
+                  type="number"
+                  min={0}
+                  step={100}
+                  value={setupPrice}
+                  onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+                />
+              </Field>
+
+              <Field label="Upgrade prices (USD)" hint="Leave blank to show 'Quoted on request'.">
+                <div className="space-y-2">
+                  {[
+                    { label: "Level 2 — Company Context", value: level2Price, set: setLevel2Price },
+                    { label: "Level 3 — You, in the Room", value: level3Price, set: setLevel3Price },
+                    { label: "Level 4 — Future You", value: level4Price, set: setLevel4Price },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-center gap-2">
+                      <span className="text-xs text-slate-600 flex-1 truncate">{row.label}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step={100}
+                        value={row.value}
+                        onChange={(e) => row.set(e.target.value)}
+                        placeholder="—"
+                        className="w-28 px-2 py-1.5 border border-slate-200 rounded-md text-sm text-right"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Field>
+            </>
           )}
 
           <Field label="Accent color">
