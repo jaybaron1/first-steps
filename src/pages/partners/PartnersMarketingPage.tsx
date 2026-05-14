@@ -85,6 +85,8 @@ const PartnersMarketingPage: React.FC = () => {
   const [level2Price, setLevel2Price] = useState<string>("");
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
+  const [showIntroducerBlock, setShowIntroducerBlock] = useState<boolean>(false);
+  const [introducerCustomLine, setIntroducerCustomLine] = useState<string>("");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -147,6 +149,9 @@ const PartnersMarketingPage: React.FC = () => {
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
     },
+    personaAddOnPrice: 500,
+    showIntroducerBlock,
+    introducerCustomLine: introducerCustomLine.trim() || undefined,
   };
 
   const handleDownload = async () => {
@@ -311,6 +316,39 @@ const PartnersMarketingPage: React.FC = () => {
                   ))}
                 </div>
               </Field>
+
+              <Field label="Each additional persona" hint="Fixed add-on pricing across all partners.">
+                <div className="flex items-center justify-between px-3 py-2 border border-slate-200 rounded-md bg-slate-50 text-sm text-slate-600">
+                  <span>Per persona, one-time</span>
+                  <span className="font-semibold text-slate-900">$500 / build</span>
+                </div>
+              </Field>
+
+              <Field
+                label="Introducer block"
+                hint="Optional. Adds a 'You get the system. And you get {your name}.' line to the sheet."
+              >
+                <label className="flex items-start gap-3 px-3 py-2.5 border border-slate-200 rounded-md cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={showIntroducerBlock}
+                    onChange={(e) => setShowIntroducerBlock(e.target.checked)}
+                    className="mt-0.5"
+                  />
+                  <span className="text-sm text-slate-700">
+                    Offer to sit in client's Roundtable sessions as a coaching voice
+                  </span>
+                </label>
+                {showIntroducerBlock && (
+                  <textarea
+                    value={introducerCustomLine}
+                    onChange={(e) => setIntroducerCustomLine(e.target.value)}
+                    rows={3}
+                    placeholder="Leave blank for default copy, or write your own…"
+                    className="w-full mt-2 px-3 py-2 border border-slate-200 rounded-md text-sm"
+                  />
+                )}
+              </Field>
             </>
           )}
 
@@ -351,16 +389,16 @@ const PartnersMarketingPage: React.FC = () => {
         {/* Right: preview */}
         <div className="space-y-3">
           <div className="text-xs font-medium uppercase tracking-wider text-slate-500">
-            Preview {template === "sales" ? "· US Letter (8.5 × 11)" : "· A4"}
+            Preview · US Letter (8.5 × 11)
           </div>
           <div className="border border-slate-200 rounded-md bg-slate-100 p-6 overflow-hidden flex justify-center">
             <div
               style={{
-                width: template === "sales" ? "816px" : "794px",
-                height: template === "sales" ? "1056px" : "1123px",
+                width: "816px",
+                height: "1056px",
                 transform: "scale(0.6)",
                 transformOrigin: "top center",
-                marginBottom: template === "sales" ? "-422px" : "-450px",
+                marginBottom: "-422px",
               }}
             >
               {renderFlyer(flyerRef)}

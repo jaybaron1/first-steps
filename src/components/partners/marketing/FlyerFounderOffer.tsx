@@ -1,68 +1,155 @@
 import React from "react";
 import FlyerFrame from "./FlyerFrame";
 import FlyerBrandImage from "./FlyerBrandImage";
+import { FLYER_THEME as T, FLYER_FONTS as F } from "./flyerTheme";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
-const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
-  <FlyerFrame ref={innerRef}>
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "#0f172a", color: "#f8fafc" }}>
-      {/* Hero */}
-      <div style={{ padding: "56px 56px 40px", borderBottom: `4px solid ${data.accentColor}` }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 36 }}>
-          <p style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: data.accentColor, margin: 0, fontWeight: 600 }}>
-            Founder offer · By invitation
-          </p>
-          {data.photoUrl && (
-            <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} />
-          )}
-        </div>
-        <h1 style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 64, lineHeight: 1, fontWeight: 500, margin: 0 }}>
-          {data.headline}
-        </h1>
-        <p style={{ fontSize: 17, color: "#cbd5e1", marginTop: 24, lineHeight: 1.5, maxWidth: 580 }}>{data.tagline}</p>
-      </div>
+const splitHeadline = (headline: string) => {
+  // Split at first sentence boundary so we can italicize the second clause.
+  const m = headline.match(/^(.+?[.!?])\s+(.+)$/);
+  if (m) return { lead: m[1], tail: m[2] };
+  return { lead: headline, tail: "" };
+};
 
-      {/* Stat */}
-      <div style={{ padding: "40px 56px 32px", display: "flex", gap: 40, alignItems: "baseline" }}>
-        <div>
-          <p style={{ fontFamily: "'Playfair Display', Georgia, serif", fontSize: 88, lineHeight: 1, margin: 0, color: data.accentColor, fontWeight: 600 }}>
-            1:1
-          </p>
-          <p style={{ fontSize: 12, letterSpacing: "0.18em", textTransform: "uppercase", color: "#94a3b8", marginTop: 8 }}>
-            Private working session
-          </p>
-        </div>
-        <div style={{ flex: 1, paddingLeft: 32, borderLeft: "1px solid #1e293b" }}>
-          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
-            {data.bullets.map((b, i) => (
-              <li key={i} style={{ display: "flex", gap: 12, fontSize: 15, color: "#e2e8f0", lineHeight: 1.5 }}>
-                <span style={{ color: data.accentColor, fontWeight: 700 }}>+</span>
-                {b}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => {
+  const accent = data.accentColor || T.accent;
+  const { lead, tail } = splitHeadline(data.headline);
 
-      <div style={{ flex: 1 }} />
+  return (
+    <FlyerFrame ref={innerRef} size="letter">
+      <div style={{ background: T.paper, height: "100%", display: "flex", flexDirection: "column" }}>
+        <div style={{ height: 6, background: accent }} />
 
-      {/* CTA footer */}
-      <div style={{ padding: "32px 56px 48px", background: "#020617", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}>
-        <div>
-          <p style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: data.accentColor, margin: 0, fontWeight: 600 }}>
-            Reserved for {data.partnerName}'s circle
-          </p>
-          <p style={{ fontSize: 16, fontWeight: 600, marginTop: 8, color: "#f8fafc", wordBreak: "break-all" }}>{data.referralUrl}</p>
-          <p style={{ fontSize: 11, color: "#64748b", marginTop: 14, letterSpacing: "0.05em" }}>The Roundtable · Galavanteer</p>
-        </div>
-        {data.qrDataUrl && (
-          <div style={{ background: "#fff", padding: 8, borderRadius: 4 }}>
-            <img src={data.qrDataUrl} style={{ width: 96, height: 96, display: "block" }} />
+        <div style={{ padding: "52px 64px 40px", flex: 1, display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+            <p style={{ fontSize: 10, letterSpacing: "0.32em", textTransform: "uppercase", color: accent, margin: 0, fontWeight: 600, fontFamily: F.body }}>
+              Founder offer · By invitation
+            </p>
+            {data.photoUrl && (
+              <FlyerBrandImage src={data.photoUrl} imageStyle={data.imageStyle} size={56} borderColor={accent} />
+            )}
           </div>
-        )}
+
+          <h1
+            style={{
+              fontFamily: F.display,
+              fontSize: 56,
+              lineHeight: 1.05,
+              fontWeight: 600,
+              margin: "40px 0 0",
+              color: T.ink,
+              letterSpacing: "-0.01em",
+            }}
+          >
+            {lead}
+            {tail && (
+              <>
+                {" "}
+                <span style={{ fontStyle: "italic", color: accent, fontWeight: 500 }}>{tail}</span>
+              </>
+            )}
+          </h1>
+
+          <p
+            style={{
+              fontFamily: F.display,
+              fontStyle: "italic",
+              fontSize: 19,
+              lineHeight: 1.45,
+              color: T.inkSoft,
+              margin: "22px 0 0",
+              maxWidth: 600,
+            }}
+          >
+            {data.tagline}
+          </p>
+
+          <div style={{ width: 80, height: 1, background: accent, margin: "32px 0" }} />
+
+          {/* Three pillar columns inspired by deck p.5 */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 28, marginTop: 4 }}>
+            {data.bullets.slice(0, 3).map((b, i) => (
+              <div key={i}>
+                <div style={{ height: 1, background: T.ink, marginBottom: 14 }} />
+                <p style={{ fontSize: 10, letterSpacing: "0.28em", textTransform: "uppercase", color: accent, margin: 0, fontWeight: 600, fontFamily: F.body }}>
+                  0{i + 1}
+                </p>
+                <p
+                  style={{
+                    fontFamily: F.body,
+                    fontStyle: "italic",
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                    color: T.body,
+                    margin: "10px 0 0",
+                  }}
+                >
+                  {b}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ flex: 1 }} />
+
+          {/* CTA */}
+          <div
+            style={{
+              marginTop: 40,
+              padding: "24px 28px",
+              background: T.paperEdge,
+              border: `1px solid ${T.hairline}`,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: 24,
+            }}
+          >
+            <div>
+              <p style={{ fontSize: 10, letterSpacing: "0.28em", textTransform: "uppercase", color: accent, margin: 0, fontWeight: 600, fontFamily: F.body }}>
+                Reserved for {data.partnerName}'s circle
+              </p>
+              <p
+                style={{
+                  fontFamily: F.display,
+                  fontSize: 18,
+                  fontWeight: 500,
+                  color: T.ink,
+                  margin: "8px 0 0",
+                  wordBreak: "break-all",
+                }}
+              >
+                {data.referralUrl}
+              </p>
+            </div>
+            {data.qrDataUrl && (
+              <div style={{ background: "#fff", padding: 6, border: `1px solid ${T.hairline}` }}>
+                <img src={data.qrDataUrl} style={{ width: 84, height: 84, display: "block" }} />
+              </div>
+            )}
+          </div>
+        </div>
+
+        <div
+          style={{
+            background: T.paperEdge,
+            borderTop: `1px solid ${T.hairline}`,
+            padding: "14px 64px",
+            display: "flex",
+            justifyContent: "space-between",
+            fontFamily: F.body,
+          }}
+        >
+          <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: T.bodyMuted, margin: 0, fontWeight: 500 }}>
+            {data.partnerName} · In partnership with Galavanteer
+          </p>
+          <p style={{ fontSize: 10, letterSpacing: "0.22em", textTransform: "uppercase", color: T.bodyMuted, margin: 0, fontWeight: 500 }}>
+            The Roundtable
+          </p>
+        </div>
       </div>
-    </div>
-  </FlyerFrame>
-);
+    </FlyerFrame>
+  );
+};
 
 export default FounderOffer;

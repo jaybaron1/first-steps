@@ -1,85 +1,167 @@
-## Sales Sheet — Visual redesign + Letter sizing + Margarita inclusion
+## Partner Flyers v2 — Editorial system inspired by Margarita's deck
 
-A focused redesign of the Sales Sheet flyer only. The other three flyers (Intro, Founder, Event) and the on-page reference section are out of scope for this pass.
+A full visual rebuild of all four partner flyers using the design language of Margarita's partner deck: cream paper, navy serif headlines, gold accent, italic body, letter-spaced caps, hairline rules, generous whitespace. Plus an optional "your partner sits in your room" toggle, refined investment block, and the new $500/persona add-on.
 
-### 1. Page size — switch to US Letter (8.5 × 11)
+### 1. Shared visual system (one source of truth)
 
-Today the flyer frame is A4 (794 × 1123 px). The Sales Sheet will render in a **Letter-sized variant** (816 × 1056 px @ 96 DPI) so it prints cleanly on standard US paper and matches the user's request.
+A new `flyerTheme.ts` module exports the palette and typography used across all four flyers, so the family is consistent.
 
-Approach: introduce an optional `size="letter" | "a4"` prop on `FlyerFrame` and pass `letter` from `FlyerSalesSheet`. The PDF exporter (`exportFlyerToPdf`) will key off the same dimensions so the output PDF is true 8.5 × 11. Other flyers stay A4.
-
-### 2. Add Margarita as an included persona
-
-New element on the Sales Sheet: a small "**Included in your boardroom**" callout introducing **Margarita** as a named, included persona that ships with every workspace — positioned as a signature inclusion (the partner gets her access for their client by default). Treated as a featured chip/card with her name, one-line role, and a short value line. Placement: directly under "What you actually get", above the level ladder, so it visually anchors the offer.
-
-Copy direction (will refine in build):
-- Label: "Included in your boardroom"
-- Name: **Margarita**
-- Role line: e.g. "Editorial conscience & narrative strategist" (will confirm exact role line during build from existing Roundtable copy)
-- Value line: one sentence on what she brings to a session
-
-### 3. Visual redesign — premium $6K feel
-
-The current sheet reads like a one-color document. The redesign will lift it to feel commensurate with a $6,000 product without becoming flashy. Direction:
-
-- **Editorial masthead** — top band in deep ink (`#0F172A`) with the Roundtable wordmark in Playfair Display, partner attribution in fine letter-spaced caps, accent hairline underneath. Brand image floats on the right.
-- **Typographic hierarchy** — Playfair Display for headings (already loaded), Inter for body. Larger headline, generous leading, classic editorial column rhythm.
-- **Two-column body** — left column carries the narrative ("What it is", "What you actually get" pillars); right column carries the structured offer (Margarita callout, level ladder, investment box). Better information density without feeling cramped.
-- **Margarita callout** — bordered card with a small monogram mark "M" in accent color, her name in Playfair, role line, value line. Distinct enough to feel like a perk, restrained enough to feel premium.
-- **Level ladder refinement** — keep the 1→4 ladder but redesign as a vertical rail with numbered medallions (circle, accent border, Playfair numeral), tier name + body, price right-aligned. Level 1 marked **Included** in a small pill. Subtle hairline rail connecting the medallions.
-- **Investment block** — split into two clear rows: "Workspace build · $6,000" hero number on the left, "Not included" line items in a refined table on the right. Hairline borders, no heavy fill.
-- **Footer** — keep referral URL + QR, but in a quieter, more editorial layout. Add a small "Galavanteer · The Roundtable" mark on the opposite side.
-- **Color discipline** — ink (`#0F172A`), paper (`#FFFFFF`), warm gold accent (partner-controlled, default `#B8956C`), neutral slate text. No grey-on-grey blocks.
-
-Final layout sketch:
+**Palette (proposed — final pick is your call below)**
 
 ```text
-┌──────────────────────────────────────────────────────────┐
-│  [INK MASTHEAD]                                          │
-│  PRESENTED BY {partner}      THE ROUNDTABLE     [photo]  │
-│  ───── accent hairline ─────                              │
-├──────────────────────────────────────────────────────────┤
-│  WHAT IT IS                                              │
-│  {large editorial tagline, two-line max}                 │
-├──────────────────────────────────────────────────────────┤
-│  WHAT YOU ACTUALLY GET     │  INCLUDED IN YOUR BOARDROOM │
-│  • pillar 1                │  ┌──────────────────────┐  │
-│  • pillar 2                │  │  M    Margarita       │  │
-│  • pillar 3                │  │       {role}          │  │
-│  • pillar 4                │  │       {value line}    │  │
-│                            │  └──────────────────────┘  │
-│                            │                             │
-│                            │  HOW DEEP YOU GO            │
-│                            │  ① Roundtable    Included   │
-│                            │  ② Company Ctx   $— / req   │
-│                            │  ③ You in Room   $— / req   │
-│                            │  ④ Future You    $— / req   │
-├──────────────────────────────────────────────────────────┤
-│  INVESTMENT · WORKSPACE BUILD                            │
-│  $6,000        Not included — billed separately          │
-│                ChatGPT Teams       $50/mo                │
-│                Each add'l user     $100/mo               │
-│                Maintenance         $200/mo               │
-├──────────────────────────────────────────────────────────┤
-│  REQUEST ACCESS                                  [QR]    │
-│  galavanteer.com/r/{slug}                                │
-│  Galavanteer · The Roundtable                            │
-└──────────────────────────────────────────────────────────┘
+Direction A — "Margarita Cream" (matches her deck verbatim)
+  paper      #F5EFE0   warm cream
+  ink        #1F3A5F   deep navy
+  accent     #B8956C   warm gold (already brand)
+  body       #4A4536   soft umber for italic body
+  hairline   #D9CFB8
+
+Direction B — "Editorial Ivory" (slightly cooler, more modern)
+  paper      #F8F4EC
+  ink        #14213D   sharper navy
+  accent     #C9A765   brighter gold
+  body       #3A3A3A
+  hairline   #E5DDC8
+
+Direction C — "Manuscript" (warmer, more luxurious)
+  paper      #EFE7D5
+  ink        #2A1810   espresso brown
+  accent     #B8956C   warm gold
+  body       #4A3F2E
+  hairline   #D4C7A8
 ```
+
+I'll generate one preview rendering of the Sales Sheet in each direction so you can pick visually before I commit. (Direction A is my recommendation — it matches her deck and works against the existing brand gold #B8956C.)
+
+**Typography**
+- Headlines: Playfair Display (already loaded), 500–600 weight, tight letter-spacing
+- Italic accent: Playfair Display Italic, in gold for the second half of split headlines (e.g. "Start simple. *Go deeper when ready.*")
+- Body: Inter, italic for the editorial passages, regular for structured data
+- Caps labels: Inter, 9–10pt, 0.24em tracking, gold
+
+**Shared chrome**
+- Top hairline rule in gold (4px band)
+- "FROM GALAVANTEER" or "PRESENTED BY {partner}" in tracked caps, top-right
+- Footer: `{Partner} · In partnership with Galavanteer` left, page mark right
+- Bottom hairline rule
+
+### 2. Flyer-by-flyer rebuild (all four → cream/editorial)
+
+All four become 8.5 × 11 (Letter), since you noted it earlier and Letter is what partners actually print.
+
+**A. Roundtable Intro** — split title ("An invitation to *The Roundtable*."), italic editorial tagline, three numbered bullets in the deck's "01 Title — body" rhythm, partner photo bottom-right inside a hairline-bordered cream block.
+
+**B. Founder Offer** — same cream paper (no more dark layout — you said the dark felt heavy). Bold split headline, single hero passage, three pillars laid out like the deck's "Who's in the room" page (3 columns × hairline tops), CTA + QR in footer.
+
+**C. Event Invite** — date/time/place in tall display Playfair, italic blurb, tiny letterspaced details ("Curated guest list · No slides · No press"), large QR centered low.
+
+**D. Sales Sheet** — the most complex. Full layout below.
+
+### 3. Sales Sheet — detailed layout
+
+```text
+┌───────────────────────────────────────────────────────────┐
+│  ▬▬▬▬▬▬▬▬▬▬ gold rule ▬▬▬▬▬▬▬▬▬▬▬                          │
+│                                                            │
+│  PRESENTED BY {Partner}            FROM GALAVANTEER ▮     │
+│                                                            │
+│  WHAT IT IS                                                │
+│  ─────                                                     │
+│                                                            │
+│  The Roundtable.                                           │
+│  A private executive boardroom                             │
+│  inside your own ChatGPT.                                  │
+│                                                            │
+│  {italic tagline — editorial, 2–3 lines}                   │
+│                                                            │
+├──────────────────────── hairline ─────────────────────────┤
+│  WHAT YOU ACTUALLY GET                                     │
+│                                                            │
+│  01  A real boardroom    │  02  Built around               │
+│      on demand           │      your business              │
+│      {italic body}       │      {italic body}              │
+│  ─────                   │  ─────                          │
+│  03  Structured to       │  04  Private and yours          │
+│      an answer           │      {italic body}              │
+│      {italic body}       │                                 │
+│                                                            │
+├──────────────────────── hairline ─────────────────────────┤
+│  HOW DEEP YOU GO                                           │
+│                                                            │
+│  01  The Roundtable     {body italic}        Included      │
+│  ─────                                                     │
+│  02  Company Context    {body italic}        $— or req     │
+│  ─────                                                     │
+│  03  You, in the Room   {body italic}        $— or req     │
+│  ─────                                                     │
+│  04  Future You         {body italic}        $— or req     │
+│                                                            │
+│  Which level is right for you is a conversation.           │
+│                                                            │
+├──────────────────────── hairline ─────────────────────────┤
+│  INVESTMENT                                                │
+│                                                            │
+│  Workspace build (Level 1)              $6,000             │
+│  Each additional persona                $500 / build       │
+│  ─────                                                     │
+│  Not included — billed separately:                         │
+│    ChatGPT Teams (paid to OpenAI)       $50 / month        │
+│    Each additional user                 $100 / month       │
+│    Optional ongoing maintenance         $200 / month       │
+│                                                            │
+├──────────────────────── hairline ─────────────────────────┤
+│  ─── only when toggle on ───                               │
+│  YOU GET THE SYSTEM. AND YOU GET {PARTNER}.                │
+│                                                            │
+│  {Partner} introduces you personally. If you want them at  │
+│  the table, they can sit in your Roundtable sessions as a  │
+│  coaching voice — drawing on the experience that brought   │
+│  this to you in the first place.                           │
+│                                                            │
+├──────────────────────── hairline ─────────────────────────┤
+│  REQUEST ACCESS                              [QR]          │
+│  galavanteer.com/r/{slug}                                  │
+│  {Partner} · In partnership with Galavanteer    PAGE 01    │
+└───────────────────────────────────────────────────────────┘
+```
+
+Key changes vs current Sales Sheet:
+- **No more dark blocks** — the $6,000 investment block becomes a clean editorial line on cream, not a heavy navy slab. The number is large Playfair in navy, right-aligned, with a hairline above.
+- **$500 per additional persona** added as its own line in Investment.
+- **Level names locked** to your terms: Roundtable / Company Context / You, in the Room / Future You.
+- **Margarita callout becomes a generic, optional "introducer in your room" block** — driven by a toggle in the form. Copy auto-personalizes with the current partner's name. Off by default.
+- **Letter sizing kept** (8.5 × 11) and propagated to the other three flyers too, so the family prints together.
+
+### 4. Form additions
+
+In `PartnersMarketingPage.tsx`:
+- New toggle: **"Include 'partner sits in your room' offer"** (default off). When on, the callout appears with the partner's name baked in.
+- New optional input: **"Custom intro line"** for when the partner wants to override the default coaching-seat copy.
+- The existing Level 2/3/4 price inputs stay; they now feed the new ladder visual.
+- Per-additional-persona is fixed at $500 (shown but not editable, since you set it as a global price).
+
+### 5. Color preview step
+
+Before any code goes out, I'll render the Sales Sheet in each of the three palette directions above as a single screenshot, present them via `ask_questions` (visual_choice), and only then commit the chosen palette into `flyerTheme.ts` and wire up all four flyers.
 
 ### Files affected
 
-- `src/components/partners/marketing/FlyerFrame.tsx` — add optional `size` prop (Letter vs A4).
-- `src/components/partners/marketing/FlyerSalesSheet.tsx` — full redesign per above; render at Letter; add Margarita callout.
-- `src/lib/partnerFlyer.ts` — make PDF export honor the rendered element's actual size (so Letter exports as Letter); no hard-coded A4 if currently present.
-- `src/pages/partners/PartnersMarketingPage.tsx` — adjust the preview frame dimensions when the Sales Sheet template is selected (so the scaled preview matches Letter).
+- **New** `src/components/partners/marketing/flyerTheme.ts` — shared palette + typography tokens.
+- **Rewrite** `FlyerSalesSheet.tsx` — full editorial layout, persona add-on line, toggleable introducer block.
+- **Rewrite** `FlyerRoundtableIntro.tsx` — editorial cream layout matching deck.
+- **Rewrite** `FlyerFounderOffer.tsx` — cream layout (lose the dark).
+- **Rewrite** `FlyerEventInvite.tsx` — cream + Playfair display.
+- **Update** `FlyerFrame.tsx` — default size becomes Letter; cream paper background option.
+- **Update** `PartnersMarketingPage.tsx` — introducer toggle, optional custom intro line.
+- **Update** `SalesMaterialReference.tsx` — mirror the new visual language in the on-page reference.
+- **Untouched** `partnerFlyer.ts` — already honors per-element size; no change needed.
 
 ### Out of scope
 
-- Other three flyers (Intro, Founder, Event) keep their current A4 design.
-- The on-page `SalesMaterialReference` reference block is unchanged in this pass.
-- No DB / schema / pricing-logic changes. Margarita is a static included persona on the asset, not a data model.
+- No DB changes. Toggle + custom line are session-only inputs (consistent with existing pattern).
+- No multi-page deck PDF in this pass — that's a bigger lift; we can add it after the 1-pagers land.
+- Public marketing site untouched.
 
-### One open detail
+### What I'll need from you mid-flight
 
-I'll write the Margarita role + value lines in build using existing Roundtable persona copy as the source of truth. If you have a preferred one-liner for her role/value, share it and I'll use it verbatim — otherwise I'll draft to match the existing voice and you can tweak.
+After implementation, I'll generate three Sales Sheet renderings (palettes A / B / C above) and ask you to pick. That's the only blocker.
