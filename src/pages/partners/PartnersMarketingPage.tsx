@@ -80,6 +80,7 @@ const PartnersMarketingPage: React.FC = () => {
   const [tagline, setTagline] = useState(TEMPLATES[0].defaults.tagline);
   const [bulletsText, setBulletsText] = useState(TEMPLATES[0].defaults.bullets.join("\n"));
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
+  const [setupPrice, setSetupPrice] = useState<number>(6000);
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -135,6 +136,7 @@ const PartnersMarketingPage: React.FC = () => {
     accentColor,
     referralUrl,
     qrDataUrl,
+    setupPrice,
   };
 
   const handleDownload = async () => {
@@ -154,6 +156,7 @@ const PartnersMarketingPage: React.FC = () => {
   const renderFlyer = (innerRef: React.Ref<HTMLDivElement>) => {
     if (template === "intro") return <FlyerRoundtableIntro data={data} innerRef={innerRef} />;
     if (template === "founder") return <FlyerFounderOffer data={data} innerRef={innerRef} />;
+    if (template === "sales") return <FlyerSalesSheet data={data} innerRef={innerRef} />;
     return <FlyerEventInvite data={data} innerRef={innerRef} />;
   };
 
