@@ -111,7 +111,7 @@ const PartnersLayout: React.FC = () => {
             ))}
           </nav>
 
-          {isAdmin && !isGhosting && (
+          {isRealAdmin && (
             <div className="border-t border-slate-200 pt-3">
               <GhostPartnerPicker />
             </div>
