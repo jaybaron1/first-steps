@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Copy, LogOut, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import LandingPageEditor from "@/components/portal/LandingPageEditor";
 
 const PROD_BASE = "https://galavanteer.com";
 
