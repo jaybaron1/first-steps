@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { MessageCircle, X, Send, ArrowRight, Calendar, Plus } from 'lucide-react';
 import visitorTracking from '@/lib/visitorTracking';
 import { trackingSupabase } from '@/lib/trackingBackend';
+import { getReferralPartner } from '@/lib/referralAttribution';
 
 interface Message {
   id: string;
@@ -157,6 +158,7 @@ const ChatDiscovery: React.FC<ChatDiscoveryProps> = ({ onComplete }) => {
           ? 'The Roundtable (The Thinking)'
           : 'Both (Custom GPT + Roundtable)';
 
+        const referralPartnerId = getReferralPartner();
         const { error: supabaseError } = await trackingSupabase.from('leads').insert({
           session_id: sessionId,
           email: finalData.email,
@@ -164,6 +166,8 @@ const ChatDiscovery: React.FC<ChatDiscoveryProps> = ({ onComplete }) => {
           source: 'chatbot',
           status: 'new',
           message: finalData.additionalContext || null,
+          referred_by_partner_id: referralPartnerId,
+          referral_session_id: referralPartnerId ? sessionId : null,
           metadata: {
             servicePath: finalData.servicePath,
             serviceDisplay,

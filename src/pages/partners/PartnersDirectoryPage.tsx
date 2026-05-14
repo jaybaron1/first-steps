@@ -35,7 +35,8 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Loader2, Pencil, Trash2 } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Link2 } from "lucide-react";
+import PartnerShareablesModal from "@/components/admin/PartnerShareablesModal";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Required").max(200),
@@ -78,6 +79,7 @@ const PartnersDirectoryPage: React.FC = () => {
   const [form, setForm] = useState<FormState>(blank);
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [shareablesPartner, setShareablesPartner] = useState<Partner | null>(null);
 
   const openNew = () => {
     setEditingId(null);
@@ -230,6 +232,14 @@ const PartnersDirectoryPage: React.FC = () => {
                     <td className="px-4 py-3 text-right">
                       <div className="flex justify-end gap-1">
                         <button
+                          onClick={() => setShareablesPartner(p)}
+                          className="p-1.5 rounded hover:bg-amber-50 text-slate-500 hover:text-amber-700"
+                          aria-label="Shareables"
+                          title="Referral link & QR"
+                        >
+                          <Link2 className="w-3.5 h-3.5" />
+                        </button>
+                        <button
                           onClick={() => openEdit(p)}
                           className="p-1.5 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-900"
                           aria-label="Edit"
@@ -358,6 +368,12 @@ const PartnersDirectoryPage: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <PartnerShareablesModal
+        partner={shareablesPartner}
+        open={!!shareablesPartner}
+        onOpenChange={(o) => !o && setShareablesPartner(null)}
+      />
     </div>
   );
 };

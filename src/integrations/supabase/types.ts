@@ -833,6 +833,8 @@ export type Database = {
           metadata: Json | null
           name: string | null
           phone: string | null
+          referral_session_id: string | null
+          referred_by_partner_id: string | null
           session_id: string | null
           sheets_synced_at: string | null
           source: string | null
@@ -848,6 +850,8 @@ export type Database = {
           metadata?: Json | null
           name?: string | null
           phone?: string | null
+          referral_session_id?: string | null
+          referred_by_partner_id?: string | null
           session_id?: string | null
           sheets_synced_at?: string | null
           source?: string | null
@@ -863,6 +867,8 @@ export type Database = {
           metadata?: Json | null
           name?: string | null
           phone?: string | null
+          referral_session_id?: string | null
+          referred_by_partner_id?: string | null
           session_id?: string | null
           sheets_synced_at?: string | null
           source?: string | null
@@ -935,7 +941,10 @@ export type Database = {
           partner_persona_included: boolean
           phone: string | null
           product_level: Database["public"]["Enums"]["product_level"] | null
+          referral_session_id: string | null
           referral_type: Database["public"]["Enums"]["referral_type"]
+          referred_by_partner_id: string | null
+          source_lead_id: string | null
           updated_at: string
         }
         Insert: {
@@ -956,7 +965,10 @@ export type Database = {
           partner_persona_included?: boolean
           phone?: string | null
           product_level?: Database["public"]["Enums"]["product_level"] | null
+          referral_session_id?: string | null
           referral_type?: Database["public"]["Enums"]["referral_type"]
+          referred_by_partner_id?: string | null
+          source_lead_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -977,7 +989,10 @@ export type Database = {
           partner_persona_included?: boolean
           phone?: string | null
           product_level?: Database["public"]["Enums"]["product_level"] | null
+          referral_session_id?: string | null
           referral_type?: Database["public"]["Enums"]["referral_type"]
+          referred_by_partner_id?: string | null
+          source_lead_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -990,45 +1005,120 @@ export type Database = {
           },
         ]
       }
+      partner_portal_invites: {
+        Row: {
+          accepted_at: string | null
+          email: string
+          id: string
+          invited_at: string
+          invited_by: string | null
+          partner_id: string
+        }
+        Insert: {
+          accepted_at?: string | null
+          email: string
+          id?: string
+          invited_at?: string
+          invited_by?: string | null
+          partner_id: string
+        }
+        Update: {
+          accepted_at?: string | null
+          email?: string
+          id?: string
+          invited_at?: string
+          invited_by?: string | null
+          partner_id?: string
+        }
+        Relationships: []
+      }
+      partner_referral_clicks: {
+        Row: {
+          created_at: string
+          id: string
+          ip_hash: string | null
+          landing_url: string | null
+          partner_id: string
+          referrer: string | null
+          session_id: string | null
+          slug_used: string
+          user_agent: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          landing_url?: string | null
+          partner_id: string
+          referrer?: string | null
+          session_id?: string | null
+          slug_used: string
+          user_agent?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          landing_url?: string | null
+          partner_id?: string
+          referrer?: string | null
+          session_id?: string | null
+          slug_used?: string
+          user_agent?: string | null
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           agreement_date: string | null
           created_at: string
           email: string | null
           id: string
+          is_white_label: boolean
           last_promotional_activity_date: string | null
           name: string
           notes: string | null
           owner_id: string
           phone: string | null
+          portal_user_id: string | null
+          slug: string | null
           status: Database["public"]["Enums"]["partner_status"]
           updated_at: string
+          website: string | null
         }
         Insert: {
           agreement_date?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          is_white_label?: boolean
           last_promotional_activity_date?: string | null
           name: string
           notes?: string | null
           owner_id: string
           phone?: string | null
+          portal_user_id?: string | null
+          slug?: string | null
           status?: Database["public"]["Enums"]["partner_status"]
           updated_at?: string
+          website?: string | null
         }
         Update: {
           agreement_date?: string | null
           created_at?: string
           email?: string | null
           id?: string
+          is_white_label?: boolean
           last_promotional_activity_date?: string | null
           name?: string
           notes?: string | null
           owner_id?: string
           phone?: string | null
+          portal_user_id?: string | null
+          slug?: string | null
           status?: Database["public"]["Enums"]["partner_status"]
           updated_at?: string
+          website?: string | null
         }
         Relationships: []
       }
@@ -1379,6 +1469,7 @@ export type Database = {
         }[]
       }
       calculate_lead_score: { Args: { p_session_id: string }; Returns: number }
+      current_portal_partner_id: { Args: never; Returns: string }
       generate_subscription_revenue: {
         Args: { p_month?: string }
         Returns: number
@@ -1391,9 +1482,10 @@ export type Database = {
         Returns: boolean
       }
       is_partners_user: { Args: { _user_id: string }; Returns: boolean }
+      is_portal_partner_for: { Args: { _partner_id: string }; Returns: boolean }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user" | "sdr"
+      app_role: "admin" | "moderator" | "user" | "sdr" | "partner"
       attribution_model:
         | "first_touch"
         | "last_touch"
@@ -1557,7 +1649,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user", "sdr"],
+      app_role: ["admin", "moderator", "user", "sdr", "partner"],
       attribution_model: [
         "first_touch",
         "last_touch",
