@@ -138,6 +138,7 @@ const PartnersMarketingPage: React.FC = () => {
     referralUrl,
     qrDataUrl,
     setupPrice,
+    imageStyle,
   };
 
   const handleDownload = async () => {
