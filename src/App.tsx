@@ -125,6 +125,7 @@ const App = () => (
               {/* Partner-only */}
               <Route path="me" element={<RequirePartner><PartnersMyPage /></RequirePartner>} />
               <Route path="landing" element={<RequirePartner><PartnersLandingPage /></RequirePartner>} />
+              <Route path="marketing" element={<RequirePartner><PartnersMarketingPage /></RequirePartner>} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
