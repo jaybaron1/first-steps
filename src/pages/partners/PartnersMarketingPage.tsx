@@ -98,26 +98,87 @@ const PartnersMarketingPage: React.FC = () => {
 
   const flyerRef = useRef<HTMLDivElement>(null);
 
-  // Load partner row
+  // Hydration guard — don't auto-save until initial load completes
+  const hydrated = useRef(false);
+
+  // Load partner row + persisted flyer fields
   useEffect(() => {
     if (!partnerId) {
       setLoading(false);
+      hydrated.current = true;
       return;
     }
     (async () => {
       const { data } = await supabase
         .from("partners")
-        .select("name, landing_photo_url, landing_logo_url, landing_accent_color")
+        .select(
+          "name, landing_photo_url, landing_logo_url, landing_accent_color, flyer_setup_price, flyer_tier_prices, flyer_show_margarita, flyer_margarita_note, flyer_tagline"
+        )
         .eq("id", partnerId)
         .maybeSingle();
       if (data) {
         if (data.name) setPartnerName(data.name);
         setPhotoUrl(data.landing_photo_url || data.landing_logo_url || null);
         if (data.landing_accent_color) setAccentColor(data.landing_accent_color);
+
+        if (typeof data.flyer_setup_price === "number") setSetupPrice(data.flyer_setup_price);
+        const tp = (data.flyer_tier_prices ?? {}) as Record<string, number>;
+        if (tp.l2 != null) setLevel2Price(String(tp.l2));
+        if (tp.l3 != null) setLevel3Price(String(tp.l3));
+        if (tp.l4 != null) setLevel4Price(String(tp.l4));
+        if (tp.l5 != null) setLevel5Price(String(tp.l5));
+        if (typeof data.flyer_show_margarita === "boolean") setShowMargarita(data.flyer_show_margarita);
+        if (data.flyer_margarita_note) setMargaritaNote(data.flyer_margarita_note);
+        // Tagline only persists for the Sales Sheet template
+        if (data.flyer_tagline) {
+          // Will be applied if/when user is on the sales template
+          (window as any).__galav_persisted_tagline = data.flyer_tagline;
+        }
       }
       setLoading(false);
+      // Defer hydrated flag so the initial state-setters don't trigger a save
+      setTimeout(() => { hydrated.current = true; }, 0);
     })();
   }, [partnerId]);
+
+  // Apply persisted Sales tagline when user switches to the sales template
+  useEffect(() => {
+    if (template === "sales") {
+      const persisted = (window as any).__galav_persisted_tagline;
+      if (persisted && typeof persisted === "string") setTagline(persisted);
+    }
+  }, [template]);
+
+  // Auto-save flyer fields, debounced
+  useEffect(() => {
+    if (!hydrated.current || !partnerId) return;
+    const handle = setTimeout(() => {
+      const tier_prices: Record<string, number> = {};
+      const l2 = Number(level2Price); if (l2 > 0) tier_prices.l2 = l2;
+      const l3 = Number(level3Price); if (l3 > 0) tier_prices.l3 = l3;
+      const l4 = Number(level4Price); if (l4 > 0) tier_prices.l4 = l4;
+      const l5 = Number(level5Price); if (l5 > 0) tier_prices.l5 = l5;
+
+      supabase
+        .from("partners")
+        .update({
+          flyer_setup_price: setupPrice || 6000,
+          flyer_tier_prices: tier_prices,
+          flyer_show_margarita: showMargarita,
+          flyer_margarita_note: margaritaNote || null,
+          flyer_tagline: template === "sales" ? tagline : (window as any).__galav_persisted_tagline ?? null,
+        })
+        .eq("id", partnerId)
+        .then(({ error }) => {
+          if (error) toast.error("Couldn't save", { description: error.message });
+          else if (template === "sales") (window as any).__galav_persisted_tagline = tagline;
+        });
+    }, 600);
+    return () => clearTimeout(handle);
+  }, [
+    partnerId, setupPrice, level2Price, level3Price, level4Price, level5Price,
+    showMargarita, margaritaNote, tagline, template,
+  ]);
 
   const referralUrl = useMemo(() => buildReferralUrl(partnerSlug), [partnerSlug]);
   const qrTargetUrl = useMemo(() => buildReferralCaptureUrl(partnerSlug), [partnerSlug]);
