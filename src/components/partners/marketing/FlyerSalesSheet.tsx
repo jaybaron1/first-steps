@@ -191,9 +191,9 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               <div
                 style={{
                   position: "absolute",
-                  left: 15,
-                  top: 6,
-                  bottom: 6,
+                  left: 15.5,
+                  top: 16,
+                  bottom: 16,
                   width: 1,
                   background: `${accent}40`,
                 }}
@@ -211,19 +211,27 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                           borderRadius: 999,
                           background: paper,
                           border: `1.5px solid ${accent}`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
+                          position: "relative",
                           flexShrink: 0,
-                          fontFamily: "'Playfair Display', Georgia, serif",
-                          fontSize: 15,
-                          fontWeight: 600,
-                          color: accent,
                           zIndex: 1,
                           boxShadow: `0 0 0 4px ${paper}`,
                         }}
                       >
-                        {lvl.n}
+                        <span
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            display: "block",
+                            textAlign: "center",
+                            lineHeight: "31px",
+                            fontFamily: "Georgia, 'Times New Roman', serif",
+                            fontSize: 15,
+                            fontWeight: 600,
+                            color: accent,
+                          }}
+                        >
+                          {lvl.n}
+                        </span>
                       </div>
                       <div style={{ flex: 1, minWidth: 0, paddingTop: 1 }}>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: 8 }}>
@@ -231,20 +239,24 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                           {isBase ? (
                             <span
                               style={{
-                                display: "inline-block",
+                                display: "inline-flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                height: 18,
+                                minWidth: 70,
                                 fontSize: 7.5,
                                 fontWeight: 700,
                                 letterSpacing: "0.18em",
                                 textTransform: "uppercase",
                                 color: accent,
                                 border: `1px solid ${accent}`,
-                                padding: "2px 7px 1px",
+                                padding: "0 8px",
                                 borderRadius: 999,
                                 whiteSpace: "nowrap",
-                                lineHeight: 1.2,
+                                lineHeight: "18px",
                               }}
                             >
-                              Included
+                              <span style={{ display: "block", lineHeight: "18px" }}>Included</span>
                             </span>
                           ) : (
                             <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap", lineHeight: 1.2 }}>{price}</span>
@@ -280,14 +292,14 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
             <p
               style={{
                 fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: 40,
+                fontSize: 0,
                 fontWeight: 700,
                 margin: "8px 0 0",
-                lineHeight: 1.15,
+                lineHeight: 1,
                 color: ink,
               }}
             >
-              {fmt(setup)}
+              <span style={{ fontSize: 40, lineHeight: "46px", verticalAlign: "baseline" }}>{fmt(setup)}</span>
             </p>
             <p style={{ fontSize: 9.5, color: muted, margin: "10px 0 0", lineHeight: 1.4 }}>
               One-time setup. Tier 1 subscription required. Upgrades priced individually.
