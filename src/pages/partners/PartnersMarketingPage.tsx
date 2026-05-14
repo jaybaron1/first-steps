@@ -61,11 +61,14 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
     description: "What The Roundtable is, what it does, what it costs.",
     defaults: {
       headline: "The Roundtable",
-      tagline: "A private executive boardroom that lives inside your own ChatGPT. Three to five senior personas — calibrated to your business — show up to think through real decisions with you. Every session ends with a structured deliverable.",
+      tagline: "A software boardroom for founders and executives. Bring a real decision. Three to five senior advisors — calibrated to your business — work it through with you and hand back a written brief you can defend.",
       bullets: [],
     },
   },
 ];
+
+const DEFAULT_MARGARITA_NOTE =
+  "A named persona at the table from day one — sharp, candid, and tuned to the way your business actually moves.";
 
 const DEFAULT_ACCENT = "#B8956C";
 
@@ -85,6 +88,8 @@ const PartnersMarketingPage: React.FC = () => {
   const [level2Price, setLevel2Price] = useState<string>("");
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
+  const [showMargarita, setShowMargarita] = useState<boolean>(true);
+  const [margaritaNote, setMargaritaNote] = useState<string>(DEFAULT_MARGARITA_NOTE);
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -147,6 +152,8 @@ const PartnersMarketingPage: React.FC = () => {
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
     },
+    showMargarita,
+    margaritaNote,
   };
 
   const handleDownload = async () => {
