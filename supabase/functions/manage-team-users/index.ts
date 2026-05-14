@@ -97,27 +97,57 @@ Deno.serve(async (req) => {
           return json({ error: "Password must be at least 12 characters" }, 400);
         }
 
+        const email = body.email.trim().toLowerCase();
+
         // Create the user with email already confirmed
         const { data: created, error: createErr } = await admin.auth.admin.createUser({
-          email: body.email.trim().toLowerCase(),
+          email,
           password: body.password,
           email_confirm: true,
         });
+
+        let newId: string;
         if (createErr) {
-          return json({ error: createErr.message }, 400);
+          const msg = createErr.message || "";
+          const alreadyExists =
+            msg.toLowerCase().includes("already been registered") ||
+            msg.toLowerCase().includes("already registered") ||
+            msg.toLowerCase().includes("email_exists");
+
+          if (!alreadyExists) {
+            return json({ error: msg }, 400);
+          }
+
+          // User exists — find them and just grant the role
+          const { data: list, error: listErr } = await admin.auth.admin.listUsers({
+            page: 1,
+            perPage: 1000,
+          });
+          if (listErr) return json({ error: listErr.message }, 400);
+          const existing = list.users.find(
+            (u) => (u.email || "").toLowerCase() === email,
+          );
+          if (!existing) {
+            return json(
+              { error: "Email is registered but user could not be located." },
+              400,
+            );
+          }
+          newId = existing.id;
+        } else {
+          newId = created.user!.id;
         }
-        const newId = created.user!.id;
 
         const { error: roleInsertErr } = await admin
           .from("user_roles")
           .insert({ user_id: newId, role: body.role });
-        if (roleInsertErr) {
-          // cleanup
-          await admin.auth.admin.deleteUser(newId);
+        if (roleInsertErr && !roleInsertErr.message.toLowerCase().includes("duplicate")) {
+          // Only clean up if we just created the user in this call
+          if (!createErr) await admin.auth.admin.deleteUser(newId);
           return json({ error: roleInsertErr.message }, 400);
         }
 
-        return json({ user_id: newId });
+        return json({ user_id: newId, reused: !!createErr });
       }
 
       case "set_role": {
