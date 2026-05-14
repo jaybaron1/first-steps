@@ -231,21 +231,23 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                           {isBase ? (
                             <span
                               style={{
+                                display: "inline-block",
                                 fontSize: 7.5,
                                 fontWeight: 700,
                                 letterSpacing: "0.18em",
                                 textTransform: "uppercase",
                                 color: accent,
                                 border: `1px solid ${accent}`,
-                                padding: "1px 5px",
+                                padding: "2px 7px 1px",
                                 borderRadius: 999,
                                 whiteSpace: "nowrap",
+                                lineHeight: 1.2,
                               }}
                             >
                               Included
                             </span>
                           ) : (
-                            <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap" }}>{price}</span>
+                            <span style={{ fontSize: 10, fontWeight: 700, color: ink, whiteSpace: "nowrap", lineHeight: 1.2 }}>{price}</span>
                           )}
                         </div>
                         <p style={{ fontSize: 9.5, lineHeight: 1.4, color: muted, margin: "2px 0 0" }}>{lvl.body}</p>
@@ -280,15 +282,14 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
                 fontFamily: "'Playfair Display', Georgia, serif",
                 fontSize: 40,
                 fontWeight: 700,
-                margin: "6px 0 0",
-                lineHeight: 1,
+                margin: "8px 0 0",
+                lineHeight: 1.15,
                 color: ink,
-                letterSpacing: "-0.01em",
               }}
             >
               {fmt(setup)}
             </p>
-            <p style={{ fontSize: 9.5, color: muted, margin: "8px 0 0", lineHeight: 1.4 }}>
+            <p style={{ fontSize: 9.5, color: muted, margin: "10px 0 0", lineHeight: 1.4 }}>
               One-time setup. Tier 1 subscription required. Upgrades priced individually.
             </p>
           </div>
