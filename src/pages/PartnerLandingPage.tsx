@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import ChatDiscovery from "@/components/ChatDiscovery";
 import { ArrowRight, ExternalLink } from "lucide-react";
+
+const openChat = () => {
+  const btn = document.querySelector<HTMLButtonElement>('button[aria-label="Open chat"]');
+  if (btn) btn.click();
+  else window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+};
 
 export interface PartnerLandingProps {
   partner: {
