@@ -88,6 +88,8 @@ const PartnersMarketingPage: React.FC = () => {
   const [level2Price, setLevel2Price] = useState<string>("");
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
+  const [level5Price, setLevel5Price] = useState<string>("");
+  const [level6Price, setLevel6Price] = useState<string>("");
   const [showMargarita, setShowMargarita] = useState<boolean>(true);
   const [margaritaNote, setMargaritaNote] = useState<string>(DEFAULT_MARGARITA_NOTE);
   const [downloading, setDownloading] = useState(false);
@@ -151,6 +153,8 @@ const PartnersMarketingPage: React.FC = () => {
       l2: Number(level2Price) || undefined,
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
+      l5: Number(level5Price) || undefined,
+      l6: Number(level6Price) || undefined,
     },
     showMargarita,
     margaritaNote,
@@ -320,6 +324,42 @@ const PartnersMarketingPage: React.FC = () => {
                   />
                 </Field>
               )}
+
+              <Field label="Workspace build price (USD)" hint="One-time setup. Shown in the Investment block.">
+                <input
+                  type="number"
+                  min={0}
+                  step={100}
+                  value={setupPrice}
+                  onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+                />
+              </Field>
+
+              <Field label="Tier prices (USD)" hint="Leave blank to show 'Quoted on request'.">
+                <div className="space-y-2">
+                  {[
+                    { label: "2 — The Operating Frame", value: level2Price, set: setLevel2Price },
+                    { label: "3 — Take A Seat",         value: level3Price, set: setLevel3Price },
+                    { label: "4 — Future Me",           value: level4Price, set: setLevel4Price },
+                    { label: "5 — Add a Voice",         value: level5Price, set: setLevel5Price },
+                    { label: "6 — Pull Up a Chair",     value: level6Price, set: setLevel6Price },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-center gap-2">
+                      <span className="text-xs text-slate-600 flex-1 truncate">{row.label}</span>
+                      <input
+                        type="number"
+                        min={0}
+                        step={50}
+                        value={row.value}
+                        onChange={(e) => row.set(e.target.value)}
+                        placeholder="—"
+                        className="w-28 px-2 py-1.5 border border-slate-200 rounded-md text-sm text-right"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </Field>
             </>
           )}
 

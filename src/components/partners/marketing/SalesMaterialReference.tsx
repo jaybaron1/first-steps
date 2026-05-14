@@ -8,10 +8,12 @@ const PILLARS = [
 ];
 
 const LEVELS = [
-  { n: 1, name: "The Roundtable", body: "Prestige personas, web-informed.", price: "Included" },
-  { n: 2, name: "Company Context", body: "Reasons inside the business — what they sell, protect, and how they decide.", price: null },
-  { n: 3, name: "You, in the Room", body: "A faithful replica of how the principal actually thinks, decides, speaks.", price: null },
-  { n: 4, name: "Future You", body: "Aspirational counterpart that challenges Present You on tradeoffs.", price: null },
+  { n: 1, name: "The Roundtable",      body: "The room itself. Sixty advisors, one owner.",      price: "Required" },
+  { n: 2, name: "The Operating Frame", body: "Your company, in their hands.",                    price: null },
+  { n: 3, name: "Take A Seat",         body: "You, in the room when you're not.",                price: null },
+  { n: 4, name: "Future Me",           body: "Tested against who you're becoming.",              price: null },
+  { n: 5, name: "Add a Voice",         body: "A teammate's voice in the room when they're not.", price: null },
+  { n: 6, name: "Pull Up a Chair",     body: "A login for a teammate to join the room live.",    price: null },
 ];
 
 const ONBOARDING = [
@@ -92,7 +94,7 @@ const SalesMaterialReference: React.FC = () => (
               </div>
               <span
                 className="text-xs font-bold whitespace-nowrap"
-                style={{ color: lvl.price === "Included" ? "#0f172a" : ACCENT }}
+                style={{ color: lvl.price === "Required" ? "#0f172a" : ACCENT }}
               >
                 {lvl.price ?? "Quoted on request"}
               </span>
