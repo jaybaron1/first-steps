@@ -35,7 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Loader2, Pencil, Trash2, Link2 } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Link2, Mail } from "lucide-react";
 import PartnerShareablesModal from "@/components/admin/PartnerShareablesModal";
 
 const schema = z.object({
