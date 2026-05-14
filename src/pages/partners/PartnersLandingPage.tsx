@@ -1,7 +1,7 @@
 import React from "react";
 import { Navigate } from "react-router-dom";
 import { usePartnersAuth } from "@/components/partners/PartnersRoute";
-import LandingPageEditor from "@/components/portal/LandingPageEditor";
+import LandingPageEditor from "@/components/partners/LandingPageEditor";
 
 const PartnersLandingPage: React.FC = () => {
   const { partnerId, partnerSlug, isWhiteLabel } = usePartnersAuth();
