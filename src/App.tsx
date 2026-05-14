@@ -35,6 +35,7 @@ import PartnersActivityPage from "./pages/partners/PartnersActivityPage";
 import PartnersUsersPage from "./pages/partners/PartnersUsersPage";
 import PartnersAppointmentsPage from "./pages/partners/PartnersAppointmentsPage";
 import ReferralRedirect from "./pages/ReferralRedirect";
+import PartnerReferralCapture from "./pages/PartnerReferralCapture";
 import PartnersMyPage from "./pages/partners/PartnersMyPage";
 import PartnersLandingPage from "./pages/partners/PartnersLandingPage";
 import PartnersMarketingPage from "./pages/partners/PartnersMarketingPage";
