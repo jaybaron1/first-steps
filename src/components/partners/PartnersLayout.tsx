@@ -3,6 +3,7 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { usePartnersAuth } from "@/components/partners/PartnersRoute";
+import { clearGhostPartnerId } from "@/lib/partnerGhost";
 import {
   LayoutDashboard,
   Users,
@@ -14,6 +15,7 @@ import {
   ShieldCheck,
   Calendar,
   Sparkles,
+  Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
