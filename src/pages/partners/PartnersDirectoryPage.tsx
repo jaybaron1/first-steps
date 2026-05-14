@@ -75,6 +75,12 @@ const PartnersDirectoryPage: React.FC = () => {
   const { user, isAdmin } = usePartnersAuth();
   const { toast } = useToast();
   const qc = useQueryClient();
+  const navigate = useNavigate();
+
+  const ghostInto = (p: Partner) => {
+    setGhostPartnerId(p.id);
+    navigate("/partners/me");
+  };
 
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
