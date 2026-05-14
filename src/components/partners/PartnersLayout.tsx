@@ -18,6 +18,7 @@ import {
   Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import GhostPartnerPicker from "@/components/partners/GhostPartnerPicker";
 
 type NavItem = {
   path: string;
@@ -45,7 +46,8 @@ const navItems: NavItem[] = [
 
 const PartnersLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, partnerName } = usePartnersAuth();
+  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, realRole, partnerName } = usePartnersAuth();
+  const isRealAdmin = realRole === "admin";
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -108,6 +110,12 @@ const PartnersLayout: React.FC = () => {
               </NavLink>
             ))}
           </nav>
+
+          {isRealAdmin && (
+            <div className="border-t border-slate-200 pt-3">
+              <GhostPartnerPicker />
+            </div>
+          )}
 
           <div className="px-3 py-4 border-t border-slate-200">
             <div className="px-3 py-2 mb-2">
