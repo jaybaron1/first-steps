@@ -1,60 +1,59 @@
-## Add a Sales Material section to /partners/marketing
+## Add a visually distinct "Upgrade ladder" to the Sales Sheet
 
-Build a fourth flyer template ("Sales Sheet") plus a static on-page reference block partners can read while pitching The Roundtable.
+The four Level files describe the same product getting progressively more personal. They become the upgrade story inside the existing Sales Sheet — not a new flyer.
 
-### What gets added on the page
+### The four levels (plain client-facing names, derived from the specs)
 
-A new section above the existing template/preview UI titled **"Sales material"** with three blocks:
+| Level | Name | What it adds |
+|---|---|---|
+| **Level 1** | The Roundtable (base) | Prestige executive personas, web-only context. Already covered as "Workspace build". |
+| **Level 2** | Company Context | Two layers loaded together: the **Company Runtime** (what the business is, sells, and protects) and the **Operating Frame** (how this organization actually decides — risk, speed, escalation). The room reasons inside the company, not around it. |
+| **Level 3** | You, in the Room | A faithful replica of how the principal actually thinks, decides, and speaks today. The room mirrors their bias and instinct so its outputs feel like their own thinking, sharper. |
+| **Level 4** | Future You | An aspirational counterpart that challenges Present You. Creates productive tension on tradeoffs the principal has said they want to handle differently. |
 
-1. **What it is** — one short paragraph on The Roundtable (private ChatGPT workspace, calibrated to how the client thinks, no prompts to memorize).
-2. **How it works** — the 4 public steps mirrored from the marketing site:
-  - Call — confirm fit, goals, workflow
-  - Blueprint — map personas, voice, decisions, integrations
-  - Implement — build and validate the workspace
-  - Track — confirm adoption and deliver a results snapshot
-3. **What it costs** — clear pricing card:
-  - **Setup** — $6,000 (one-time, editable per partner; can be paid in monthly installments)
-  - **Not included / billed separately:**
-    - ChatGPT Teams — $50/month (paid to OpenAI)
-    - Each additional user — $100/month
-    - Optional ongoing maintenance — $200/month
+Level 2A and Level 2B are merged under "Level 2 — Company Context" because the spec treats them as the paired company-truth layer; partners don't need to sell them separately.
 
-A small "Reference for you, the partner" note clarifies this is the talk-track, and partners can still customize the downloadable PDF below.
+### What changes in the Sales Sheet
 
-### What gets added to the flyer system
+The Sales Sheet (PDF + on-page reference) gains a new dedicated section between "What you actually get" and "Investment":
 
-A fourth template **"Sales Sheet"** alongside Roundtable Intro / Founder Offer / Event Invite. Layout:
+**Section title: "How deep you go"**
 
-- Header: partner name + photo + accent rule
-- Section 1: "The Roundtable" — short description
-- Section 2: "How it works" — 4 numbered steps (Call → Blueprint → Implement → Track)
-- Section 3: "Investment" — setup price + add-on table
-- Footer: referral URL + QR (already wired to `/r/:slug/connect`)
+Visual treatment: a 4-step ladder/escalator (each step taller and more saturated than the last), each with:
+- Level number (small, accent color)
+- Plain name (bold)
+- One-line description
+- Editable price (blank default; renders as "Quoted on request" if blank, or `$X,XXX` if set)
 
-The setup price defaults to **$6,000** but is editable in a new "Setup price" form field, persisted only in component state (no DB write). Add-on prices ($50 / $100 / $200) are fixed in copy — they're OpenAI / service costs, not partner-controlled.
+Level 1 is shown as **Included** (not priced) so the ladder reads as: included → upgrade → upgrade → upgrade.
+
+### Form changes (per-partner editability)
+
+Add four optional price fields shown only when the Sales Sheet template is selected:
+- Level 2 price
+- Level 3 price
+- Level 4 price
+
+Blank = "Quoted on request" appears on the PDF. All in-session only, no DB write.
+
+### Visual design step (before implementation)
+
+Because the user wants the ladder visually designed, I'll generate **3 design directions** for just the "How deep you go" block — same accent color, same font stack as the rest of the Sales Sheet — and let you pick one before I write the final markup. The three directions will explore: (1) horizontal stepped ladder, (2) vertical numbered tiers with increasing weight, (3) connected-cards "ascent" layout.
 
 ### Files
 
-**New**
-
-- `src/components/partners/marketing/FlyerSalesSheet.tsx` — the PDF template
-- `src/components/partners/marketing/SalesMaterialReference.tsx` — the on-page static reference block
-
 **Modified**
-
-- `src/pages/partners/PartnersMarketingPage.tsx`
-  - Render `<SalesMaterialReference />` at the top of the page
-  - Register the new template in the `TEMPLATES` array with `key: "sales"`
-  - Extend `FlyerData` with optional `setupPrice` (default 6000) + add a "Setup price" input (only shown when `template === "sales"`)
-  - Wire `renderFlyer` to return `<FlyerSalesSheet />` for the new key
-- `src/components/partners/marketing/FlyerRoundtableIntro.tsx` — extend the shared `FlyerData` type to include the optional `setupPrice` field (or move the type to a shared file). Existing templates ignore the new field.
+- `src/components/partners/marketing/FlyerSalesSheet.tsx` — insert the Levels section; render prices conditionally
+- `src/components/partners/marketing/SalesMaterialReference.tsx` — mirror the Levels block on-page
+- `src/components/partners/marketing/FlyerRoundtableIntro.tsx` — extend `FlyerData` with optional `levelPrices: { l2?: number; l3?: number; l4?: number }`
+- `src/pages/partners/PartnersMarketingPage.tsx` — three new editable price inputs (visible when `template === "sales"`), plumbed into `FlyerData`
 
 ### Out of scope
 
-- No DB schema changes. No edits to public marketing pricing.
-- No per-partner persistence of the setup price (in-session only).
-- No changes to commission logic or `partner_clients`.
+- No new flyer template, no DB schema, no public marketing-site changes.
+- The four Level spec files remain internal knowledge — not surfaced to clients verbatim.
+- No commission/pricing logic changes.
 
 ### Memory
 
-Update `mem://features/partners-marketing` to note the new Sales Sheet template and the on-page reference block.
+Update `mem://features/partners-marketing` to record the four-level upgrade ladder names and that Level 2A + 2B are merged under "Company Context" for partner-facing material.

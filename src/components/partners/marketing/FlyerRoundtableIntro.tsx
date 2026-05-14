@@ -13,6 +13,7 @@ export interface FlyerData {
   qrDataUrl: string | null;
   setupPrice?: number;
   imageStyle?: "photo" | "logo";
+  levelPrices?: { l2?: number; l3?: number; l4?: number };
 }
 
 const Editorial: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
