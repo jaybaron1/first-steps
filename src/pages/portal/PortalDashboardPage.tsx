@@ -176,20 +176,9 @@ const PortalDashboardPage: React.FC = () => {
             </Card>
           )}
 
-          {/* White-label persona panel */}
+          {/* White-label landing page editor */}
           {isWhiteLabel && (
-            <Card className="p-5 border-slate-200 shadow-none bg-gradient-to-br from-slate-50 to-amber-50/30">
-              <div className="flex items-start gap-3">
-                <Sparkles className="w-5 h-5 text-amber-600 mt-0.5" />
-                <div>
-                  <h2 className="text-sm font-semibold text-slate-900">Your boardroom persona</h2>
-                  <p className="text-xs text-slate-600 mt-1">
-                    You're set up as a featured personality inside the boardrooms you sell. Jason
-                    will publish your persona profile here once it's built.
-                  </p>
-                </div>
-              </div>
-            </Card>
+            <LandingPageEditor partnerId={partnerId} partnerSlug={partnerSlug} />
           )}
 
           {/* Recent clients */}
