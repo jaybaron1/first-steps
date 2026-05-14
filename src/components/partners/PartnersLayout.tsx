@@ -45,11 +45,16 @@ const navItems: NavItem[] = [
 
 const PartnersLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel } = usePartnersAuth();
+  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, partnerName } = usePartnersAuth();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/partners/login", { replace: true });
+  };
+
+  const exitGhost = () => {
+    clearGhostPartnerId();
+    navigate("/partners/directory", { replace: true });
   };
 
   const visible = navItems.filter((i) => i.show({ isStaff, isAdmin, isPartner, isWhiteLabel }));
