@@ -42,8 +42,6 @@ const PartnerLandingPage: React.FC<PartnerLandingProps> = ({ partner }) => {
     ? (partner.landing_bullets as string[]).filter(Boolean)
     : [];
 
-  const [chatOpen, setChatOpen] = useState(false);
-
   return (
     <>
       <Helmet>
