@@ -22,6 +22,7 @@ const ONBOARDING = [
 ];
 
 const ADDONS = [
+  { label: "Each additional persona", price: "$500 / build" },
   { label: "ChatGPT Teams (paid to OpenAI)", price: "$50 / month" },
   { label: "Each additional user", price: "$100 / month" },
   { label: "Optional ongoing maintenance", price: "$200 / month" },
