@@ -50,8 +50,41 @@ const PartnersRoute: React.FC<PartnersRouteProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [role, setRole] = useState<PartnersRole | null>(null);
   const [partner, setPartner] = useState<PartnerRow | null>(null);
+  const [ghostId, setGhostId] = useState<string | null>(() => getGhostPartnerId());
+  const [ghostPartner, setGhostPartner] = useState<PartnerRow | null>(null);
 
+  // React to ghost-id changes from anywhere in the app
   useEffect(() => {
+    const onChange = () => setGhostId(getGhostPartnerId());
+    window.addEventListener("partners-ghost-change", onChange);
+    window.addEventListener("storage", onChange);
+    return () => {
+      window.removeEventListener("partners-ghost-change", onChange);
+      window.removeEventListener("storage", onChange);
+    };
+  }, []);
+
+  // Load the ghosted partner row whenever an admin sets a ghost id
+  useEffect(() => {
+    let active = true;
+    const isAdmin = role === "admin";
+    if (!isAdmin || !ghostId) {
+      setGhostPartner(null);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("partners")
+        .select("id, name, slug, is_white_label")
+        .eq("id", ghostId)
+        .maybeSingle();
+      if (active) setGhostPartner(data ?? null);
+    })();
+    return () => {
+      active = false;
+    };
+  }, [ghostId, role]);
+
     let mounted = true;
 
     const resolveRole = async (uid: string): Promise<PartnersRole | null> => {
