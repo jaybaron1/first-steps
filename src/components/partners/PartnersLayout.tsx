@@ -18,6 +18,7 @@ import {
   Eye,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import GhostPartnerPicker from "@/components/partners/GhostPartnerPicker";
 
 type NavItem = {
   path: string;
