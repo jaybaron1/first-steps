@@ -84,10 +84,6 @@ const App = () => (
             <Route path="/one-pager" element={<OnePager />} />
             <Route path="/r/:slug" element={<ReferralRedirect />} />
 
-            {/* Partner-facing portal */}
-            <Route path="/portal/login" element={<PortalLoginPage />} />
-            <Route path="/portal" element={<PortalRoute><PortalDashboardPage /></PortalRoute>} />
-
             {/* Admin - Tab-based layout with nested routes */}
             <Route path="/admin" element={
               <AdminRoute>
@@ -106,22 +102,28 @@ const App = () => (
               <Route path="seo" element={<SEOPage />} />
             </Route>
 
-            {/* Partners CRM */}
+            {/* Partners CRM (admin/sdr) + Partner Portal (partner role) */}
             <Route path="/partners/login" element={<PartnersLoginPage />} />
+            <Route path="/portal/login" element={<Navigate to="/partners/login" replace />} />
+            <Route path="/portal" element={<Navigate to="/partners/me" replace />} />
             <Route path="/partners" element={
               <PartnersRoute>
                 <PartnersLayout />
               </PartnersRoute>
             }>
-              <Route index element={<PartnersDashboardPage />} />
-              <Route path="clients" element={<PartnersClientsPage />} />
-              <Route path="clients/:id" element={<PartnersClientProfilePage />} />
-              <Route path="new" element={<PartnersNewReferralPage />} />
-              <Route path="directory" element={<PartnersDirectoryPage />} />
-              <Route path="commissions" element={<PartnersCommissionLogPage />} />
-              <Route path="activity" element={<PartnersActivityPage />} />
-              <Route path="appointments" element={<PartnersAppointmentsPage />} />
-              <Route path="users" element={<PartnersUsersPage />} />
+              <Route index element={<RequireStaff><PartnersDashboardPage /></RequireStaff>} />
+              <Route path="clients" element={<RequireStaff><PartnersClientsPage /></RequireStaff>} />
+              <Route path="clients/:id" element={<RequireStaff><PartnersClientProfilePage /></RequireStaff>} />
+              <Route path="new" element={<RequireStaff><PartnersNewReferralPage /></RequireStaff>} />
+              <Route path="directory" element={<RequireStaff><PartnersDirectoryPage /></RequireStaff>} />
+              <Route path="commissions" element={<RequireStaff><PartnersCommissionLogPage /></RequireStaff>} />
+              <Route path="activity" element={<RequireStaff><PartnersActivityPage /></RequireStaff>} />
+              <Route path="appointments" element={<RequireStaff><PartnersAppointmentsPage /></RequireStaff>} />
+              <Route path="users" element={<RequireStaff><PartnersUsersPage /></RequireStaff>} />
+
+              {/* Partner-only */}
+              <Route path="me" element={<RequirePartner><PartnersMyPage /></RequirePartner>} />
+              <Route path="landing" element={<RequirePartner><PartnersLandingPage /></RequirePartner>} />
             </Route>
 
             <Route path="*" element={<NotFound />} />
