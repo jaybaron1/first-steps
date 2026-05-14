@@ -94,7 +94,7 @@ const SalesMaterialReference: React.FC = () => (
               </div>
               <span
                 className="text-xs font-bold whitespace-nowrap"
-                style={{ color: lvl.price === "Required" ? accentForFlag(lvl.price) : ACCENT }}
+                style={{ color: lvl.price === "Required" ? "#0f172a" : ACCENT }}
               >
                 {lvl.price ?? "Quoted on request"}
               </span>
