@@ -274,14 +274,16 @@ const PartnersMarketingPage: React.FC = () => {
             />
           </Field>
 
-          <Field label="Bullets" hint="One per line.">
-            <textarea
-              value={bulletsText}
-              onChange={(e) => setBulletsText(e.target.value)}
-              rows={4}
-              className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
-            />
-          </Field>
+          {template !== "sales" && (
+            <Field label="Bullets" hint="One per line.">
+              <textarea
+                value={bulletsText}
+                onChange={(e) => setBulletsText(e.target.value)}
+                rows={4}
+                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+              />
+            </Field>
+          )}
 
           {template === "sales" && (
             <>
