@@ -177,6 +177,8 @@ const PartnersMarketingPage: React.FC = () => {
         </p>
       </header>
 
+      <SalesMaterialReference />
+
       <div className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-8">
         {/* Left: form */}
         <div className="space-y-6">
@@ -244,6 +246,19 @@ const PartnersMarketingPage: React.FC = () => {
               className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
             />
           </Field>
+
+          {template === "sales" && (
+            <Field label="Setup price (USD)" hint="Editable per partner. Add-ons stay fixed.">
+              <input
+                type="number"
+                min={0}
+                step={100}
+                value={setupPrice}
+                onChange={(e) => setSetupPrice(Number(e.target.value) || 0)}
+                className="w-full px-3 py-2 border border-slate-200 rounded-md text-sm"
+              />
+            </Field>
+          )}
 
           <Field label="Accent color">
             <div className="flex items-center gap-3">
