@@ -350,15 +350,17 @@ const PartnersMarketingPage: React.FC = () => {
 
         {/* Right: preview */}
         <div className="space-y-3">
-          <div className="text-xs font-medium uppercase tracking-wider text-slate-500">Preview</div>
+          <div className="text-xs font-medium uppercase tracking-wider text-slate-500">
+            Preview {template === "sales" ? "· US Letter (8.5 × 11)" : "· A4"}
+          </div>
           <div className="border border-slate-200 rounded-md bg-slate-100 p-6 overflow-hidden flex justify-center">
             <div
               style={{
-                width: "794px",
-                height: "1123px",
+                width: template === "sales" ? "816px" : "794px",
+                height: template === "sales" ? "1056px" : "1123px",
                 transform: "scale(0.6)",
                 transformOrigin: "top center",
-                marginBottom: "-450px",
+                marginBottom: template === "sales" ? "-422px" : "-450px",
               }}
             >
               {renderFlyer(flyerRef)}
