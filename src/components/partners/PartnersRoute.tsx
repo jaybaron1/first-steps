@@ -18,11 +18,14 @@ export interface PartnersAuthContext {
   isAdmin: boolean;
   isStaff: boolean; // admin or sdr
   isPartner: boolean;
-  // Populated when role === 'partner'
+  // Populated when role === 'partner' (or when an admin is ghosting a partner)
   partnerId: string | null;
   partnerName: string | null;
   partnerSlug: string | null;
   isWhiteLabel: boolean;
+  // Ghost-mode flags (admin viewing as partner)
+  isGhosting: boolean;
+  realRole: PartnersRole;
 }
 
 const PartnersAuthContextRC = React.createContext<PartnersAuthContext | null>(null);
