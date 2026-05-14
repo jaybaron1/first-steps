@@ -82,6 +82,9 @@ const PartnersMarketingPage: React.FC = () => {
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [setupPrice, setSetupPrice] = useState<number>(6000);
   const [imageStyle, setImageStyle] = useState<"photo" | "logo">("photo");
+  const [level2Price, setLevel2Price] = useState<string>("");
+  const [level3Price, setLevel3Price] = useState<string>("");
+  const [level4Price, setLevel4Price] = useState<string>("");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
