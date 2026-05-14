@@ -271,6 +271,21 @@ const PartnersDirectoryPage: React.FC = () => {
                         >
                           <Link2 className="w-3.5 h-3.5" />
                         </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => sendInvite(p)}
+                            disabled={invitingId === p.id}
+                            className="p-1.5 rounded hover:bg-blue-50 text-slate-500 hover:text-blue-700 disabled:opacity-50"
+                            aria-label="Send portal invite"
+                            title={p.portal_user_id ? "Resend portal invite" : "Send portal invite"}
+                          >
+                            {invitingId === p.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Mail className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        )}
                         <button
                           onClick={() => openEdit(p)}
                           className="p-1.5 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-900"
