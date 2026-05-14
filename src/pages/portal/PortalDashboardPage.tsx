@@ -6,7 +6,7 @@ import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { usePortalAuth } from "@/components/portal/PortalRoute";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Copy, LogOut, Sparkles } from "lucide-react";
+import { Copy, LogOut } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import LandingPageEditor from "@/components/portal/LandingPageEditor";
 
