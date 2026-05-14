@@ -71,7 +71,7 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
 const DEFAULT_TAGLINE_SALES = TEMPLATES.find((t) => t.key === "sales")!.defaults.tagline;
 
 const DEFAULT_MARGARITA_NOTE =
-  "A named persona at the table from day one — sharp, candid, and tuned to the way your business actually moves.";
+  "I'll have a seat at your table. As a thank-you for working together, my persona joins your boardroom from day one — calibrated to how I think, how I push back, and how I'd weigh in on your decisions. Ask me anything, anytime, right inside the room.";
 
 const DEFAULT_ACCENT = "#B8956C";
 
