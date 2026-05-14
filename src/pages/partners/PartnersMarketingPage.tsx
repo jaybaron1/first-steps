@@ -58,10 +58,10 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
   {
     key: "sales",
     label: "Sales Sheet",
-    description: "What it is, how it works, what it costs. The full pitch on one page.",
+    description: "What The Roundtable is, what it does, what it costs.",
     defaults: {
-      headline: "The Roundtable, built for you.",
-      tagline: "A private ChatGPT workspace, calibrated to how you actually think and decide. No prompts to memorize. No agents to babysit. Quiet leverage that compounds, conversation by conversation.",
+      headline: "The Roundtable",
+      tagline: "A private executive boardroom that lives inside your own ChatGPT. Three to five senior personas — calibrated to your business — show up to think through real decisions with you. Every session ends with a structured deliverable.",
       bullets: [],
     },
   },
@@ -81,6 +81,7 @@ const PartnersMarketingPage: React.FC = () => {
   const [bulletsText, setBulletsText] = useState(TEMPLATES[0].defaults.bullets.join("\n"));
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [setupPrice, setSetupPrice] = useState<number>(6000);
+  const [imageStyle, setImageStyle] = useState<"photo" | "logo">("photo");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
