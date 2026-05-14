@@ -62,7 +62,7 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
     defaults: {
       headline: "The Roundtable",
       tagline:
-        "A private boardroom inside your own ChatGPT. Bring a real decision and the room assembles three to five of sixty-plus senior advisors — chosen for the problem in front of you — to think it through and hand back a written brief you can defend.",
+        "Your private boardroom, built inside your own ChatGPT. Bring any decision and the room convenes three to five advisors — pulled from a bench of sixty-plus senior operators, investors, and specialists matched to the exact problem on the table. You leave with a written brief sharp enough to act on, defend, or send.",
       bullets: [],
     },
   },
@@ -71,7 +71,7 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
 const DEFAULT_TAGLINE_SALES = TEMPLATES.find((t) => t.key === "sales")!.defaults.tagline;
 
 const DEFAULT_MARGARITA_NOTE =
-  "A named persona at the table from day one — sharp, candid, and tuned to the way your business actually moves.";
+  "I'll have a seat at your table. As a thank-you for working together, my persona joins your boardroom from day one — calibrated to how I think, how I push back, and how I'd weigh in on your decisions. Ask me anything, anytime, right inside the room.";
 
 const DEFAULT_ACCENT = "#B8956C";
 
