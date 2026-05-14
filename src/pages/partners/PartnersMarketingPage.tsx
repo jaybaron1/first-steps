@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { usePartnersAuth } from "@/components/partners/PartnersRoute";
-import { buildReferralUrl, exportFlyerToPdf, generateQrDataUrl } from "@/lib/partnerFlyer";
+import { buildReferralUrl, buildReferralCaptureUrl, exportFlyerToPdf, generateQrDataUrl } from "@/lib/partnerFlyer";
 import FlyerRoundtableIntro, { type FlyerData } from "@/components/partners/marketing/FlyerRoundtableIntro";
 import FlyerFounderOffer from "@/components/partners/marketing/FlyerFounderOffer";
 import FlyerEventInvite from "@/components/partners/marketing/FlyerEventInvite";
