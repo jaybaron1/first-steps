@@ -1,75 +1,39 @@
-## Marketing assets for partners
+# QR-to-CRM lead capture flow
 
-A new page in the partners sidebar where partners (and admins ghosting in) can pick from 3 flyer templates, personalize them with their name, photo/logo, headline, tagline, accent color, and personal referral link/QR code, then download a print-ready PDF one-pager.
+Today the QR code on every flyer points to `/r/:slug`, which either renders the partner's white-label landing page or silently redirects home with a `?ref=` tag. There is no dedicated funnel for someone who scans a flyer in the wild and wants to be contacted, so referred prospects rarely make it into the partner's CRM list.
 
-### What gets built
+This plan adds a short, branded capture form that the QR opens directly, and wires submissions into `partner_clients` so the referring partner sees a new lead waiting for follow-up.
 
-**1. New route + sidebar entry**
-- Route: `/partners/marketing` (component: `PartnersMarketingPage.tsx`)
-- Add "Marketing assets" item to `PartnersLayout` sidebar with a `FileDown` icon, visible to both `partner` and `admin` effective roles.
-- Works in admin ghost mode automatically (uses the same `usePartnersAuth` context).
+## What changes for the user
 
-**2. Three flyer templates**
-Each template is a React component that renders an A4 one-pager (210 × 297 mm) in a hidden div, then exported to PDF. Templates share the same brandable fields but differ visually:
+1. **New capture page** at `/r/:slug/connect` — a one-screen form: name, email, phone, optional note. Headline reads "Referred by {Partner Name}" with their photo/accent color. Single primary CTA: "Request an introduction".
+2. **QR codes on all 3 flyer templates** now encode the `/r/:slug/connect` URL instead of `/r/:slug`. Existing partner landing pages still work via the old route.
+3. **On submit** → success screen ("We'll be in touch — {Partner} has been notified") and the prospect lands in the partner's CRM as a new client with status `prospect` and referral source attached.
+4. **Partner sees the lead** in `/partners/clients` (their existing CRM list) within seconds, tagged as `self_identified` referral, source = the capture form.
 
-```text
-┌─ Roundtable Intro ────┐  ┌─ Founder Offer ───────┐  ┌─ Event Invite ────────┐
-│  Editorial / serif    │  │  Bold / dark hero     │  │  Minimal / lots of    │
-│  Photo top-right      │  │  Big stat callout     │  │  whitespace, QR-led   │
-│  3 bullets + quote    │  │  Single CTA + bullets │  │  Date placeholder     │
-│  QR + URL bottom      │  │  QR right-aligned     │  │  QR centered hero     │
-└───────────────────────┘  └───────────────────────┘  └───────────────────────┘
-```
+## Technical implementation
 
-**3. Personalization panel (left side of page)**
-Form bound to local state, pre-filled from the partner's `partners` row:
-- Name (from `partners.name`)
-- Photo/logo (uses `landing_photo_url` or `landing_logo_url`; partner can override with a fresh upload to a new `partner-marketing` storage bucket)
-- Headline (default: "An invitation to The Roundtable")
-- Tagline / sub-copy (default per template)
-- Accent color (color picker, default `#B8956C` Roundtable gold or partner's `landing_accent_color`)
-- Referral URL is auto-built from `partners.slug` → `https://galavanteer.lovable.app/r/{slug}`. QR code generated from this URL.
+### Database (one migration)
+- Attach the existing `auto_create_partner_client_from_lead()` function as an `AFTER INSERT` trigger on `public.leads`. The function already exists and de-dupes by email per partner — it is just not wired up.
 
-**4. Live preview (right side of page)**
-- Tabs to switch between the 3 templates.
-- Renders the selected template at scaled-down size (e.g. 60%) with the current personalization applied in real time.
-- "Download PDF" button on each template.
+### New page: `src/pages/PartnerReferralCapture.tsx`
+- Route: `/r/:slug/connect` (added in `src/App.tsx`, public).
+- Loads the partner via `trackingSupabase` (`name`, `landing_photo_url`, `landing_accent_color`, `landing_headline`).
+- Calls `setReferralPartner(partner.id)` and logs a `partner_referral_clicks` row with `slug_used` so QR scans stay attributed.
+- Form (zod-validated): `name` (required, ≤100), `email` (required, valid, ≤255), `phone` (optional, ≤40), `message` (optional, ≤1000).
+- On submit → `INSERT` into `leads` with `referred_by_partner_id`, `referral_session_id`, `source = 'partner_qr'`, `name/email/phone/message`. RLS already permits anon inserts.
+- The new trigger then creates the `partner_clients` row for the partner's owner (SDR) automatically.
+- Show success state with partner name; no redirect.
 
-**5. PDF generation**
-- Client-side using `html2canvas` + `jsPDF` (no server cost, no edge function needed).
-- QR code generated with `qrcode` library.
-- Filename: `roundtable-{template}-{partner-slug}.pdf`.
+### Flyer QR update
+- In `src/lib/partnerFlyer.ts` add `buildReferralCaptureUrl(slug)` returning `${PARTNER_REFERRAL_BASE}/${slug}/connect`.
+- Update the three flyer templates (`FlyerRoundtableIntro`, `FlyerFounderOffer`, `FlyerEventInvite`) and `PartnersMarketingPage` preview to call `buildReferralCaptureUrl` when generating the QR data URL. The visible printed URL on the flyer can stay as the short `/r/:slug` form (cleaner to read) while the QR encodes the `/connect` variant.
 
-### Technical details
+### Files
+- **New**: `src/pages/PartnerReferralCapture.tsx`
+- **Modified**: `src/App.tsx` (route), `src/lib/partnerFlyer.ts` (helper), `src/pages/partners/PartnersMarketingPage.tsx`, `src/components/partners/marketing/Flyer*.tsx` (QR source URL)
+- **Migration**: attach `auto_create_partner_client_from_lead` trigger to `leads`
 
-**Files to create**
-- `src/pages/partners/PartnersMarketingPage.tsx` — page shell, form, preview tabs, download trigger
-- `src/components/partners/marketing/FlyerRoundtableIntro.tsx`
-- `src/components/partners/marketing/FlyerFounderOffer.tsx`
-- `src/components/partners/marketing/FlyerEventInvite.tsx`
-- `src/components/partners/marketing/FlyerFrame.tsx` — shared A4 wrapper with print-safe sizing
-- `src/lib/partnerFlyer.ts` — `exportFlyerToPdf(elementId, filename)` helper using html2canvas + jsPDF
-
-**Files to edit**
-- `src/App.tsx` — register `/partners/marketing` route inside the `PartnersRoute` guard
-- `src/components/partners/PartnersLayout.tsx` — add sidebar nav item
-- A new memory file `mem://features/partners-marketing` summarizing this feature
-
-**Dependencies to add**
-- `html2canvas`
-- `jspdf`
-- `qrcode` (+ `@types/qrcode`)
-
-**Storage (optional, for custom uploads)**
-- New public `partner-marketing` bucket with RLS:
-  - Partners can upload to their own folder (`{partner_id}/...`)
-  - Public read so the image can be embedded in the PDF render
-- If we want to ship faster, v1 can skip uploads and only use the existing `landing_photo_url` / `landing_logo_url`. Recommended: ship v1 without uploads, add later.
-
-**No new tables.** All personalization is ephemeral (per-download). Defaults come from `partners` row. If we later want to remember tweaked headlines, we can add a `partner_marketing_overrides` table.
-
-### Out of scope (for now)
-- Saving custom headline/tagline back to the partner profile
-- PNG/social-image variants
-- Email-template downloads, decks, etc. (sidebar section is named generically so we can add later)
-- White-label mode (no Roundtable branding) — can be added by checking `partners.is_white_label`
+## Out of scope
+- Email/SMS notification to the partner when a new lead drops in (can layer on after — Resend is already configured).
+- Editing the capture form copy per partner (uses partner name + accent only for v1).

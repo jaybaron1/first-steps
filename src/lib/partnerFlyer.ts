@@ -34,3 +34,9 @@ export function buildReferralUrl(slug: string | null | undefined): string {
   if (!slug) return "https://galavanteer.lovable.app";
   return `${PARTNER_REFERRAL_BASE}/${slug}`;
 }
+
+/** URL the QR code should encode — opens the lead capture form directly. */
+export function buildReferralCaptureUrl(slug: string | null | undefined): string {
+  if (!slug) return "https://galavanteer.lovable.app";
+  return `${PARTNER_REFERRAL_BASE}/${slug}/connect`;
+}

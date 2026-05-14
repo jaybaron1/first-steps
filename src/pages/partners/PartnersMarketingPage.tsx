@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { partnersSupabase as supabase } from "@/lib/partnersBackend";
 import { usePartnersAuth } from "@/components/partners/PartnersRoute";
-import { buildReferralUrl, exportFlyerToPdf, generateQrDataUrl } from "@/lib/partnerFlyer";
+import { buildReferralUrl, buildReferralCaptureUrl, exportFlyerToPdf, generateQrDataUrl } from "@/lib/partnerFlyer";
 import FlyerRoundtableIntro, { type FlyerData } from "@/components/partners/marketing/FlyerRoundtableIntro";
 import FlyerFounderOffer from "@/components/partners/marketing/FlyerFounderOffer";
 import FlyerEventInvite from "@/components/partners/marketing/FlyerEventInvite";
@@ -94,15 +94,16 @@ const PartnersMarketingPage: React.FC = () => {
   }, [partnerId]);
 
   const referralUrl = useMemo(() => buildReferralUrl(partnerSlug), [partnerSlug]);
+  const qrTargetUrl = useMemo(() => buildReferralCaptureUrl(partnerSlug), [partnerSlug]);
 
   // Regenerate QR when URL or accent changes
   useEffect(() => {
     let cancelled = false;
-    generateQrDataUrl(referralUrl, "#0f172a")
+    generateQrDataUrl(qrTargetUrl, "#0f172a")
       .then((url) => { if (!cancelled) setQrDataUrl(url); })
       .catch(() => { if (!cancelled) setQrDataUrl(null); });
     return () => { cancelled = true; };
-  }, [referralUrl]);
+  }, [qrTargetUrl]);
 
   // When template changes, swap defaults (only if user hasn't customized — for simplicity, always swap)
   const handleTemplateChange = (key: TemplateKey) => {
