@@ -34,6 +34,10 @@ import PartnersCommissionLogPage from "./pages/partners/PartnersCommissionLogPag
 import PartnersActivityPage from "./pages/partners/PartnersActivityPage";
 import PartnersUsersPage from "./pages/partners/PartnersUsersPage";
 import PartnersAppointmentsPage from "./pages/partners/PartnersAppointmentsPage";
+import ReferralRedirect from "./pages/ReferralRedirect";
+import PortalRoute from "./components/portal/PortalRoute";
+import PortalLoginPage from "./pages/portal/PortalLoginPage";
+import PortalDashboardPage from "./pages/portal/PortalDashboardPage";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
@@ -78,7 +82,12 @@ const App = () => (
             <Route path="/about" element={<AboutPage />} />
             <Route path="/privacy" element={<PrivacyPage />} />
             <Route path="/one-pager" element={<OnePager />} />
-            
+            <Route path="/r/:slug" element={<ReferralRedirect />} />
+
+            {/* Partner-facing portal */}
+            <Route path="/portal/login" element={<PortalLoginPage />} />
+            <Route path="/portal" element={<PortalRoute><PortalDashboardPage /></PortalRoute>} />
+
             {/* Admin - Tab-based layout with nested routes */}
             <Route path="/admin" element={
               <AdminRoute>
