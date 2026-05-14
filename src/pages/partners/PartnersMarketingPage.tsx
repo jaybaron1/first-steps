@@ -142,6 +142,11 @@ const PartnersMarketingPage: React.FC = () => {
     qrDataUrl,
     setupPrice,
     imageStyle,
+    levelPrices: {
+      l2: Number(level2Price) || undefined,
+      l3: Number(level3Price) || undefined,
+      l4: Number(level4Price) || undefined,
+    },
   };
 
   const handleDownload = async () => {
