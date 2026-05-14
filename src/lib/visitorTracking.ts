@@ -4,6 +4,7 @@
  */
 
 import { trackingSupabase } from "@/lib/trackingBackend";
+import { getReferralPartner } from "@/lib/referralAttribution";
 
 interface VisitorSession {
   session_id: string;
@@ -58,9 +59,11 @@ class VisitorTracker {
   }
 
   private shouldSkipTracking(): boolean {
-    // Skip admin and partners routes
+    // Skip admin, partners, portal, and referral redirect routes
     if (window.location.pathname.startsWith('/admin')) return true;
     if (window.location.pathname.startsWith('/partners')) return true;
+    if (window.location.pathname.startsWith('/portal')) return true;
+    if (window.location.pathname.startsWith('/r/')) return true;
 
     // Skip Lovable preview / editor hosts (internal traffic during build)
     // NOTE: galavanteer.lovable.app IS the published site — keep tracking it.
@@ -311,6 +314,7 @@ class VisitorTracker {
     if (!this.sessionId) return false;
 
     try {
+      const referralPartnerId = getReferralPartner();
       const { error } = await trackingSupabase.from("leads").insert({
         session_id: this.sessionId,
         email: leadData.email || null,
@@ -319,6 +323,8 @@ class VisitorTracker {
         message: leadData.message || null,
         source: "chatbot",
         status: "new",
+        referred_by_partner_id: referralPartnerId,
+        referral_session_id: referralPartnerId ? this.sessionId : null,
       });
 
       if (error) {
