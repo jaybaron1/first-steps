@@ -55,6 +55,16 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
       ],
     },
   },
+  {
+    key: "sales",
+    label: "Sales Sheet",
+    description: "What it is, how it works, what it costs. The full pitch on one page.",
+    defaults: {
+      headline: "The Roundtable, built for you.",
+      tagline: "A private ChatGPT workspace, calibrated to how you actually think and decide. No prompts to memorize. No agents to babysit. Quiet leverage that compounds, conversation by conversation.",
+      bullets: [],
+    },
+  },
 ];
 
 const DEFAULT_ACCENT = "#B8956C";
