@@ -368,6 +368,12 @@ const PartnersDirectoryPage: React.FC = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <PartnerShareablesModal
+        partner={shareablesPartner}
+        open={!!shareablesPartner}
+        onOpenChange={(o) => !o && setShareablesPartner(null)}
+      />
     </div>
   );
 };
