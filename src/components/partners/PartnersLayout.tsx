@@ -110,6 +110,12 @@ const PartnersLayout: React.FC = () => {
             ))}
           </nav>
 
+          {isAdmin && !isGhosting && (
+            <div className="border-t border-slate-200 pt-3">
+              <GhostPartnerPicker />
+            </div>
+          )}
+
           <div className="px-3 py-4 border-t border-slate-200">
             <div className="px-3 py-2 mb-2">
               <p className="text-xs font-medium text-slate-900 truncate">
