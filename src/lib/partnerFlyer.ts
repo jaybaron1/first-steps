@@ -12,10 +12,11 @@ export async function generateQrDataUrl(url: string, color = "#0f172a"): Promise
 }
 
 /**
- * Render an A4-sized DOM node to a single-page PDF and trigger download.
- * The element should be sized to A4 (210 × 297 mm at 96 DPI ≈ 794 × 1123 px).
+ * Render a flyer DOM node to a single-page PDF and trigger download.
+ * Page format keys off the element's `data-flyer-size` attribute ("letter" | "a4").
  */
 export async function exportFlyerToPdf(element: HTMLElement, filename: string) {
+  const size = (element.getAttribute("data-flyer-size") as "letter" | "a4" | null) ?? "a4";
   const canvas = await html2canvas(element, {
     scale: 2,
     backgroundColor: "#ffffff",
@@ -23,8 +24,18 @@ export async function exportFlyerToPdf(element: HTMLElement, filename: string) {
     logging: false,
   });
   const imgData = canvas.toDataURL("image/jpeg", 0.95);
-  const pdf = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
-  pdf.addImage(imgData, "JPEG", 0, 0, 210, 297, undefined, "FAST");
+  const isLetter = size === "letter";
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: isLetter ? "letter" : "a4",
+  });
+  if (isLetter) {
+    // 8.5 × 11 in → 215.9 × 279.4 mm
+    pdf.addImage(imgData, "JPEG", 0, 0, 215.9, 279.4, undefined, "FAST");
+  } else {
+    pdf.addImage(imgData, "JPEG", 0, 0, 210, 297, undefined, "FAST");
+  }
   pdf.save(filename);
 }
 
