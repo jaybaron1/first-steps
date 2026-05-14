@@ -94,15 +94,16 @@ const PartnersMarketingPage: React.FC = () => {
   }, [partnerId]);
 
   const referralUrl = useMemo(() => buildReferralUrl(partnerSlug), [partnerSlug]);
+  const qrTargetUrl = useMemo(() => buildReferralCaptureUrl(partnerSlug), [partnerSlug]);
 
   // Regenerate QR when URL or accent changes
   useEffect(() => {
     let cancelled = false;
-    generateQrDataUrl(referralUrl, "#0f172a")
+    generateQrDataUrl(qrTargetUrl, "#0f172a")
       .then((url) => { if (!cancelled) setQrDataUrl(url); })
       .catch(() => { if (!cancelled) setQrDataUrl(null); });
     return () => { cancelled = true; };
-  }, [referralUrl]);
+  }, [qrTargetUrl]);
 
   // When template changes, swap defaults (only if user hasn't customized — for simplicity, always swap)
   const handleTemplateChange = (key: TemplateKey) => {
