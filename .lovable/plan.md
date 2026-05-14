@@ -1,39 +1,60 @@
-# QR-to-CRM lead capture flow
+## Add a Sales Material section to /partners/marketing
 
-Today the QR code on every flyer points to `/r/:slug`, which either renders the partner's white-label landing page or silently redirects home with a `?ref=` tag. There is no dedicated funnel for someone who scans a flyer in the wild and wants to be contacted, so referred prospects rarely make it into the partner's CRM list.
+Build a fourth flyer template ("Sales Sheet") plus a static on-page reference block partners can read while pitching The Roundtable.
 
-This plan adds a short, branded capture form that the QR opens directly, and wires submissions into `partner_clients` so the referring partner sees a new lead waiting for follow-up.
+### What gets added on the page
 
-## What changes for the user
+A new section above the existing template/preview UI titled **"Sales material"** with three blocks:
 
-1. **New capture page** at `/r/:slug/connect` — a one-screen form: name, email, phone, optional note. Headline reads "Referred by {Partner Name}" with their photo/accent color. Single primary CTA: "Request an introduction".
-2. **QR codes on all 3 flyer templates** now encode the `/r/:slug/connect` URL instead of `/r/:slug`. Existing partner landing pages still work via the old route.
-3. **On submit** → success screen ("We'll be in touch — {Partner} has been notified") and the prospect lands in the partner's CRM as a new client with status `prospect` and referral source attached.
-4. **Partner sees the lead** in `/partners/clients` (their existing CRM list) within seconds, tagged as `self_identified` referral, source = the capture form.
+1. **What it is** — one short paragraph on The Roundtable (private ChatGPT workspace, calibrated to how the client thinks, no prompts to memorize).
+2. **How it works** — the 4 public steps mirrored from the marketing site:
+  - Call — confirm fit, goals, workflow
+  - Blueprint — map personas, voice, decisions, integrations
+  - Implement — build and validate the workspace
+  - Track — confirm adoption and deliver a results snapshot
+3. **What it costs** — clear pricing card:
+  - **Setup** — $6,000 (one-time, editable per partner; can be paid in monthly installments)
+  - **Not included / billed separately:**
+    - ChatGPT Teams — $50/month (paid to OpenAI)
+    - Each additional user — $100/month
+    - Optional ongoing maintenance — $200/month
 
-## Technical implementation
+A small "Reference for you, the partner" note clarifies this is the talk-track, and partners can still customize the downloadable PDF below.
 
-### Database (one migration)
-- Attach the existing `auto_create_partner_client_from_lead()` function as an `AFTER INSERT` trigger on `public.leads`. The function already exists and de-dupes by email per partner — it is just not wired up.
+### What gets added to the flyer system
 
-### New page: `src/pages/PartnerReferralCapture.tsx`
-- Route: `/r/:slug/connect` (added in `src/App.tsx`, public).
-- Loads the partner via `trackingSupabase` (`name`, `landing_photo_url`, `landing_accent_color`, `landing_headline`).
-- Calls `setReferralPartner(partner.id)` and logs a `partner_referral_clicks` row with `slug_used` so QR scans stay attributed.
-- Form (zod-validated): `name` (required, ≤100), `email` (required, valid, ≤255), `phone` (optional, ≤40), `message` (optional, ≤1000).
-- On submit → `INSERT` into `leads` with `referred_by_partner_id`, `referral_session_id`, `source = 'partner_qr'`, `name/email/phone/message`. RLS already permits anon inserts.
-- The new trigger then creates the `partner_clients` row for the partner's owner (SDR) automatically.
-- Show success state with partner name; no redirect.
+A fourth template **"Sales Sheet"** alongside Roundtable Intro / Founder Offer / Event Invite. Layout:
 
-### Flyer QR update
-- In `src/lib/partnerFlyer.ts` add `buildReferralCaptureUrl(slug)` returning `${PARTNER_REFERRAL_BASE}/${slug}/connect`.
-- Update the three flyer templates (`FlyerRoundtableIntro`, `FlyerFounderOffer`, `FlyerEventInvite`) and `PartnersMarketingPage` preview to call `buildReferralCaptureUrl` when generating the QR data URL. The visible printed URL on the flyer can stay as the short `/r/:slug` form (cleaner to read) while the QR encodes the `/connect` variant.
+- Header: partner name + photo + accent rule
+- Section 1: "The Roundtable" — short description
+- Section 2: "How it works" — 4 numbered steps (Call → Blueprint → Implement → Track)
+- Section 3: "Investment" — setup price + add-on table
+- Footer: referral URL + QR (already wired to `/r/:slug/connect`)
+
+The setup price defaults to **$6,000** but is editable in a new "Setup price" form field, persisted only in component state (no DB write). Add-on prices ($50 / $100 / $200) are fixed in copy — they're OpenAI / service costs, not partner-controlled.
 
 ### Files
-- **New**: `src/pages/PartnerReferralCapture.tsx`
-- **Modified**: `src/App.tsx` (route), `src/lib/partnerFlyer.ts` (helper), `src/pages/partners/PartnersMarketingPage.tsx`, `src/components/partners/marketing/Flyer*.tsx` (QR source URL)
-- **Migration**: attach `auto_create_partner_client_from_lead` trigger to `leads`
 
-## Out of scope
-- Email/SMS notification to the partner when a new lead drops in (can layer on after — Resend is already configured).
-- Editing the capture form copy per partner (uses partner name + accent only for v1).
+**New**
+
+- `src/components/partners/marketing/FlyerSalesSheet.tsx` — the PDF template
+- `src/components/partners/marketing/SalesMaterialReference.tsx` — the on-page static reference block
+
+**Modified**
+
+- `src/pages/partners/PartnersMarketingPage.tsx`
+  - Render `<SalesMaterialReference />` at the top of the page
+  - Register the new template in the `TEMPLATES` array with `key: "sales"`
+  - Extend `FlyerData` with optional `setupPrice` (default 6000) + add a "Setup price" input (only shown when `template === "sales"`)
+  - Wire `renderFlyer` to return `<FlyerSalesSheet />` for the new key
+- `src/components/partners/marketing/FlyerRoundtableIntro.tsx` — extend the shared `FlyerData` type to include the optional `setupPrice` field (or move the type to a shared file). Existing templates ignore the new field.
+
+### Out of scope
+
+- No DB schema changes. No edits to public marketing pricing.
+- No per-partner persistence of the setup price (in-session only).
+- No changes to commission logic or `partner_clients`.
+
+### Memory
+
+Update `mem://features/partners-marketing` to note the new Sales Sheet template and the on-page reference block.
