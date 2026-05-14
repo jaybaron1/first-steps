@@ -61,11 +61,14 @@ const TEMPLATES: { key: TemplateKey; label: string; description: string; default
     description: "What The Roundtable is, what it does, what it costs.",
     defaults: {
       headline: "The Roundtable",
-      tagline: "A software boardroom for founders and executives. Bring a real decision. Three to five senior advisors — calibrated to your business — work it through with you and hand back a written brief you can defend.",
+      tagline:
+        "A private boardroom inside your own ChatGPT. Bring a real decision and the room assembles three to five of sixty-plus senior advisors — chosen for the problem in front of you — to think it through and hand back a written brief you can defend.",
       bullets: [],
     },
   },
 ];
+
+const DEFAULT_TAGLINE_SALES = TEMPLATES.find((t) => t.key === "sales")!.defaults.tagline;
 
 const DEFAULT_MARGARITA_NOTE =
   "A named persona at the table from day one — sharp, candid, and tuned to the way your business actually moves.";
@@ -89,7 +92,6 @@ const PartnersMarketingPage: React.FC = () => {
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
   const [level5Price, setLevel5Price] = useState<string>("");
-  const [level6Price, setLevel6Price] = useState<string>("");
   const [showMargarita, setShowMargarita] = useState<boolean>(true);
   const [margaritaNote, setMargaritaNote] = useState<string>(DEFAULT_MARGARITA_NOTE);
   const [downloading, setDownloading] = useState(false);
@@ -154,7 +156,6 @@ const PartnersMarketingPage: React.FC = () => {
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
       l5: Number(level5Price) || undefined,
-      l6: Number(level6Price) || undefined,
     },
     showMargarita,
     margaritaNote,
