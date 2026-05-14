@@ -174,6 +174,37 @@ const PartnersDirectoryPage: React.FC = () => {
     }
   };
 
+  const sendInvite = async (p: Partner) => {
+    if (!p.email) {
+      toast({
+        title: "Email required",
+        description: "Add an email to this partner before sending a portal invite.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setInvitingId(p.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("partner-portal-invite", {
+        body: { partner_id: p.id, email: p.email },
+      });
+      if (error) throw error;
+      qc.invalidateQueries({ queryKey: ["partners-crm"] });
+      toast({
+        title: "Portal invite sent",
+        description: `${p.email} will get a magic link to sign in.`,
+      });
+    } catch (err) {
+      toast({
+        title: "Could not send invite",
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive",
+      });
+    } finally {
+      setInvitingId(null);
+    }
+  };
+
   const statusTone = (s: string) =>
     s === "active"
       ? "bg-emerald-50 text-emerald-800 border-emerald-200"
