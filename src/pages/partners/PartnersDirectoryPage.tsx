@@ -80,6 +80,7 @@ const PartnersDirectoryPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [shareablesPartner, setShareablesPartner] = useState<Partner | null>(null);
+  const [invitingId, setInvitingId] = useState<string | null>(null);
 
   const openNew = () => {
     setEditingId(null);
