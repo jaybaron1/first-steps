@@ -1,5 +1,6 @@
 import React from "react";
 import FlyerFrame from "./FlyerFrame";
+import FlyerBrandImage from "./FlyerBrandImage";
 
 export interface FlyerData {
   partnerName: string;
