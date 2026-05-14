@@ -37,6 +37,7 @@ import PartnersAppointmentsPage from "./pages/partners/PartnersAppointmentsPage"
 import ReferralRedirect from "./pages/ReferralRedirect";
 import PartnersMyPage from "./pages/partners/PartnersMyPage";
 import PartnersLandingPage from "./pages/partners/PartnersLandingPage";
+import PartnersMarketingPage from "./pages/partners/PartnersMarketingPage";
 import { RequireStaff, RequirePartner } from "./components/partners/PartnersGuards";
 import AOSProvider from "@/components/AOSProvider";
 import GoogleTagManager from "@/components/GoogleTagManager";
