@@ -46,7 +46,8 @@ const navItems: NavItem[] = [
 
 const PartnersLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, partnerName } = usePartnersAuth();
+  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel, isGhosting, realRole, partnerName } = usePartnersAuth();
+  const isRealAdmin = realRole === "admin";
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
