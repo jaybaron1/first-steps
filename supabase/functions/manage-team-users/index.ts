@@ -100,22 +100,34 @@ Deno.serve(async (req) => {
         const email = body.email.trim().toLowerCase();
 
         // Create the user with email already confirmed
-        const { data: created, error: createErr } = await admin.auth.admin.createUser({
-          email,
-          password: body.password,
-          email_confirm: true,
-        });
+        let created: any = null;
+        let createErr: any = null;
+        try {
+          const res = await admin.auth.admin.createUser({
+            email,
+            password: body.password,
+            email_confirm: true,
+          });
+          created = res.data;
+          createErr = res.error;
+        } catch (e) {
+          createErr = e;
+        }
 
         let newId: string;
         if (createErr) {
-          const msg = createErr.message || "";
+          const msg = (createErr.message || String(createErr) || "").toLowerCase();
+          const code = (createErr.code || createErr.error_code || "").toString().toLowerCase();
+          const status = createErr.status || 0;
           const alreadyExists =
-            msg.toLowerCase().includes("already been registered") ||
-            msg.toLowerCase().includes("already registered") ||
-            msg.toLowerCase().includes("email_exists");
+            code === "email_exists" ||
+            status === 422 ||
+            msg.includes("already been registered") ||
+            msg.includes("already registered") ||
+            msg.includes("email_exists");
 
           if (!alreadyExists) {
-            return json({ error: msg }, 400);
+            return json({ error: createErr.message || String(createErr) }, 400);
           }
 
           // User exists — find them and just grant the role
