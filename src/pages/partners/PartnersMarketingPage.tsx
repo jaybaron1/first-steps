@@ -344,7 +344,6 @@ const PartnersMarketingPage: React.FC = () => {
                     { label: "3 — Take A Seat",         value: level3Price, set: setLevel3Price },
                     { label: "4 — Future Me",           value: level4Price, set: setLevel4Price },
                     { label: "5 — Add a Voice",         value: level5Price, set: setLevel5Price },
-                    { label: "6 — Pull Up a Chair",     value: level6Price, set: setLevel6Price },
                   ].map((row) => (
                     <div key={row.label} className="flex items-center gap-2">
                       <span className="text-xs text-slate-600 flex-1 truncate">{row.label}</span>
