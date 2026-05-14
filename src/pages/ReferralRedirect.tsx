@@ -55,6 +55,16 @@ const ReferralRedirect: React.FC = () => {
 
       // White-label + published → render co-branded landing page
       if (partner.is_white_label && partner.landing_published) {
+        const refSlug = partner.slug || slug;
+        try {
+          window.history.replaceState(
+            null,
+            "",
+            `${window.location.pathname}?ref=${encodeURIComponent(refSlug)}`
+          );
+        } catch {
+          // no-op
+        }
         setLanding(partner as typeof landing);
         return;
       }
