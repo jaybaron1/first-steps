@@ -128,10 +128,18 @@ const PartnersMarketingPage: React.FC = () => {
         if (tp.l4 != null) setLevel4Price(String(tp.l4));
         if (tp.l5 != null) setLevel5Price(String(tp.l5));
         if (typeof data.flyer_show_margarita === "boolean") setShowMargarita(data.flyer_show_margarita);
-        if (data.flyer_margarita_note) setMargaritaNote(data.flyer_margarita_note);
-        // Tagline only persists for the Sales Sheet template
-        if (data.flyer_tagline) {
-          // Will be applied if/when user is on the sales template
+        // Skip stale defaults so refreshed copy shows through
+        const STALE_NOTES = [
+          "A named persona at the table from day one — sharp, candid, and tuned to the way your business actually moves.",
+        ];
+        if (data.flyer_margarita_note && !STALE_NOTES.includes(data.flyer_margarita_note)) {
+          setMargaritaNote(data.flyer_margarita_note);
+        }
+        const STALE_TAGLINES = [
+          "A private boardroom inside your own ChatGPT. Bring a real decision and the room assembles three to five of sixty-plus senior advisors — chosen for the problem in front of you — to think it through and hand back a written brief you can defend.",
+          "A boardroom on demand. Bring a real decision — walk out with a written brief you can defend.",
+        ];
+        if (data.flyer_tagline && !STALE_TAGLINES.includes(data.flyer_tagline)) {
           (window as any).__galav_persisted_tagline = data.flyer_tagline;
         }
       }
