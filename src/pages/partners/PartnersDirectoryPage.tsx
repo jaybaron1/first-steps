@@ -35,8 +35,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Loader2, Pencil, Trash2, Link2, Mail } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Link2, Mail, Eye } from "lucide-react";
 import PartnerShareablesModal from "@/components/admin/PartnerShareablesModal";
+import { setGhostPartnerId } from "@/lib/partnerGhost";
+import { useNavigate } from "react-router-dom";
 
 const schema = z.object({
   name: z.string().trim().min(1, "Required").max(200),
