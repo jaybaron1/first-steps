@@ -270,18 +270,19 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
             <p style={{ fontSize: 9, letterSpacing: "0.24em", textTransform: "uppercase", color: accent, margin: 0, fontWeight: 700 }}>
               Investment · Workspace build
             </p>
-            <p
-              style={{
-                fontFamily: "'Playfair Display', Georgia, serif",
-                fontSize: 0,
-                fontWeight: 700,
-                margin: "8px 0 0",
-                lineHeight: 1,
-                color: ink,
-              }}
-            >
-              <span style={{ fontSize: 40, lineHeight: "46px", verticalAlign: "baseline" }}>{fmt(setup)}</span>
-            </p>
+            <svg width="210" height="48" viewBox="0 0 210 48" style={{ display: "block", marginTop: 8, overflow: "visible" }}>
+              <text
+                x="0"
+                y="25"
+                dominantBaseline="central"
+                fontFamily="Georgia, 'Times New Roman', serif"
+                fontSize="40"
+                fontWeight="700"
+                fill={ink}
+              >
+                {fmt(setup)}
+              </text>
+            </svg>
             <p style={{ fontSize: 9.5, color: muted, margin: "10px 0 0", lineHeight: 1.4 }}>
               One-time setup. Tier 1 subscription required. Upgrades priced individually.
             </p>
