@@ -85,6 +85,8 @@ const PartnersMarketingPage: React.FC = () => {
   const [level2Price, setLevel2Price] = useState<string>("");
   const [level3Price, setLevel3Price] = useState<string>("");
   const [level4Price, setLevel4Price] = useState<string>("");
+  const [showIntroducerBlock, setShowIntroducerBlock] = useState<boolean>(false);
+  const [introducerCustomLine, setIntroducerCustomLine] = useState<string>("");
   const [downloading, setDownloading] = useState(false);
 
   const flyerRef = useRef<HTMLDivElement>(null);
@@ -147,6 +149,9 @@ const PartnersMarketingPage: React.FC = () => {
       l3: Number(level3Price) || undefined,
       l4: Number(level4Price) || undefined,
     },
+    personaAddOnPrice: 500,
+    showIntroducerBlock,
+    introducerCustomLine: introducerCustomLine.trim() || undefined,
   };
 
   const handleDownload = async () => {
