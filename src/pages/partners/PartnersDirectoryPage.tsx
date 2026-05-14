@@ -35,7 +35,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { Plus, Loader2, Pencil, Trash2, Link2 } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Link2, Mail } from "lucide-react";
 import PartnerShareablesModal from "@/components/admin/PartnerShareablesModal";
 
 const schema = z.object({
@@ -80,6 +80,7 @@ const PartnersDirectoryPage: React.FC = () => {
   const [saving, setSaving] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [shareablesPartner, setShareablesPartner] = useState<Partner | null>(null);
+  const [invitingId, setInvitingId] = useState<string | null>(null);
 
   const openNew = () => {
     setEditingId(null);
@@ -173,6 +174,37 @@ const PartnersDirectoryPage: React.FC = () => {
     }
   };
 
+  const sendInvite = async (p: Partner) => {
+    if (!p.email) {
+      toast({
+        title: "Email required",
+        description: "Add an email to this partner before sending a portal invite.",
+        variant: "destructive",
+      });
+      return;
+    }
+    setInvitingId(p.id);
+    try {
+      const { data, error } = await supabase.functions.invoke("partner-portal-invite", {
+        body: { partner_id: p.id, email: p.email },
+      });
+      if (error) throw error;
+      qc.invalidateQueries({ queryKey: ["partners-crm"] });
+      toast({
+        title: "Portal invite sent",
+        description: `${p.email} will get a magic link to sign in.`,
+      });
+    } catch (err) {
+      toast({
+        title: "Could not send invite",
+        description: err instanceof Error ? err.message : String(err),
+        variant: "destructive",
+      });
+    } finally {
+      setInvitingId(null);
+    }
+  };
+
   const statusTone = (s: string) =>
     s === "active"
       ? "bg-emerald-50 text-emerald-800 border-emerald-200"
@@ -239,6 +271,21 @@ const PartnersDirectoryPage: React.FC = () => {
                         >
                           <Link2 className="w-3.5 h-3.5" />
                         </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => sendInvite(p)}
+                            disabled={invitingId === p.id}
+                            className="p-1.5 rounded hover:bg-blue-50 text-slate-500 hover:text-blue-700 disabled:opacity-50"
+                            aria-label="Send portal invite"
+                            title={p.portal_user_id ? "Resend portal invite" : "Send portal invite"}
+                          >
+                            {invitingId === p.id ? (
+                              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            ) : (
+                              <Mail className="w-3.5 h-3.5" />
+                            )}
+                          </button>
+                        )}
                         <button
                           onClick={() => openEdit(p)}
                           className="p-1.5 rounded hover:bg-slate-100 text-slate-500 hover:text-slate-900"
