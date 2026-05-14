@@ -1,6 +1,7 @@
 import React from "react";
 import FlyerFrame from "./FlyerFrame";
 import FlyerBrandImage from "./FlyerBrandImage";
+import GalavanteerMark from "./GalavanteerMark";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
 const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
@@ -47,13 +48,15 @@ const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivEleme
       <div style={{ flex: 1 }} />
 
       {/* CTA footer */}
-      <div style={{ padding: "32px 56px 48px", background: "#020617", display: "flex", justifyContent: "space-between", alignItems: "center", gap: 24 }}>
+      <div style={{ padding: "32px 56px 48px", background: "#020617", display: "flex", justifyContent: "space-between", alignItems: "flex-end", gap: 24 }}>
         <div>
           <p style={{ fontSize: 11, letterSpacing: "0.22em", textTransform: "uppercase", color: data.accentColor, margin: 0, fontWeight: 600 }}>
             Reserved for {data.partnerName}'s circle
           </p>
           <p style={{ fontSize: 16, fontWeight: 600, marginTop: 8, color: "#f8fafc", wordBreak: "break-all" }}>{data.referralUrl}</p>
-          <p style={{ fontSize: 11, color: "#64748b", marginTop: 14, letterSpacing: "0.05em" }}>The Roundtable · Galavanteer</p>
+          <div style={{ marginTop: 14 }}>
+            <GalavanteerMark color="#94a3b8" invert />
+          </div>
         </div>
         {data.qrDataUrl && (
           <div style={{ background: "#fff", padding: 8, borderRadius: 4 }}>
