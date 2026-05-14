@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
       // Generate a magic-link invite (creates the user and sends email)
       const { data: invited, error: invErr } = await admin.auth.admin.inviteUserByEmail(
         cleanEmail,
-        { redirectTo: `${new URL(req.url).origin.replace(/\/.*/, "")}/portal/login` },
+        { redirectTo: `${new URL(req.url).origin.replace(/\/.*/, "")}/partners/login` },
       );
       if (invErr) return json({ error: invErr.message }, 400);
       userId = invited.user!.id;
@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
                 <h2 style="margin: 0 0 16px;">Welcome to the Galavanteer Partner Portal</h2>
                 <p>You'll receive a separate sign-in email from our system. Once you set your password, you can log in here:</p>
                 <p style="margin: 20px 0;">
-                  <a href="https://galavanteer.com/portal/login" style="background:#1A1915;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">Open the portal</a>
+                  <a href="https://galavanteer.com/partners/login" style="background:#1A1915;color:#fff;padding:10px 18px;border-radius:6px;text-decoration:none;">Sign in</a>
                 </p>
                 <p style="font-size:13px;color:#666;">Inside you'll find your referral link, QR code, live click counts, and your commission ledger.</p>
                 <p style="font-size:13px;color:#666;">— Jason</p>

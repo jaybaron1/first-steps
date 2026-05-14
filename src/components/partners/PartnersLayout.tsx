@@ -13,33 +13,52 @@ import {
   LogOut,
   ShieldCheck,
   Calendar,
+  Sparkles,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const navItems = [
-  { path: "/partners", label: "Dashboard", icon: LayoutDashboard, end: true, adminOnly: false },
-  { path: "/partners/clients", label: "Clients", icon: Users, adminOnly: false },
-  { path: "/partners/new", label: "Add Referral", icon: Plus, adminOnly: false },
-  { path: "/partners/directory", label: "Partners", icon: Briefcase, adminOnly: false },
-  { path: "/partners/appointments", label: "Appointments", icon: Calendar, adminOnly: false },
-  { path: "/partners/commissions", label: "Commissions", icon: Receipt, adminOnly: false },
-  { path: "/partners/activity", label: "Activity", icon: Activity, adminOnly: false },
-  { path: "/partners/users", label: "Team users", icon: ShieldCheck, adminOnly: true },
+type NavItem = {
+  path: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+  end?: boolean;
+  show: (ctx: { isStaff: boolean; isAdmin: boolean; isPartner: boolean; isWhiteLabel: boolean }) => boolean;
+};
+
+const navItems: NavItem[] = [
+  // Staff (admin + sdr) — full CRM
+  { path: "/partners", label: "Dashboard", icon: LayoutDashboard, end: true, show: (c) => c.isStaff },
+  { path: "/partners/clients", label: "Clients", icon: Users, show: (c) => c.isStaff },
+  { path: "/partners/new", label: "Add Referral", icon: Plus, show: (c) => c.isStaff },
+  { path: "/partners/directory", label: "Partners", icon: Briefcase, show: (c) => c.isStaff },
+  { path: "/partners/appointments", label: "Appointments", icon: Calendar, show: (c) => c.isStaff },
+  { path: "/partners/commissions", label: "Commissions", icon: Receipt, show: (c) => c.isStaff },
+  { path: "/partners/activity", label: "Activity", icon: Activity, show: (c) => c.isStaff },
+  { path: "/partners/users", label: "Team users", icon: ShieldCheck, show: (c) => c.isAdmin },
+
+  // Partner-only items
+  { path: "/partners/me", label: "Dashboard", icon: LayoutDashboard, end: true, show: (c) => c.isPartner },
+  { path: "/partners/landing", label: "My Landing Page", icon: Sparkles, show: (c) => c.isPartner && c.isWhiteLabel },
 ];
 
 const PartnersLayout: React.FC = () => {
   const navigate = useNavigate();
-  const { user, role, isAdmin } = usePartnersAuth();
+  const { user, role, isAdmin, isStaff, isPartner, isWhiteLabel } = usePartnersAuth();
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
     navigate("/partners/login", { replace: true });
   };
 
+  const visible = navItems.filter((i) => i.show({ isStaff, isAdmin, isPartner, isWhiteLabel }));
+
+  const titleLabel = isPartner ? "Partner Portal" : "Partners CRM";
+  const roleLabel = isAdmin ? "Administrator" : isPartner ? "Partner" : "SDR";
+
   return (
     <>
       <Helmet>
-        <title>Partners CRM | Galavanteer</title>
+        <title>{titleLabel} | Galavanteer</title>
         <meta name="robots" content="noindex, nofollow, noarchive" />
       </Helmet>
 
@@ -53,7 +72,7 @@ const PartnersLayout: React.FC = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-900 tracking-tight">
-                  Partners CRM
+                  {titleLabel}
                 </p>
                 <p className="text-[10px] text-slate-500 uppercase tracking-wider">
                   Galavanteer
@@ -63,7 +82,7 @@ const PartnersLayout: React.FC = () => {
           </div>
 
           <nav className="flex-1 px-3 py-4 space-y-0.5">
-            {navItems.filter((item) => !item.adminOnly || isAdmin).map((item) => (
+            {visible.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
@@ -89,7 +108,7 @@ const PartnersLayout: React.FC = () => {
                 {user.email}
               </p>
               <p className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">
-                {isAdmin ? "Administrator" : "SDR"} · {role}
+                {roleLabel} · {role}
               </p>
             </div>
             <button

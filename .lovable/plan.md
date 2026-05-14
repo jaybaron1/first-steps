@@ -1,111 +1,92 @@
-&nbsp;
+# Collapse `/portal` into `/partners`
 
-&nbsp;
+## Why
 
-# White-Label Partner Landing Pages
+`/partners` already has auth, layout, sidebar, and a sign-in page. Running a second auth surface at `/portal` for one user (Margarita) doubles the maintenance and confuses anyone who has to support either. One door, role-aware behind it.
 
-## The problem you spotted
+## How it works after this change
 
-Today `/r/margarita` sets the attribution cookie, then **redirects to your homepage**. Margarita's referrals land on a page that's 100% your offer, with zero signal that she's the reason they're there — or that she's part of what they get.
+**One login URL: `/partners/login**` — used by admins, SDRs, *and* external partners (Margarita and future white-labels).
 
-## The fix
-
-Stop redirecting white-label partners. Instead, `/r/margarita` **renders a co-branded landing page** that frames the offer as *hers*, with you as the engine behind it. Attribution still gets set silently in the background.
-
-Non-white-label partners (regular SDRs / affiliates) keep the silent redirect behavior — they're just earning commission, not selling their persona.
-
-## What Margarita's page looks like
+After sign-in, `PartnersRoute` checks roles in this order and routes accordingly:
 
 ```text
-┌─────────────────────────────────────────────┐
-│  [Margarita's logo / photo]                 │
-│                                             │
-│  Work with Margarita Xistris               │
-│  + your own private boardroom of advisors   │
-│                                             │
-│  [Her positioning copy — editable]          │
-│                                             │
-│  ┌──────────────────────────────────────┐   │
-│  │  What you get when you work with me: │   │
-│  │  • A seat at my table                │   │
-│  │  • Your own AI Roundtable, built     │   │
-│  │    on the Galavanteer engine         │   │
-│  │  • [her custom bullets]              │   │
-│  └──────────────────────────────────────┘   │
-│                                             │
-│  [Start a conversation] ──► ChatDiscovery   │
-│                              (pre-tagged)   │
-│                                             │
-│  Powered by Galavanteer  ·  small footer    │
-└─────────────────────────────────────────────┘
+admin   → full CRM (everything you have today)
+sdr     → full CRM minus admin-only items
+partner → restricted view: their own dashboard only
 ```
 
-Key points:
+A user with the `partner` role lands on `/partners` and sees a stripped-down sidebar:
 
-- **Her name, her face, her copy** above the fold
-- **One CTA** → opens ChatDiscovery (the lead is auto-tagged to her)
-- **"Powered by Galavanteer"** — small, honest, doesn't compete with her brand
-- **No top nav** to your other pages — this is *her* funnel, not a tour of your site
+- **Dashboard** — clicks, clients, commission earned (their data only)
+- **My Landing Page** — the editor (only if `is_white_label = true`)
+- **My Referral Link** — link + QR + downloads
+- *Sign out*
 
-## How the toggle works
+They cannot see: other partners, the directory, team users, add-referral, appointments, activity feed, or anyone else's commissions. RLS already enforces this server-side; the UI just hides the irrelevant nav.
 
-In the admin Partners directory, each partner has `is_white_label`:
+## What gets deleted vs. moved
 
-- `**is_white_label = true**` (Margarita): `/r/:slug` renders the landing page
-- `**is_white_label = false**` (SDRs like John): `/r/:slug` does the silent redirect → homepage, just like today
+**Deleted:**
 
-## What Margarita can edit herself
+- `src/pages/portal/PortalLoginPage.tsx`
+- `src/pages/portal/PortalDashboardPage.tsx`
+- `src/components/portal/PortalRoute.tsx`
+- `/portal/*` routes from `App.tsx`
 
-In her **partner portal** (`/portal`), add a "My Landing Page" tab where she controls:
+**Moved into `/partners`:**
 
-- Headline + subheadline
-- Her photo / logo URL
-- Her bio paragraph
-- Her custom bullet list ("what working with me means")
-- Optional testimonial quote
-- Optional accent color
+- The dashboard content (stats + clients + commission ledger + referral link + QR) → new `src/pages/partners/PartnersMyPage.tsx`, mounted at `/partners/me`
+- The landing-page editor → new page at `/partners/landing` (white-label partners only)
+- Existing `LandingPageEditor.tsx` component stays as-is (just imported from the new page)
 
-You see a live preview + can override anything from `/admin/partners/:id`.
+**Keep:**
 
-## Technical changes
+- `/r/:slug` (referral redirect + landing page) — unchanged
+- The `partner-portal-invite` edge function — still creates auth users, just redirects to `/partners/login` instead of `/portal/login`
 
-**Database (one migration):**
+## Routing rules inside `/partners`
 
-- Add to `partners`: `landing_headline`, `landing_subheadline`, `landing_bio`, `landing_bullets jsonb`, `landing_photo_url`, `landing_logo_url`, `landing_testimonial`, `landing_accent_color`, `landing_published bool default false`
+`PartnersRoute` extends to recognize three roles instead of two. Behavior:
 
-**Routing:**
 
-- Modify `src/pages/ReferralRedirect.tsx`: after looking up the partner, branch on `is_white_label && landing_published`:
-  - `true` → render new `<PartnerLandingPage partner={partner} />` (still sets cookie + logs click)
-  - `false` → existing redirect behavior
+| Role    | Default landing | Sidebar items                                         |
+| ------- | --------------- | ----------------------------------------------------- |
+| admin   | `/partners`     | All current items + Team users                        |
+| sdr     | `/partners`     | All current items except Team users                   |
+| partner | `/partners/me`  | Dashboard, My Landing Page (if white-label), Sign out |
 
-**New components:**
 
-- `src/pages/PartnerLandingPage.tsx` — the co-branded page
-- `src/components/portal/LandingPageEditor.tsx` — Margarita's editor in `/portal`
-- `src/components/admin/PartnerLandingEditor.tsx` — admin override view
+If a `partner`-role user navigates to `/partners/clients`, `/partners/directory`, etc., they get redirected to `/partners/me`. This is belt-and-suspenders — RLS would already return empty data — but it keeps the experience clean.
 
-**Modified:**
+## What the partner sees on `/partners/me`
 
-- `src/pages/ReferralRedirect.tsx` — branch logic
-- `src/pages/portal/PortalDashboardPage.tsx` — add "My Landing Page" tab
-- `src/components/ChatDiscovery.tsx` — when opened from a partner landing page, prepend "Hi, I was referred by {partner.name}" to give the lead context
+Same content as the current `/portal` dashboard, just rendered inside the existing `PartnersLayout` sidebar:
 
-**No changes** to attribution, cookie logic, click logging, auto-create-client trigger, or commission flow — all of that already works.
+- 4 stat cards (clicks 30d, clicks all, clients, commission)
+- Their referral link + QR + copy button
+- Downloadable branded assets
+- Recent clients table (their data only)
+- Commission ledger (their data only)
+- "My Landing Page" link (white-label only) → `/partners/landing`
 
-## What this gives you
+## Migration touchpoints
 
-- Margarita can sell her site as **her** site, not "a referral link to Doug"
-- Her conversion rate goes up because the page matches what she pitched
-- You stay in control: the editor is bounded (no arbitrary HTML), the engine + checkout + chatbot are all yours
-- One toggle (`is_white_label`) cleanly separates "personality partners" from "commission-only SDRs"
+1. `**PartnersRoute.tsx**` — `resolveRole()` adds a third branch checking the `partner` role; context type widens to `"admin" | "sdr" | "partner"`; also resolves `partnerId / partnerSlug / isWhiteLabel` when role is `partner`.
+2. `**PartnersLayout.tsx**` — nav items get a `partnerOnly` / `partnerHidden` flag; whole sidebar filters by role.
+3. `**App.tsx**` — remove `/portal/*` routes and `import PortalRoute…`; add `/partners/me` and `/partners/landing` inside the existing `<PartnersRoute>` block.
+4. `**partner-portal-invite/index.ts**` — change the magic-link redirect from `/portal` to `/partners/me`.
+5. **Email copy** in the invite — point to `/partners/login`.
+6. `**PortalRoute` consumers** — none outside `/portal`, so safe to delete.
 
-## Out of scope (ask if you want them)
+## What stays the same for you
 
-- Custom subdomain (`margarita.galavanteer.com`) — still works as `/r/margarita` for now
-- Multiple landing-page templates per partner
-- A/B testing partner landing pages
+- Margarita's `/r/margarita` URL, QR code, and cookie attribution: unchanged
+- Auto-create-client trigger, commission rules, RLS policies: unchanged
+- Your day-to-day at `/partners`: visually identical (same sidebar, same pages)
 
-Extra:
+## Out of scope
 
-Add a “Send portal invite” button in the partner directory so I can emailc Margarita and other partners their portal login link.
+- Renaming "Partners CRM" in the sidebar header for partner-role users (low priority cosmetic)
+- Custom subdomains
+- Multi-user partner accounts (one auth user per partner row, as today)
