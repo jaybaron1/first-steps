@@ -20,7 +20,7 @@ export interface FlyerData {
 }
 
 const Editorial: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
-  <FlyerFrame ref={innerRef}>
+  <FlyerFrame ref={innerRef} size="letter">
     <div style={{ padding: "64px 64px 48px", height: "100%", display: "flex", flexDirection: "column" }}>
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 48 }}>
         <div>
