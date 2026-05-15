@@ -25,7 +25,7 @@ const ONBOARDING = [
 const ADDONS = [
   { label: "ChatGPT Teams (paid to OpenAI)", price: "$50 / month" },
   { label: "Each additional user", price: "$100 / month" },
-  { label: "Optional ongoing maintenance", price: "$200 / month" },
+  { label: "Ongoing maintenance", price: "$200 / month" },
 ];
 
 const ACCENT = "#B8956C";
