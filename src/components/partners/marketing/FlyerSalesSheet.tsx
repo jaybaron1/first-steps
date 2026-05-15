@@ -295,7 +295,7 @@ const SalesSheet: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement
               {[
                 { label: "ChatGPT Teams (paid to OpenAI)", price: "$50 / mo" },
                 { label: "Each additional user", price: "$100 / mo" },
-                { label: "Optional ongoing maintenance", price: "$200 / mo" },
+                { label: "Ongoing maintenance", price: "$200 / mo" },
               ].map((row, i, arr) => (
                 <li
                   key={row.label}
