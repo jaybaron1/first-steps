@@ -5,7 +5,7 @@ import GalavanteerMark from "./GalavanteerMark";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
 const FounderOffer: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
-  <FlyerFrame ref={innerRef}>
+  <FlyerFrame ref={innerRef} size="letter">
     <div style={{ height: "100%", display: "flex", flexDirection: "column", background: "#0f172a", color: "#f8fafc" }}>
       {/* Hero */}
       <div style={{ padding: "56px 56px 40px", borderBottom: `4px solid ${data.accentColor}` }}>

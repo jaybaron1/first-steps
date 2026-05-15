@@ -5,7 +5,7 @@ import GalavanteerMark from "./GalavanteerMark";
 import type { FlyerData } from "./FlyerRoundtableIntro";
 
 const EventInvite: React.FC<{ data: FlyerData; innerRef: React.Ref<HTMLDivElement> }> = ({ data, innerRef }) => (
-  <FlyerFrame ref={innerRef}>
+  <FlyerFrame ref={innerRef} size="letter">
     <div style={{ height: "100%", padding: "72px 80px 40px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
       {data.photoUrl && (
         <div style={{ marginBottom: 32 }}>
